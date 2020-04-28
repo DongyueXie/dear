@@ -7,4 +7,18 @@ editor_options:
   chunk_output_type: console
 ---
 
-Describe your project.
+[binomial thinning ultimate](binomthinultimate.html): understand binomial thinning
+
+## single-cell
+
+[single cell DE](scde.html): first try of mouthwash, cate, sva methods on single cell data GSE45719. 
+
+[single cell DE PBMC](scdePBMC2.html): 709 CDT cells from PBMC. 
+
+[Check MOUTHWASH](scdeMouthwash.html): compare setting $\alpha=0$ or $\alpha=1$ in `ash`. Setting $\alpha=1$ outperforms. Why? A look into binomial [thinning](binomialthinning.html). How about in [real data analysis](scdeCheckAlpha.html)(instead of using thinned data)? Does setting $\alpha=1$ give higher likelihood?
+
+[Calibration of ruv methods](scdeCalibration.html): whether methods acheive claimed fdr level -- yes, they all perform comparably
+
+[single cell cytokine, two controls](sccytokines.html): compare two control groups. 
+
+[single cell cytokine, two controls](sccytokines_filter10.html):  filter out genes with < 10 non-zero elements
