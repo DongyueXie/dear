@@ -1,0 +1,119 @@
+---
+title: "compare  linear model and sample mean/var based methods"
+author: "DongyueXie"
+date: "2020-05-04"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+---
+
+## Introduction
+
+Two methods: use limma / sample mean&var obtaining Bhat and Shat then feed into mashr-no-baseline. These two method give exactly the same Bhat but different Shat.
+
+I want to compare those false discoveries from using sample mean&var. 
+
+To do so, I filtered out genes that appear in less than 1000 cells out of total 13000+ cells. The main reason is to make model fitting faster, and make data cleaner. 
+
+For each false discovery, I compared lfsr, Shat and distribution of z-scores from mashr_update_data. In the plot, lm stands for limma method and sample stands for sample mean&var.
+
+
+```{r}
+library(mashr)
+library(ggplot2)
+library(plyr)
+load('output/compare_lm_sample.RData')
+
+out = compare_lm_sample$out_lm
+out.s = compare_lm_sample$out_sam
+mash_data = mash_set_data(out$betahat,out$sebetahat)
+mash_data.L = mash_update_data(mash_data,ref='mean')
+
+mash_data.s = mash_set_data(out.s$Bhat,out.s$Shat)
+mash_data.L.s = mash_update_data(mash_data.s,ref='mean')
+
+get_significant_results(compare_lm_sample$mash_lm)
+get_significant_results(compare_lm_sample$mash_sam)
+
+```
+
+
+
+```{r}
+
+summary_mm = function(idx){
+  #First look at lfsr. Big difference!
+  dat = cbind(as.numeric(compare_lm_sample$mash_lm$result$lfsr[idx,]),
+            as.numeric(compare_lm_sample$mash_sam$result$lfsr[idx,]))
+  colnames(dat) = c('lm','sample')
+  boxplot(dat,ylab='lfsr')
+  
+  #Look at corresponding S_hat: similar median but difference variance.
+  dat = cbind(as.numeric(compare_lm_sample$out_lm$sebetahat[idx,]),
+              as.numeric(compare_lm_sample$out_sam$Shat[idx,]))
+  colnames(dat) = c('lm','sample')
+  boxplot(dat,ylab = 'S_hat')
+  
+  #Distribution of z-statistics after mash_update_data
+  
+z1 = mash_data.L$Bhat[idx,]/mash_data.L$Shat[idx,]
+z2 = mash_data.L.s$Bhat[idx,]/mash_data.L.s$Shat[idx,]
+dat = data.frame(z = c(z1, z2), method = rep(c("lm", "sample"),each=49))
+
+mu = ddply(dat, "method", summarise, grp.mean=mean(z))
+ggplot(dat, aes(x = z, fill = method,color=method)) + 
+  geom_histogram(alpha = 0.5,bins=50,position="identity") +
+  geom_vline(data=mu, aes(xintercept=grp.mean, color=method),
+             linetype="dashed") +
+  theme(legend.position="top")
+}
+```
+
+Let's look at some genes that are identified by mashr using sample mean and variance.
+
+```{r}
+summary_mm(2121)
+```
+
+The difference of lfsr are huge. $\hat s$ are of similar scale but the ones from sample estiamtion is more dispersed.  The plot of z-statistics shows that there is an extreme z-score of sample method. 
+
+
+```{r}
+summary_mm(1198)
+```
+      
+Again, z-statistics from sample method has heavier tails.
+
+```{r}
+summary_mm(2161)
+```
+
+Let's take a look at this extreme z-score.
+
+```{r}
+as.numeric(mash_data.L.s$Bhat[2161,17])
+as.numeric(mash_data.L.s$Shat[2161,17])
+as.numeric(mash_data.L$Shat[2161,17])
+```
+
+The Bhat is -0.047, and Shat from sample is 0.0089 while 0.014 from limma. 
+
+## Summary
+
+1. Z-scores from sample method could have some extreme ones, especially negative ones. This is due to small Shat.
+The conseqeunce is false postives.
+
+2. On plausibility of multiple linear regression model: 
+
+```{r}
+X = model.matrix(~as.factor(compare_lm_sample$group_idx))
+X.lm = cbind(X[,1]-rowSums(X[,-1,drop=FALSE]),X[,-1])
+cov_of_interest = 1:ncol(X)
+
+par(mfrow=c(2,2))
+
+for(i in 1:4){
+  lm1 = lm(y~.-1,data.frame(y=compare_lm_sample$Y[,i],x=X.lm))
+  plot(fitted(lm1),resid(lm1),xlab='fitted',ylab='residual')
+}
+```
