@@ -1,0 +1,163 @@
+---
+title: "sva+limma+mash applies to multiple treatment single cell data"
+author: "DongyueXie"
+date: "2020-04-25"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+---
+
+## NULL setting
+
+(sva+limma+mashr_no_baseline) and (limma+mashr_no_baseline) perform similarly and have 3-6 false positives out of 7000+ tests.
+
+```{r}
+load("output/lm_cytokine_null_simu_cd4.RData")
+load("output/slm_cytokine_null_simu_cd4.RData")
+library(mashr)
+for(i in 1:length(out1)){
+  print((get_significant_results(out1[[i]])))
+}
+
+for(i in 1:length(out2)){
+  print((get_significant_results(out2[[i]])))
+}
+```
+
+
+## Non-NULL simulation
+
+Notation: $g$ for gene, $i$ for treatment, $y$ for normalized gene expression.
+
+For each gene, let $E(y_{i}) = \alpha+\beta_i$, where $\alpha$ is the baseline(intercept), and $\beta_i$ is the effect of treatment $i$ satisfying $\sum_i\beta_i=0$.
+
+
+In practice, we expect most of genes are null(invariant to treatments) and for those non-null genes, most of the treatments do not have effect on gene expression. Hence, we set the portion of non-null genes to be 0.1 and for non-null genes, $0.2$ of treatments have effects on them. For a non-null gene $g$, we generate its $\beta_i$ from $0.8*\delta_0+0.2*N(0,0.8^2)$.
+
+Note: a summary of residual standard error of genes using a linear model: 
+
+```{r}
+ss = cbind(0.0868,  0.1364,  0.1811,  0.2124,  0.2513,  1.0290)
+colnames(ss) = c('Min.', '1st Qu.',  'Median',    'Mean', '3rd Qu.',   'Max.' )
+ss
+```
+
+### Details
+
+```{r}
+library(ggplot2)
+library(gridExtra)
+
+load("output/lm_cytokine_Nonnull_simu_cd4.RData")
+for(i in 1:length(out_lm)){
+  which_null = rep(1,7353)
+  which_null[out_lm[[i]]$data$non_null_gene_idx] = 0
+  top = apply(get_lfsr(out_lm[[i]]), 1, min)
+  roc_out = pROC::roc(response = which_null, predictor = top)
+  sout = data.frame(TPR = roc_out$sensitivities, FPR = 1 - roc_out$specificities)
+  p1 <- ggplot(data = sout, mapping = aes(x = FPR, y = TPR)) +
+  geom_path() + theme_bw() + ggtitle("ROC Curves")
+  print(roc_out$auc)
+  print(paste('fdp:',1-mean(get_significant_results(out_lm[[i]])%in%out_lm[[i]]$data$non_null_gene_idx)))
+}
+```
+
+
+It seems that this setting is too easy. Let's try to set only 2 out 50 treatments have effects on non-null genes. 
+
+```{r}
+load("output/lm_cytokine_Nonnull_simu_cd4_2trteffect.RData")
+for(i in 1:length(out_lm)){
+  which_null = rep(1,7353)
+  which_null[out_lm[[i]]$data$non_null_gene_idx] = 0
+  top = apply(get_lfsr(out_lm[[i]]), 1, min)
+  roc_out = pROC::roc(response = which_null, predictor = top)
+  sout = data.frame(TPR = roc_out$sensitivities, FPR = 1 - roc_out$specificities)
+  p2 <- ggplot(data = sout, mapping = aes(x = FPR, y = TPR)) +
+  geom_path() + theme_bw() + ggtitle(paste('sd = 0.8 ', 'auc = ',round(roc_out$auc,4)))
+  print(roc_out$auc)
+  print(paste('fdp:',1-mean(get_significant_results(out_lm[[i]])%in%out_lm[[i]]$data$non_null_gene_idx)))
+}
+```
+
+Still relatively easy. How about reduce effect size? $N(0,0.4^2)$
+
+```{r}
+load("output/lm_cytokine_Nonnull_simu_cd4_2trteffect_sizesd4.RData")
+for(i in 1:length(out_lm)){
+  which_null = rep(1,7353)
+  which_null[out_lm[[i]]$data$non_null_gene_idx] = 0
+  top = apply(get_lfsr(out_lm[[i]]), 1, min)
+  roc_out = pROC::roc(response = which_null, predictor = top)
+  sout = data.frame(TPR = roc_out$sensitivities, FPR = 1 - roc_out$specificities)
+  p3 <- ggplot(data = sout, mapping = aes(x = FPR, y = TPR)) +
+  geom_path() + theme_bw() + ggtitle(paste('sd = 0.4 ', 'auc = ',round(roc_out$auc,4)))
+  print(roc_out$auc)
+  print(paste('fdp:',1-mean(get_significant_results(out_lm[[i]])%in%out_lm[[i]]$data$non_null_gene_idx)))
+}
+```
+
+
+How about reduce effect size? $N(0,0.1^2)$
+
+```{r}
+load("output/lm_cytokine_Nonnull_simu_cd4_2trteffect_sizesd01.RData")
+for(i in 1:length(out_lm)){
+  which_null = rep(1,7353)
+  which_null[out_lm[[i]]$data$non_null_gene_idx] = 0
+  top = apply(get_lfsr(out_lm[[i]]), 1, min)
+  roc_out = pROC::roc(response = which_null, predictor = top)
+  sout = data.frame(TPR = roc_out$sensitivities, FPR = 1 - roc_out$specificities)
+  p4 <-  ggplot(data = sout, mapping = aes(x = FPR, y = TPR)) +
+  geom_path() + theme_bw() + ggtitle(paste('sd = 0.1 ', 'auc = ',round(roc_out$auc,4)))
+  print(roc_out$auc)
+  print(paste('fdp:',1-mean(get_significant_results(out_lm[[i]])%in%out_lm[[i]]$data$non_null_gene_idx)))
+}
+```
+
+How about reduce effect size? $N(0,0.05^2)$
+
+```{r}
+load("output/lm_cytokine_Nonnull_simu_cd4_2trteffect_sizesd005.RData")
+for(i in 1:length(out_lm)){
+  which_null = rep(1,7353)
+  which_null[out_lm[[i]]$data$non_null_gene_idx] = 0
+  top = apply(get_lfsr(out_lm[[i]]), 1, min)
+  roc_out = pROC::roc(response = which_null, predictor = top)
+  sout = data.frame(TPR = roc_out$sensitivities, FPR = 1 - roc_out$specificities)
+  p5 <- ggplot(data = sout, mapping = aes(x = FPR, y = TPR)) +
+  geom_path() + theme_bw() + ggtitle(paste('sd = 0.05 ', 'auc = ',round(roc_out$auc,4)))
+  print(roc_out$auc)
+  print(paste('fdp:',1-mean(get_significant_results(out_lm[[i]])%in%out_lm[[i]]$data$non_null_gene_idx)))
+}
+```
+
+How about reduce effect size? $N(0,0.01^2)$
+
+```{r}
+load("output/lm_cytokine_Nonnull_simu_cd4_2trteffect_sizesd001.RData")
+for(i in 1:length(out_lm)){
+  which_null = rep(1,7353)
+  which_null[out_lm[[i]]$data$non_null_gene_idx] = 0
+  top = apply(get_lfsr(out_lm[[i]]), 1, min)
+  roc_out = pROC::roc(response = which_null, predictor = top)
+  sout = data.frame(TPR = roc_out$sensitivities, FPR = 1 - roc_out$specificities)
+  p6 <- ggplot(data = sout, mapping = aes(x = FPR, y = TPR)) +
+  geom_path() + theme_bw() + ggtitle(paste('sd = 0.01 ', 'auc = ',round(roc_out$auc,4)))
+  print(roc_out$auc)
+  print(paste('fdp:',1-mean(get_significant_results(out_lm[[i]])%in%out_lm[[i]]$data$non_null_gene_idx)))
+}
+```
+
+
+### Summary plot
+
+Number of non-null treatment: 2 out of 50
+
+Proportion of non-null genes: 0.1
+
+sd stands for the standard deviation of normal dsitributon where we generate effect of treatment from.
+
+```{r}
+grid.arrange(p2,p3,p4,p5,p6,ncol=3)
+```
