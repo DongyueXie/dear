@@ -74,7 +74,7 @@ for(i in 1:length(out_lm)){
   roc_out = pROC::roc(response = which_null, predictor = top)
   sout = data.frame(TPR = roc_out$sensitivities, FPR = 1 - roc_out$specificities)
   p2 <- ggplot(data = sout, mapping = aes(x = FPR, y = TPR)) +
-  geom_path() + theme_bw() + ggtitle(paste('sd = 0.8 ', 'auc = ',round(roc_out$auc,4)))
+  geom_path() + theme_bw() + ggtitle(paste('sd=0.8 ', 'auc=',round(roc_out$auc,4)))
   print(roc_out$auc)
   print(paste('fdp:',1-mean(get_significant_results(out_lm[[i]])%in%out_lm[[i]]$data$non_null_gene_idx)))
 }
@@ -91,7 +91,7 @@ for(i in 1:length(out_lm)){
   roc_out = pROC::roc(response = which_null, predictor = top)
   sout = data.frame(TPR = roc_out$sensitivities, FPR = 1 - roc_out$specificities)
   p3 <- ggplot(data = sout, mapping = aes(x = FPR, y = TPR)) +
-  geom_path() + theme_bw() + ggtitle(paste('sd = 0.4 ', 'auc = ',round(roc_out$auc,4)))
+  geom_path() + theme_bw() + ggtitle(paste('sd=0.4 ', 'auc=',round(roc_out$auc,4)))
   print(roc_out$auc)
   print(paste('fdp:',1-mean(get_significant_results(out_lm[[i]])%in%out_lm[[i]]$data$non_null_gene_idx)))
 }
@@ -109,7 +109,7 @@ for(i in 1:length(out_lm)){
   roc_out = pROC::roc(response = which_null, predictor = top)
   sout = data.frame(TPR = roc_out$sensitivities, FPR = 1 - roc_out$specificities)
   p4 <-  ggplot(data = sout, mapping = aes(x = FPR, y = TPR)) +
-  geom_path() + theme_bw() + ggtitle(paste('sd = 0.1 ', 'auc = ',round(roc_out$auc,4)))
+  geom_path() + theme_bw() + ggtitle(paste('sd=0.1 ', 'auc=',round(roc_out$auc,4)))
   print(roc_out$auc)
   print(paste('fdp:',1-mean(get_significant_results(out_lm[[i]])%in%out_lm[[i]]$data$non_null_gene_idx)))
 }
@@ -126,7 +126,7 @@ for(i in 1:length(out_lm)){
   roc_out = pROC::roc(response = which_null, predictor = top)
   sout = data.frame(TPR = roc_out$sensitivities, FPR = 1 - roc_out$specificities)
   p5 <- ggplot(data = sout, mapping = aes(x = FPR, y = TPR)) +
-  geom_path() + theme_bw() + ggtitle(paste('sd = 0.05 ', 'auc = ',round(roc_out$auc,4)))
+  geom_path() + theme_bw() + ggtitle(paste('sd=0.05 ', 'auc=',round(roc_out$auc,4)))
   print(roc_out$auc)
   print(paste('fdp:',1-mean(get_significant_results(out_lm[[i]])%in%out_lm[[i]]$data$non_null_gene_idx)))
 }
@@ -143,7 +143,7 @@ for(i in 1:length(out_lm)){
   roc_out = pROC::roc(response = which_null, predictor = top)
   sout = data.frame(TPR = roc_out$sensitivities, FPR = 1 - roc_out$specificities)
   p6 <- ggplot(data = sout, mapping = aes(x = FPR, y = TPR)) +
-  geom_path() + theme_bw() + ggtitle(paste('sd = 0.01 ', 'auc = ',round(roc_out$auc,4)))
+  geom_path() + theme_bw() + ggtitle(paste('sd=0.01 ', 'auc=',round(roc_out$auc,4)))
   print(roc_out$auc)
   print(paste('fdp:',1-mean(get_significant_results(out_lm[[i]])%in%out_lm[[i]]$data$non_null_gene_idx)))
 }
