@@ -435,10 +435,10 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomDongyueXiedeartree16120a95f6b46bd58e74df30df605dc5c14f66f2targetblank16120a9a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/DongyueXie/dear/tree/16120a95f6b46bd58e74df30df605dc5c14f66f2" target="_blank">16120a9</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomDongyueXiedeartreeae9196bc0b842595d7fbd87ae3354522a180ab27targetblankae9196ba"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/DongyueXie/dear/tree/ae9196bc0b842595d7fbd87ae3354522a180ab27" target="_blank">ae9196b</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomDongyueXiedeartree16120a95f6b46bd58e74df30df605dc5c14f66f2targetblank16120a9a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomDongyueXiedeartreeae9196bc0b842595d7fbd87ae3354522a180ab27targetblankae9196ba" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility. The version displayed above was the version of the Git repository at the time these results were generated. <br><br> Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -508,6 +508,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/DongyueXie/dear/blob/ae9196bc0b842595d7fbd87ae3354522a180ab27/analysis/sva_multitreat.Rmd" target="_blank">ae9196b</a>
+</td>
+<td>
+DongyueXie
+</td>
+<td>
+2020-05-05
+</td>
+<td>
+wflow_publish(“analysis/sva_multitreat.Rmd”)
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/DongyueXie/dear/62a266c93d7466ef607873f658bff33801893ae8/docs/sva_multitreat.html" target="_blank">62a266c</a>
+</td>
+<td>
+DongyueXie
+</td>
+<td>
+2020-05-05
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -621,7 +655,7 @@ for(i in 1:length(out_lm)){
   roc_out = pROC::roc(response = which_null, predictor = top)
   sout = data.frame(TPR = roc_out$sensitivities, FPR = 1 - roc_out$specificities)
   p2 &lt;- ggplot(data = sout, mapping = aes(x = FPR, y = TPR)) +
-  geom_path() + theme_bw() + ggtitle(paste(&#39;sd = 0.8 &#39;, &#39;auc = &#39;,round(roc_out$auc,4)))
+  geom_path() + theme_bw() + ggtitle(paste(&#39;sd=0.8 &#39;, &#39;auc=&#39;,round(roc_out$auc,4)))
   print(roc_out$auc)
   print(paste(&#39;fdp:&#39;,1-mean(get_significant_results(out_lm[[i]])%in%out_lm[[i]]$data$non_null_gene_idx)))
 }</code></pre>
@@ -638,7 +672,7 @@ for(i in 1:length(out_lm)){
   roc_out = pROC::roc(response = which_null, predictor = top)
   sout = data.frame(TPR = roc_out$sensitivities, FPR = 1 - roc_out$specificities)
   p3 &lt;- ggplot(data = sout, mapping = aes(x = FPR, y = TPR)) +
-  geom_path() + theme_bw() + ggtitle(paste(&#39;sd = 0.4 &#39;, &#39;auc = &#39;,round(roc_out$auc,4)))
+  geom_path() + theme_bw() + ggtitle(paste(&#39;sd=0.4 &#39;, &#39;auc=&#39;,round(roc_out$auc,4)))
   print(roc_out$auc)
   print(paste(&#39;fdp:&#39;,1-mean(get_significant_results(out_lm[[i]])%in%out_lm[[i]]$data$non_null_gene_idx)))
 }</code></pre>
@@ -655,7 +689,7 @@ for(i in 1:length(out_lm)){
   roc_out = pROC::roc(response = which_null, predictor = top)
   sout = data.frame(TPR = roc_out$sensitivities, FPR = 1 - roc_out$specificities)
   p4 &lt;-  ggplot(data = sout, mapping = aes(x = FPR, y = TPR)) +
-  geom_path() + theme_bw() + ggtitle(paste(&#39;sd = 0.1 &#39;, &#39;auc = &#39;,round(roc_out$auc,4)))
+  geom_path() + theme_bw() + ggtitle(paste(&#39;sd=0.1 &#39;, &#39;auc=&#39;,round(roc_out$auc,4)))
   print(roc_out$auc)
   print(paste(&#39;fdp:&#39;,1-mean(get_significant_results(out_lm[[i]])%in%out_lm[[i]]$data$non_null_gene_idx)))
 }</code></pre>
@@ -672,7 +706,7 @@ for(i in 1:length(out_lm)){
   roc_out = pROC::roc(response = which_null, predictor = top)
   sout = data.frame(TPR = roc_out$sensitivities, FPR = 1 - roc_out$specificities)
   p5 &lt;- ggplot(data = sout, mapping = aes(x = FPR, y = TPR)) +
-  geom_path() + theme_bw() + ggtitle(paste(&#39;sd = 0.05 &#39;, &#39;auc = &#39;,round(roc_out$auc,4)))
+  geom_path() + theme_bw() + ggtitle(paste(&#39;sd=0.05 &#39;, &#39;auc=&#39;,round(roc_out$auc,4)))
   print(roc_out$auc)
   print(paste(&#39;fdp:&#39;,1-mean(get_significant_results(out_lm[[i]])%in%out_lm[[i]]$data$non_null_gene_idx)))
 }</code></pre>
@@ -691,7 +725,7 @@ for(i in 1:length(out_lm)){
   roc_out = pROC::roc(response = which_null, predictor = top)
   sout = data.frame(TPR = roc_out$sensitivities, FPR = 1 - roc_out$specificities)
   p6 &lt;- ggplot(data = sout, mapping = aes(x = FPR, y = TPR)) +
-  geom_path() + theme_bw() + ggtitle(paste(&#39;sd = 0.01 &#39;, &#39;auc = &#39;,round(roc_out$auc,4)))
+  geom_path() + theme_bw() + ggtitle(paste(&#39;sd=0.01 &#39;, &#39;auc=&#39;,round(roc_out$auc,4)))
   print(roc_out$auc)
   print(paste(&#39;fdp:&#39;,1-mean(get_significant_results(out_lm[[i]])%in%out_lm[[i]]$data$non_null_gene_idx)))
 }</code></pre>
@@ -709,6 +743,43 @@ Area under the curve: 0.4923
 <p>sd stands for the standard deviation of normal dsitributon where we generate effect of treatment from.</p>
 <pre class="r"><code>grid.arrange(p2,p3,p4,p5,p6,ncol=3)</code></pre>
 <p><img src="figure/sva_multitreat.Rmd/unnamed-chunk-9-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-9-1">
+Past versions of unnamed-chunk-9-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-9-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/DongyueXie/dear/blob/62a266c93d7466ef607873f658bff33801893ae8/docs/figure/sva_multitreat.Rmd/unnamed-chunk-9-1.png" target="_blank">62a266c</a>
+</td>
+<td>
+DongyueXie
+</td>
+<td>
+2020-05-05
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
