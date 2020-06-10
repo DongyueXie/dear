@@ -2,29 +2,37 @@
 title: "scMash_simu"
 author: "DongyueXie"
 date: "2020-06-09"
-output: workflowr::wflow_html
+output:
+  workflowr::wflow_html:
+    code_folding: hide
 editor_options:
   chunk_output_type: console
 ---
 
 ## Introduction
 
-```{r}
-library(mashr)
-load('/scratch/midway2/dyxie/sc-cytokine/output/scMash_pbmc3k_null.RData')
-load('/scratch/midway2/dyxie/sc-cytokine/output/scMash_pbmc3k_signal.RData')
-```
+We take raw count data from cd4 cells of cytokine experiment and compare DE methods + mash.
 
-We will use the PBMC data available from 10X Genomics, the raw data can be downloaded [here](https://s3-us-west-2.amazonaws.com/10x.files/samples/cell/pbmc3k/pbmc3k_filtered_gene_bc_matrices.tar.gz). We use data from 4 cell types: Naive CD4 T, Memory CD4 T,   CD14+ Mono,  B. 
+limma -- log1p transformation on scRNA-seq data then limma
 
+voom-limma -- voom transformation+limma
 
+pb -- stands for pseudo-bulk 
+
+anova -- a simple one-way anova on each gene and use BH for fdr control. 
+
+There are two settings: 1. in null setting, we randomly assign labels(total 10 labels) to each cell to create a NULL data in which no gene is differentially expressed. To make the dataset close to null data, we remove genes that are detected in less than 100 cells. 2. in non-null setting, we randomly select around $10\%$ genes to be non-null and for these genes, randomly choose 2-4 conditions to be non-null(relative to mean). Signals are added using binomial thinning.
+
+To examine the effect of the number of cells creating pseudo-bulk data, we include simulations with 150 and 50 cells per replicate. For each simulation, we randomly select 2000 genes and 4500/1500 cells.
 
 
 ## NULL setting
 
-We randomly assign labels(total 5) to each cell to create a NULL data in which no gene is differentially expressed. To make the dataset close to null data, we remove genes that are detected in less than 100 cells. For each simulation, we randomly select 2000 genes and 1200 cells.
+### 150 cells
+
 
 ```{r}
+library(mashr)
 fdp = function(dis.idx, true.idx){
   if(length(dis.idx)==0){
     0
@@ -33,88 +41,313 @@ fdp = function(dis.idx, true.idx){
   }
 }
 
-fdp_all = matrix(nrow=12,ncol=5)
-n_fdis = matrix(nrow=12,ncol=5)
-for(i in 1:12){
-  
-  fdp_all[i,1] = fdp(get_significant_results(null_simu$limma[[i]]),0) 
-  n_fdis[i,1] = length(get_significant_results(null_simu$limma[[i]]))
-  
-  fdp_all[i,2] = fdp(get_significant_results(null_simu$deseq[[i]]),0) 
-  n_fdis[i,2] = length(get_significant_results(null_simu$deseq[[i]]))
-  
-  fdp_all[i,3] = fdp(get_significant_results(null_simu$limma_pb[[i]]),0) 
-  n_fdis[i,3] = length(get_significant_results(null_simu$limma_pb[[i]]))
-  
-  fdp_all[i,4] = fdp(get_significant_results(null_simu$deseq_pb[[i]]),0) 
-  n_fdis[i,4] = length(get_significant_results(null_simu$deseq_pb[[i]]))
-  
-  fdp_all[i,5] = fdp(null_simu$anova[[i]]$sig_idx,0) 
-  n_fdis[i,5] = length(null_simu$anova[[i]]$sig_idx)
-}
-colnames(fdp_all) = names(null_simu)
-colnames(n_fdis) = names(null_simu)
-rownames(n_fdis) = 1:12
-knitr::kable(n_fdis,caption='number of false discoveries')
-```
 
-
-## Add Signal
-
-$10\%$ genes are non-null and for these non-null gene, 2 conditions are non-null and signals are drawn from $N(0,0.8^2)$.
-
-```{r}
 auc = function(pred,true.label){
   auc=pROC::roc(response = true.label, predictor = pred)
   auc$auc
 }
-fdp_signal = matrix(nrow=12,ncol=9)
-auc_signal = matrix(nrow=12,ncol=9)
-#n_fdis_signal = matrix(nrow=12,ncol=10)
-#fdp_all = matrix(nrow=12,ncol=8)
-#auc_all = matrix(nrow=12,ncol=8)
-for(i in 1:12){
+
+powr = function(dis.idx, true.idx){
+  if(length(dis.idx)==0){
+    0
+  }else{
+    sum(dis.idx%in%true.idx)/length(true.idx)
+  }
+}
+```
+
+```{r}
+load('/scratch/midway2/dyxie/sc-cytokine/output/scMash_cytokine_cd4_null_150CellPerRep.RData')
+nsimu=20
+
+fdp_all = matrix(nrow=nsimu,ncol=6)
+n_fdis = matrix(nrow=nsimu,ncol=6)
+for(i in 1:nsimu){
+  
+  fdp_all[i,1] = fdp(get_significant_results(null_simu$limma[[i]]),0) 
+  n_fdis[i,1] = length(get_significant_results(null_simu$limma[[i]]))
+  
+  fdp_all[i,2] = fdp(get_significant_results(null_simu$voom_limma[[i]]),0) 
+  n_fdis[i,2] = length(get_significant_results(null_simu$voom_limma[[i]]))
+  
+ # fdp_all[i,2] = fdp(get_significant_results(null_simu$deseq[[i]]),0) 
+ # n_fdis[i,2] = length(get_significant_results(null_simu$deseq[[i]]))
+  
+  fdp_all[i,3] = fdp(get_significant_results(null_simu$limma_pb[[i]]),0) 
+  n_fdis[i,3] = length(get_significant_results(null_simu$limma_pb[[i]]))
+  
+  fdp_all[i,4] = fdp(get_significant_results(null_simu$voom_limma_pb[[i]]),0) 
+  n_fdis[i,4] = length(get_significant_results(null_simu$voom_limma_pb[[i]]))
+  
+  fdp_all[i,5] = fdp(get_significant_results(null_simu$deseq_pb[[i]]),0) 
+  n_fdis[i,5] = length(get_significant_results(null_simu$deseq_pb[[i]]))
+  
+  fdp_all[i,6] = fdp(null_simu$anova[[i]]$sig_idx,0) 
+  n_fdis[i,6] = length(null_simu$anova[[i]]$sig_idx)
+}
+colnames(fdp_all) = names(null_simu)
+colnames(n_fdis) = names(null_simu)
+rownames(n_fdis) = 1:nsimu
+knitr::kable(n_fdis,caption='number of false discoveries')
+```
+
+
+### 50 cells
+
+```{r}
+load('/scratch/midway2/dyxie/sc-cytokine/output/scMash_cytokine_cd4_null_50CellPerRep.RData')
+nsimu=20
+
+fdp_all = matrix(nrow=nsimu,ncol=6)
+n_fdis = matrix(nrow=nsimu,ncol=6)
+for(i in 1:nsimu){
+  
+  fdp_all[i,1] = fdp(get_significant_results(null_simu$limma[[i]]),0) 
+  n_fdis[i,1] = length(get_significant_results(null_simu$limma[[i]]))
+  
+  fdp_all[i,2] = fdp(get_significant_results(null_simu$voom_limma[[i]]),0) 
+  n_fdis[i,2] = length(get_significant_results(null_simu$voom_limma[[i]]))
+  
+ # fdp_all[i,2] = fdp(get_significant_results(null_simu$deseq[[i]]),0) 
+ # n_fdis[i,2] = length(get_significant_results(null_simu$deseq[[i]]))
+  
+  fdp_all[i,3] = fdp(get_significant_results(null_simu$limma_pb[[i]]),0) 
+  n_fdis[i,3] = length(get_significant_results(null_simu$limma_pb[[i]]))
+  
+  fdp_all[i,4] = fdp(get_significant_results(null_simu$voom_limma_pb[[i]]),0) 
+  n_fdis[i,4] = length(get_significant_results(null_simu$voom_limma_pb[[i]]))
+  
+  fdp_all[i,5] = fdp(get_significant_results(null_simu$deseq_pb[[i]]),0) 
+  n_fdis[i,5] = length(get_significant_results(null_simu$deseq_pb[[i]]))
+  
+  fdp_all[i,6] = fdp(null_simu$anova[[i]]$sig_idx,0) 
+  n_fdis[i,6] = length(null_simu$anova[[i]]$sig_idx)
+}
+colnames(fdp_all) = names(null_simu)
+colnames(n_fdis) = names(null_simu)
+rownames(n_fdis) = 1:nsimu
+knitr::kable(n_fdis,caption='number of false discoveries')
+```
+
+
+## Non-null setting
+
+### 150 cells
+
+
+```{r}
+load('/scratch/midway2/dyxie/sc-cytokine/output/scMash_cytokine_cd4_signal_150CellPerRep.RData')
+nsimu=20
+fdp_signal = matrix(nrow=nsimu,ncol=6)
+auc_signal = matrix(nrow=nsimu,ncol=6)
+power_signal = matrix(nrow=nsimu,ncol=6)
+#n_fdis_signal = matrix(nrow=nsimu,ncol=10)
+#fdp_all = matrix(nrow=nsimu,ncol=8)
+#auc_all = matrix(nrow=nsimu,ncol=8)
+for(i in 1:nsimu){
   
   which_null = 1*(rowSums(signal_simu$non_null_matrix[[i]])==0)
   non_null_idx = which(rowSums(signal_simu$non_null_matrix[[i]])!=0)
   
-  fdp_signal[i,1] = fdp(get_significant_results(signal_simu$limma_a0[[i]]),non_null_idx) 
-  auc_signal[i,1] = auc(apply(signal_simu$limma_a0[[i]]$result$lfsr,1,min),which_null)
-  #fdp_all[i,1] = fdp(which(signal_simu$limma_a0[[i]]$result$lfsr<0.05),which(signal_simu$non_null_matrix[[i]]!=0)) 
-  #auc_all[i,1] = auc(c(signal_simu$limma_a0[[i]]$result$lfsr),c(1-signal_simu$non_null_matrix[[i]]))
+  fdp_signal[i,1] = fdp(get_significant_results(signal_simu$limma[[i]]),non_null_idx) 
+  auc_signal[i,1] = auc(apply(signal_simu$limma[[i]]$result$lfsr,1,min),which_null)
+  power_signal[i,1] = powr(get_significant_results(signal_simu$limma[[i]]),non_null_idx) 
+  
+  fdp_signal[i,2] = fdp(get_significant_results(signal_simu$voom_limma[[i]]),non_null_idx) 
+  auc_signal[i,2] = auc(apply(signal_simu$voom_limma[[i]]$result$lfsr,1,min),which_null)
+  power_signal[i,2] = powr(get_significant_results(signal_simu$voom_limma[[i]]),non_null_idx)
+
+  fdp_signal[i,3] = fdp(get_significant_results(signal_simu$limma_pb[[i]]),non_null_idx) 
+  auc_signal[i,3] = auc(apply(signal_simu$limma_pb[[i]]$result$lfsr,1,min),which_null)
+  power_signal[i,3] = powr(get_significant_results(signal_simu$voom_limma[[i]]),non_null_idx)
+  
+  fdp_signal[i,4] = fdp(get_significant_results(signal_simu$voom_limma_pb[[i]]),non_null_idx) 
+  auc_signal[i,4] = auc(apply(signal_simu$voom_limma_pb[[i]]$result$lfsr,1,min),which_null)
+  power_signal[i,4] = powr(get_significant_results(signal_simu$voom_limma_pb[[i]]),non_null_idx) 
+  
+  fdp_signal[i,5] = fdp(get_significant_results(signal_simu$deseq_pb[[i]]),non_null_idx) 
+  auc_signal[i,5] = auc(apply(signal_simu$deseq_pb[[i]]$result$lfsr,1,min),which_null)
+  power_signal[i,5] = powr(get_significant_results(signal_simu$deseq_pb[[i]]),non_null_idx) 
+  
+   #fdp_signal[i,7] = fdp(get_significant_results(signal_simu$limma_pb_a1[[i]]),non_null_idx) 
+  #auc_signal[i,7] = auc(apply(signal_simu$limma_pb_a1[[i]]$result$lfsr,1,min),which_null)
+  
+  #fdp_signal[i,8] = fdp(get_significant_results(signal_simu$deseq_pb_a1[[i]]),non_null_idx) 
+  #auc_signal[i,8] = auc(apply(signal_simu$deseq_pb_a1[[i]]$result$lfsr,1,min),which_null)
   
   
-  
-  fdp_signal[i,2] = fdp(get_significant_results(signal_simu$deseq_a0[[i]]),non_null_idx) 
-  auc_signal[i,2] = auc(apply(signal_simu$deseq_a0[[i]]$result$lfsr,1,min),which_null)
-  
-  fdp_signal[i,3] = fdp(get_significant_results(signal_simu$limma_a1[[i]]),non_null_idx) 
-  auc_signal[i,3] = auc(apply(signal_simu$limma_a1[[i]]$result$lfsr,1,min),which_null)
-  
-  fdp_signal[i,4] = fdp(get_significant_results(signal_simu$deseq_a1[[i]]),non_null_idx) 
-  auc_signal[i,4] = auc(apply(signal_simu$deseq_a1[[i]]$result$lfsr,1,min),which_null)
-  
-   fdp_signal[i,5] = fdp(get_significant_results(signal_simu$limma_pb_a0[[i]]),non_null_idx) 
-  auc_signal[i,5] = auc(apply(signal_simu$limma_pb_a0[[i]]$result$lfsr,1,min),which_null)
-  
-  fdp_signal[i,6] = fdp(get_significant_results(signal_simu$deseq_pb_a0[[i]]),non_null_idx) 
-  auc_signal[i,6] = auc(apply(signal_simu$deseq_pb_a0[[i]]$result$lfsr,1,min),which_null)
-  
-   fdp_signal[i,7] = fdp(get_significant_results(signal_simu$limma_pb_a1[[i]]),non_null_idx) 
-  auc_signal[i,7] = auc(apply(signal_simu$limma_pb_a1[[i]]$result$lfsr,1,min),which_null)
-  
-  fdp_signal[i,8] = fdp(get_significant_results(signal_simu$deseq_pb_a1[[i]]),non_null_idx) 
-  auc_signal[i,8] = auc(apply(signal_simu$deseq_pb_a1[[i]]$result$lfsr,1,min),which_null)
-  
-  
-  fdp_signal[i,9] = fdp(signal_simu$anova[[i]]$sig_idx,non_null_idx) 
-  auc_signal[i,9] = auc(p.adjust(signal_simu$anova[[i]]$p_val,method='BH'),which_null)
+  fdp_signal[i,6] = fdp(signal_simu$anova[[i]]$sig_idx,non_null_idx) 
+  auc_signal[i,6] = auc(p.adjust(signal_simu$anova[[i]]$p_val,method='BH'),which_null)
+  power_signal[i,6] = powr(signal_simu$anova[[i]]$sig_idx,non_null_idx) 
 }
-colnames(fdp_signal) = names(signal_simu)[1:9]
-colnames(auc_signal) = names(signal_simu)[1:9]
-rownames(auc_signal) = 1:12
+colnames(fdp_signal) = names(signal_simu)[1:6]
+colnames(auc_signal) = names(signal_simu)[1:6]
+rownames(auc_signal) = 1:nsimu
+colnames(power_signal) = names(signal_simu)[1:6]
 
 
-knitr::kable(sort(round(apply(fdp_signal,2,mean),2)[c(1,2,5,6,9)]),col.names = 'fdr')
-knitr::kable(sort(round(apply(auc_signal,2,mean),2)[c(1,2,5,6,9)],decreasing = TRUE),col.names = 'auc')
+knitr::kable(sort(round(apply(fdp_signal,2,mean),2)),col.names = 'fdr level 0.05')
+knitr::kable(sort(round(apply(auc_signal,2,mean),2),decreasing = TRUE),col.names = 'auc')
+knitr::kable(sort(round(apply(power_signal,2,mean),2),decreasing = TRUE),col.names = 'power at fdr level 0.05')
+```
+
+Plot ROC 
+
+```{r}
+
+which_null = 1*(rowSums(signal_simu$non_null_matrix[[1]])==0)
+  non_null_idx = which(rowSums(signal_simu$non_null_matrix[[1]])!=0)
+roc_out <- list(
+  pROC::roc(response = which_null, predictor = c(apply(signal_simu$deseq_pb[[1]]$result$lfsr,1,min))),
+  pROC::roc(response = which_null, predictor = c(p.adjust(signal_simu$anova[[1]]$p_val,method='BH'))),
+   pROC::roc(response = which_null, predictor = c(apply(signal_simu$limma[[1]]$result$lfsr,1,min)))
+  )
+name_vec <- c("deseq_pb", "anova","limma")
+names(roc_out) <- name_vec
+
+sout <- lapply(roc_out, function(x) { data.frame(TPR = x$sensitivities, FPR = 1 - x$specificities)})
+for (index in 1:length(sout)) {
+  sout[[index]]$Method <- name_vec[index]
+}
+longdat <- do.call(rbind, sout)
+
+shortdat <- dplyr::filter(longdat, Method == "deseq_pb" |
+                            Method == "anova"|
+                            Method == "limma" )
+library(ggplot2)
+ggplot(data = shortdat, mapping = aes(x = FPR, y = TPR, col = Method)) +
+  geom_path() + theme_bw() + ggtitle("ROC Curves")
+
+```
+
+```{r,eval=FALSE,include=FALSE}
+
+#On detecting both genes and conditions
+
+fdp_signal = matrix(nrow=nsimu,ncol=5)
+auc_signal = matrix(nrow=nsimu,ncol=5)
+#n_fdis_signal = matrix(nrow=nsimu,ncol=10)
+#fdp_all = matrix(nrow=nsimu,ncol=8)
+#auc_all = matrix(nrow=nsimu,ncol=8)
+for(i in 1:nsimu){
+  
+  
+  non_null_matrix = c(cbind(rep(0,nrow(signal_simu$non_null_matrix[[i]])),signal_simu$non_null_matrix[[i]]))
+  which_null = (1*(non_null_matrix==0))
+  non_null_idx = which(non_null_matrix!=0)
+  
+  fdp_signal[i,1] = fdp(which(c(signal_simu$limma[[i]]$result$lfsr)<0.05),non_null_idx) 
+  auc_signal[i,1] = auc(c(signal_simu$limma[[i]]$result$lfsr),which_null)
+  
+  fdp_signal[i,2] = fdp(which(signal_simu$voom_limma[[i]]$result$lfsr<0.05),non_null_idx) 
+  auc_signal[i,2] = auc(c(signal_simu$voom_limma[[i]]$result$lfsr),which_null)
+
+  fdp_signal[i,3] = fdp(which(signal_simu$limma_pb[[i]]$result$lfsr<0.05),non_null_idx) 
+  auc_signal[i,3] = auc(c(signal_simu$limma_pb[[i]]$result$lfsr),which_null)
+  
+  fdp_signal[i,4] = fdp(which(signal_simu$voom_limma_pb[[i]]$result$lfsr<0.05),non_null_idx) 
+  auc_signal[i,4] = auc(c(signal_simu$voom_limma_pb[[i]]$result$lfsr),which_null)
+  
+  fdp_signal[i,5] = fdp(which(signal_simu$deseq_pb[[i]]$result$lfsr<0.05),non_null_idx) 
+  auc_signal[i,5] = auc(c(signal_simu$deseq_pb[[i]]$result$lfsr),which_null)
+  
+   #fdp_signal[i,7] = fdp(get_significant_results(signal_simu$limma_pb_a1[[i]]),non_null_idx) 
+  #auc_signal[i,7] = auc(apply(signal_simu$limma_pb_a1[[i]]$result$lfsr,1,min),which_null)
+  
+  #fdp_signal[i,8] = fdp(get_significant_results(signal_simu$deseq_pb_a1[[i]]),non_null_idx) 
+  #auc_signal[i,8] = auc(apply(signal_simu$deseq_pb_a1[[i]]$result$lfsr,1,min),which_null)
+  
+}
+colnames(fdp_signal) = names(signal_simu)[1:5]
+colnames(auc_signal) = names(signal_simu)[1:5]
+rownames(auc_signal) = 1:nsimu
+
+
+knitr::kable(sort(round(apply(fdp_signal,2,mean),2)),col.names = 'fdr')
+knitr::kable(sort(round(apply(auc_signal,2,mean),2),decreasing = TRUE),col.names = 'auc')
+```
+
+### 50 cells
+
+```{r}
+load('/scratch/midway2/dyxie/sc-cytokine/output/scMash_cytokine_cd4_signal_50CellPerRep.RData')
+nsimu=20
+fdp_signal = matrix(nrow=nsimu,ncol=6)
+auc_signal = matrix(nrow=nsimu,ncol=6)
+power_signal = matrix(nrow=nsimu,ncol=6)
+#n_fdis_signal = matrix(nrow=nsimu,ncol=10)
+#fdp_all = matrix(nrow=nsimu,ncol=8)
+#auc_all = matrix(nrow=nsimu,ncol=8)
+for(i in 1:nsimu){
+  
+  which_null = 1*(rowSums(signal_simu$non_null_matrix[[i]])==0)
+  non_null_idx = which(rowSums(signal_simu$non_null_matrix[[i]])!=0)
+  
+  fdp_signal[i,1] = fdp(get_significant_results(signal_simu$limma[[i]]),non_null_idx) 
+  auc_signal[i,1] = auc(apply(signal_simu$limma[[i]]$result$lfsr,1,min),which_null)
+  power_signal[i,1] = powr(get_significant_results(signal_simu$limma[[i]]),non_null_idx) 
+  
+  fdp_signal[i,2] = fdp(get_significant_results(signal_simu$voom_limma[[i]]),non_null_idx) 
+  auc_signal[i,2] = auc(apply(signal_simu$voom_limma[[i]]$result$lfsr,1,min),which_null)
+  power_signal[i,2] = powr(get_significant_results(signal_simu$voom_limma[[i]]),non_null_idx)
+
+  fdp_signal[i,3] = fdp(get_significant_results(signal_simu$limma_pb[[i]]),non_null_idx) 
+  auc_signal[i,3] = auc(apply(signal_simu$limma_pb[[i]]$result$lfsr,1,min),which_null)
+  power_signal[i,3] = powr(get_significant_results(signal_simu$voom_limma[[i]]),non_null_idx)
+  
+  fdp_signal[i,4] = fdp(get_significant_results(signal_simu$voom_limma_pb[[i]]),non_null_idx) 
+  auc_signal[i,4] = auc(apply(signal_simu$voom_limma_pb[[i]]$result$lfsr,1,min),which_null)
+  power_signal[i,4] = powr(get_significant_results(signal_simu$voom_limma_pb[[i]]),non_null_idx) 
+  
+  fdp_signal[i,5] = fdp(get_significant_results(signal_simu$deseq_pb[[i]]),non_null_idx) 
+  auc_signal[i,5] = auc(apply(signal_simu$deseq_pb[[i]]$result$lfsr,1,min),which_null)
+  power_signal[i,5] = powr(get_significant_results(signal_simu$deseq_pb[[i]]),non_null_idx) 
+  
+   #fdp_signal[i,7] = fdp(get_significant_results(signal_simu$limma_pb_a1[[i]]),non_null_idx) 
+  #auc_signal[i,7] = auc(apply(signal_simu$limma_pb_a1[[i]]$result$lfsr,1,min),which_null)
+  
+  #fdp_signal[i,8] = fdp(get_significant_results(signal_simu$deseq_pb_a1[[i]]),non_null_idx) 
+  #auc_signal[i,8] = auc(apply(signal_simu$deseq_pb_a1[[i]]$result$lfsr,1,min),which_null)
+  
+  
+  fdp_signal[i,6] = fdp(signal_simu$anova[[i]]$sig_idx,non_null_idx) 
+  auc_signal[i,6] = auc(p.adjust(signal_simu$anova[[i]]$p_val,method='BH'),which_null)
+  power_signal[i,6] = powr(signal_simu$anova[[i]]$sig_idx,non_null_idx) 
+}
+colnames(fdp_signal) = names(signal_simu)[1:6]
+colnames(auc_signal) = names(signal_simu)[1:6]
+rownames(auc_signal) = 1:nsimu
+colnames(power_signal) = names(signal_simu)[1:6]
+knitr::kable(sort(round(apply(fdp_signal,2,mean),2)),col.names = 'fdr level 0.05')
+knitr::kable(sort(round(apply(auc_signal,2,mean),2),decreasing = TRUE),col.names = 'auc')
+knitr::kable(sort(round(apply(power_signal,2,mean),2),decreasing = TRUE),col.names = 'power at fdr level 0.05')
+```
+
+Plot ROC 
+
+```{r}
+
+which_null = 1*(rowSums(signal_simu$non_null_matrix[[1]])==0)
+  non_null_idx = which(rowSums(signal_simu$non_null_matrix[[1]])!=0)
+roc_out <- list(
+  pROC::roc(response = which_null, predictor = c(apply(signal_simu$deseq_pb[[1]]$result$lfsr,1,min))),
+  pROC::roc(response = which_null, predictor = c(p.adjust(signal_simu$anova[[1]]$p_val,method='BH'))),
+   pROC::roc(response = which_null, predictor = c(apply(signal_simu$limma[[1]]$result$lfsr,1,min)))
+  )
+name_vec <- c("deseq_pb", "anova","limma")
+names(roc_out) <- name_vec
+
+sout <- lapply(roc_out, function(x) { data.frame(TPR = x$sensitivities, FPR = 1 - x$specificities)})
+for (index in 1:length(sout)) {
+  sout[[index]]$Method <- name_vec[index]
+}
+longdat <- do.call(rbind, sout)
+
+shortdat <- dplyr::filter(longdat, Method == "deseq_pb" |
+                            Method == "anova"|
+                            Method == "limma" )
+library(ggplot2)
+ggplot(data = shortdat, mapping = aes(x = FPR, y = TPR, col = Method)) +
+  geom_path() + theme_bw() + ggtitle("ROC Curves")
+
 ```
