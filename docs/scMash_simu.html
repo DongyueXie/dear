@@ -25,6 +25,7 @@
 <link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
 <script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
 <link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
 <link href="site_libs/font-awesome-5.0.13/css/fa-svg-with-js.css" rel="stylesheet" />
@@ -170,6 +171,14 @@ $(document).ready(function () {
 </script>
 
 <!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
 
 
 
@@ -315,6 +324,14 @@ div.section {
 
 <div class="fluid-row" id="header">
 
+<div class="btn-group pull-right">
+<button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
 
 
 <h1 class="title toc-ignore">scMash_simu</h1>
@@ -344,7 +361,7 @@ div.section {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2020-06-09
+<strong>Last updated:</strong> 2020-06-10
 </p>
 <p>
 <strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
@@ -435,10 +452,10 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomDongyueXiedeartree878be81725e90a35dc2779e237bce15054d86e44targetblank878be81a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/DongyueXie/dear/tree/878be81725e90a35dc2779e237bce15054d86e44" target="_blank">878be81</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomDongyueXiedeartree46a6e163c3f3f2203acb1aa1562368c8148a221ctargetblank46a6e16a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/DongyueXie/dear/tree/46a6e163c3f3f2203acb1aa1562368c8148a221c" target="_blank">46a6e16</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomDongyueXiedeartree878be81725e90a35dc2779e237bce15054d86e44targetblank878be81a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomDongyueXiedeartree46a6e163c3f3f2203acb1aa1562368c8148a221ctargetblank46a6e16a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility. The version displayed above was the version of the Git repository at the time these results were generated. <br><br> Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -518,6 +535,40 @@ Message
 Rmd
 </td>
 <td>
+<a href="https://github.com/DongyueXie/dear/blob/46a6e163c3f3f2203acb1aa1562368c8148a221c/analysis/scMash_simu.Rmd" target="_blank">46a6e16</a>
+</td>
+<td>
+DongyueXie
+</td>
+<td>
+2020-06-10
+</td>
+<td>
+wflow_publish(“analysis/scMash_simu.Rmd”)
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/DongyueXie/dear/c94a7872d16b2710b727dc333bb3315e4eb8358e/docs/scMash_simu.html" target="_blank">c94a787</a>
+</td>
+<td>
+DongyueXie
+</td>
+<td>
+2020-06-09
+</td>
+<td>
+Build site.
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
 <a href="https://github.com/DongyueXie/dear/blob/878be81725e90a35dc2779e237bce15054d86e44/analysis/scMash_simu.Rmd" target="_blank">878be81</a>
 </td>
 <td>
@@ -539,15 +590,20 @@ wflow_publish(“analysis/scMash_simu.Rmd”)
 </div>
 <div id="introduction" class="section level2">
 <h2>Introduction</h2>
-<pre class="r"><code>library(mashr)</code></pre>
-<pre><code>Loading required package: ashr</code></pre>
-<pre class="r"><code>load(&#39;/scratch/midway2/dyxie/sc-cytokine/output/scMash_pbmc3k_null.RData&#39;)
-load(&#39;/scratch/midway2/dyxie/sc-cytokine/output/scMash_pbmc3k_signal.RData&#39;)</code></pre>
-<p>We will use the PBMC data available from 10X Genomics, the raw data can be downloaded <a href="https://s3-us-west-2.amazonaws.com/10x.files/samples/cell/pbmc3k/pbmc3k_filtered_gene_bc_matrices.tar.gz">here</a>. We use data from 4 cell types: Naive CD4 T, Memory CD4 T, CD14+ Mono, B.</p>
+<p>We take raw count data from cd4 cells of cytokine experiment and compare DE methods + mash.</p>
+<p>limma – log1p transformation on scRNA-seq data then limma</p>
+<p>voom-limma – voom transformation+limma</p>
+<p>pb – stands for pseudo-bulk</p>
+<p>anova – a simple one-way anova on each gene and use BH for fdr control.</p>
+<p>There are two settings: 1. in null setting, we randomly assign labels(total 10 labels) to each cell to create a NULL data in which no gene is differentially expressed. To make the dataset close to null data, we remove genes that are detected in less than 100 cells. 2. in non-null setting, we randomly select around <span class="math inline">\(10\%\)</span> genes to be non-null and for these genes, randomly choose 2-4 conditions to be non-null(relative to mean). Signals are added using binomial thinning.</p>
+<p>To examine the effect of the number of cells creating pseudo-bulk data, we include simulations with 150 and 50 cells per replicate. For each simulation, we randomly select 2000 genes and 4500/1500 cells.</p>
 </div>
 <div id="null-setting" class="section level2">
 <h2>NULL setting</h2>
-<p>We randomly assign labels(total 5) to each cell to create a NULL data in which no gene is differentially expressed. To make the dataset close to null data, we remove genes that are detected in less than 100 cells. For each simulation, we randomly select 2000 genes and 1200 cells.</p>
+<div id="cells" class="section level3">
+<h3>150 cells</h3>
+<pre class="r"><code>library(mashr)</code></pre>
+<pre><code>Loading required package: ashr</code></pre>
 <pre class="r"><code>fdp = function(dis.idx, true.idx){
   if(length(dis.idx)==0){
     0
@@ -556,36 +612,59 @@ load(&#39;/scratch/midway2/dyxie/sc-cytokine/output/scMash_pbmc3k_signal.RData&#
   }
 }
 
-fdp_all = matrix(nrow=12,ncol=5)
-n_fdis = matrix(nrow=12,ncol=5)
-for(i in 1:12){
+
+auc = function(pred,true.label){
+  auc=pROC::roc(response = true.label, predictor = pred)
+  auc$auc
+}
+
+powr = function(dis.idx, true.idx){
+  if(length(dis.idx)==0){
+    0
+  }else{
+    sum(dis.idx%in%true.idx)/length(true.idx)
+  }
+}</code></pre>
+<pre class="r"><code>load(&#39;/scratch/midway2/dyxie/sc-cytokine/output/scMash_cytokine_cd4_null_150CellPerRep.RData&#39;)
+nsimu=20
+
+fdp_all = matrix(nrow=nsimu,ncol=6)
+n_fdis = matrix(nrow=nsimu,ncol=6)
+for(i in 1:nsimu){
   
   fdp_all[i,1] = fdp(get_significant_results(null_simu$limma[[i]]),0) 
   n_fdis[i,1] = length(get_significant_results(null_simu$limma[[i]]))
   
-  fdp_all[i,2] = fdp(get_significant_results(null_simu$deseq[[i]]),0) 
-  n_fdis[i,2] = length(get_significant_results(null_simu$deseq[[i]]))
+  fdp_all[i,2] = fdp(get_significant_results(null_simu$voom_limma[[i]]),0) 
+  n_fdis[i,2] = length(get_significant_results(null_simu$voom_limma[[i]]))
+  
+ # fdp_all[i,2] = fdp(get_significant_results(null_simu$deseq[[i]]),0) 
+ # n_fdis[i,2] = length(get_significant_results(null_simu$deseq[[i]]))
   
   fdp_all[i,3] = fdp(get_significant_results(null_simu$limma_pb[[i]]),0) 
   n_fdis[i,3] = length(get_significant_results(null_simu$limma_pb[[i]]))
   
-  fdp_all[i,4] = fdp(get_significant_results(null_simu$deseq_pb[[i]]),0) 
-  n_fdis[i,4] = length(get_significant_results(null_simu$deseq_pb[[i]]))
+  fdp_all[i,4] = fdp(get_significant_results(null_simu$voom_limma_pb[[i]]),0) 
+  n_fdis[i,4] = length(get_significant_results(null_simu$voom_limma_pb[[i]]))
   
-  fdp_all[i,5] = fdp(null_simu$anova[[i]]$sig_idx,0) 
-  n_fdis[i,5] = length(null_simu$anova[[i]]$sig_idx)
+  fdp_all[i,5] = fdp(get_significant_results(null_simu$deseq_pb[[i]]),0) 
+  n_fdis[i,5] = length(get_significant_results(null_simu$deseq_pb[[i]]))
+  
+  fdp_all[i,6] = fdp(null_simu$anova[[i]]$sig_idx,0) 
+  n_fdis[i,6] = length(null_simu$anova[[i]]$sig_idx)
 }
 colnames(fdp_all) = names(null_simu)
 colnames(n_fdis) = names(null_simu)
-rownames(n_fdis) = 1:12
+rownames(n_fdis) = 1:nsimu
 knitr::kable(n_fdis,caption=&#39;number of false discoveries&#39;)</code></pre>
 <table>
 <caption>number of false discoveries</caption>
 <thead>
 <tr class="header">
 <th align="right">limma</th>
-<th align="right">deseq</th>
+<th align="right">voom_limma</th>
 <th align="right">limma_pb</th>
+<th align="right">voom_limma_pb</th>
 <th align="right">deseq_pb</th>
 <th align="right">anova</th>
 </tr>
@@ -593,177 +672,468 @@ knitr::kable(n_fdis,caption=&#39;number of false discoveries&#39;)</code></pre>
 <tbody>
 <tr class="odd">
 <td align="right">0</td>
-<td align="right">1</td>
-<td align="right">0</td>
-<td align="right">1</td>
-<td align="right">0</td>
-</tr>
-<tr class="even">
-<td align="right">41</td>
-<td align="right">1</td>
-<td align="right">1</td>
-<td align="right">1</td>
-<td align="right">0</td>
-</tr>
-<tr class="odd">
-<td align="right">818</td>
-<td align="right">2</td>
-<td align="right">2</td>
-<td align="right">0</td>
-<td align="right">0</td>
-</tr>
-<tr class="even">
-<td align="right">485</td>
-<td align="right">0</td>
-<td align="right">4</td>
-<td align="right">0</td>
-<td align="right">0</td>
-</tr>
-<tr class="odd">
-<td align="right">1095</td>
-<td align="right">4</td>
-<td align="right">2</td>
-<td align="right">0</td>
-<td align="right">0</td>
-</tr>
-<tr class="even">
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">7</td>
-<td align="right">5</td>
-<td align="right">0</td>
-</tr>
-<tr class="odd">
-<td align="right">9</td>
-<td align="right">4</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-</tr>
-<tr class="even">
-<td align="right">56</td>
-<td align="right">1</td>
-<td align="right">11</td>
-<td align="right">2</td>
-<td align="right">1</td>
-</tr>
-<tr class="odd">
-<td align="right">837</td>
-<td align="right">2</td>
-<td align="right">4</td>
-<td align="right">0</td>
-<td align="right">0</td>
-</tr>
-<tr class="even">
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">4</td>
-<td align="right">0</td>
-<td align="right">0</td>
-</tr>
-<tr class="odd">
-<td align="right">0</td>
-<td align="right">1</td>
-<td align="right">1</td>
-<td align="right">0</td>
-<td align="right">0</td>
-</tr>
-<tr class="even">
-<td align="right">253</td>
+<td align="right">1885</td>
 <td align="right">3</td>
+<td align="right">3</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">0</td>
+<td align="right">1762</td>
+<td align="right">4</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="right">0</td>
+<td align="right">1652</td>
+<td align="right">8</td>
 <td align="right">5</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">0</td>
+<td align="right">1852</td>
+<td align="right">6</td>
+<td align="right">7</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">1881</td>
+<td align="right">6</td>
+<td align="right">4</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">11</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="right">0</td>
+<td align="right">1849</td>
+<td align="right">4</td>
+<td align="right">10</td>
+<td align="right">0</td>
+<td align="right">2</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="right">1793</td>
+<td align="right">7</td>
+<td align="right">4</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="right">0</td>
+<td align="right">1933</td>
+<td align="right">1</td>
+<td align="right">10</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">0</td>
+<td align="right">1840</td>
+<td align="right">11</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="right">0</td>
+<td align="right">888</td>
+<td align="right">4</td>
+<td align="right">3</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">0</td>
+<td align="right">4</td>
+<td align="right">8</td>
+<td align="right">6</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="right">0</td>
+<td align="right">1836</td>
+<td align="right">4</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">0</td>
+<td align="right">1731</td>
+<td align="right">10</td>
+<td align="right">12</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="right">0</td>
+<td align="right">1738</td>
+<td align="right">6</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="right">0</td>
+<td align="right">1858</td>
+<td align="right">6</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">4</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">0</td>
+<td align="right">1720</td>
+<td align="right">8</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="right">0</td>
+<td align="right">1923</td>
+<td align="right">1</td>
+<td align="right">2</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">5</td>
+<td align="right">3</td>
 <td align="right">0</td>
 <td align="right">0</td>
 </tr>
 </tbody>
 </table>
 </div>
-<div id="add-signal" class="section level2">
-<h2>Add Signal</h2>
-<p><span class="math inline">\(10\%\)</span> genes are non-null and for these non-null gene, 2 conditions are non-null and signals are drawn from <span class="math inline">\(N(0,0.8^2)\)</span>.</p>
-<pre class="r"><code>auc = function(pred,true.label){
-  auc=pROC::roc(response = true.label, predictor = pred)
-  auc$auc
+<div id="cells-1" class="section level3">
+<h3>50 cells</h3>
+<pre class="r"><code>load(&#39;/scratch/midway2/dyxie/sc-cytokine/output/scMash_cytokine_cd4_null_50CellPerRep.RData&#39;)
+nsimu=20
+
+fdp_all = matrix(nrow=nsimu,ncol=6)
+n_fdis = matrix(nrow=nsimu,ncol=6)
+for(i in 1:nsimu){
+  
+  fdp_all[i,1] = fdp(get_significant_results(null_simu$limma[[i]]),0) 
+  n_fdis[i,1] = length(get_significant_results(null_simu$limma[[i]]))
+  
+  fdp_all[i,2] = fdp(get_significant_results(null_simu$voom_limma[[i]]),0) 
+  n_fdis[i,2] = length(get_significant_results(null_simu$voom_limma[[i]]))
+  
+ # fdp_all[i,2] = fdp(get_significant_results(null_simu$deseq[[i]]),0) 
+ # n_fdis[i,2] = length(get_significant_results(null_simu$deseq[[i]]))
+  
+  fdp_all[i,3] = fdp(get_significant_results(null_simu$limma_pb[[i]]),0) 
+  n_fdis[i,3] = length(get_significant_results(null_simu$limma_pb[[i]]))
+  
+  fdp_all[i,4] = fdp(get_significant_results(null_simu$voom_limma_pb[[i]]),0) 
+  n_fdis[i,4] = length(get_significant_results(null_simu$voom_limma_pb[[i]]))
+  
+  fdp_all[i,5] = fdp(get_significant_results(null_simu$deseq_pb[[i]]),0) 
+  n_fdis[i,5] = length(get_significant_results(null_simu$deseq_pb[[i]]))
+  
+  fdp_all[i,6] = fdp(null_simu$anova[[i]]$sig_idx,0) 
+  n_fdis[i,6] = length(null_simu$anova[[i]]$sig_idx)
 }
-fdp_signal = matrix(nrow=12,ncol=9)
-auc_signal = matrix(nrow=12,ncol=9)
-#n_fdis_signal = matrix(nrow=12,ncol=10)
-#fdp_all = matrix(nrow=12,ncol=8)
-#auc_all = matrix(nrow=12,ncol=8)
-for(i in 1:12){
+colnames(fdp_all) = names(null_simu)
+colnames(n_fdis) = names(null_simu)
+rownames(n_fdis) = 1:nsimu
+knitr::kable(n_fdis,caption=&#39;number of false discoveries&#39;)</code></pre>
+<table>
+<caption>number of false discoveries</caption>
+<thead>
+<tr class="header">
+<th align="right">limma</th>
+<th align="right">voom_limma</th>
+<th align="right">limma_pb</th>
+<th align="right">voom_limma_pb</th>
+<th align="right">deseq_pb</th>
+<th align="right">anova</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">11</td>
+<td align="right">10</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">0</td>
+<td align="right">1784</td>
+<td align="right">5</td>
+<td align="right">5</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="right">0</td>
+<td align="right">1843</td>
+<td align="right">6</td>
+<td align="right">10</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">0</td>
+<td align="right">1903</td>
+<td align="right">6</td>
+<td align="right">7</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="right">0</td>
+<td align="right">1945</td>
+<td align="right">6</td>
+<td align="right">7</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">0</td>
+<td align="right">1584</td>
+<td align="right">4</td>
+<td align="right">10</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="right">0</td>
+<td align="right">1842</td>
+<td align="right">4</td>
+<td align="right">16</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">0</td>
+<td align="right">1817</td>
+<td align="right">7</td>
+<td align="right">9</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">1042</td>
+<td align="right">9</td>
+<td align="right">8</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">0</td>
+<td align="right">1823</td>
+<td align="right">7</td>
+<td align="right">9</td>
+<td align="right">0</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="right">0</td>
+<td align="right">1859</td>
+<td align="right">8</td>
+<td align="right">9</td>
+<td align="right">1</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">0</td>
+<td align="right">1775</td>
+<td align="right">6</td>
+<td align="right">5</td>
+<td align="right">0</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="right">0</td>
+<td align="right">1664</td>
+<td align="right">3</td>
+<td align="right">8</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">0</td>
+<td align="right">1838</td>
+<td align="right">3</td>
+<td align="right">6</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="right">0</td>
+<td align="right">1463</td>
+<td align="right">6</td>
+<td align="right">5</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">0</td>
+<td align="right">1834</td>
+<td align="right">5</td>
+<td align="right">9</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">1049</td>
+<td align="right">10</td>
+<td align="right">7</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">0</td>
+<td align="right">1412</td>
+<td align="right">4</td>
+<td align="right">9</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="right">2</td>
+<td align="right">1598</td>
+<td align="right">8</td>
+<td align="right">13</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">0</td>
+<td align="right">1653</td>
+<td align="right">6</td>
+<td align="right">9</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="non-null-setting" class="section level2">
+<h2>Non-null setting</h2>
+<div id="cells-2" class="section level3">
+<h3>150 cells</h3>
+<pre class="r"><code>load(&#39;/scratch/midway2/dyxie/sc-cytokine/output/scMash_cytokine_cd4_signal_150CellPerRep.RData&#39;)
+nsimu=20
+fdp_signal = matrix(nrow=nsimu,ncol=6)
+auc_signal = matrix(nrow=nsimu,ncol=6)
+power_signal = matrix(nrow=nsimu,ncol=6)
+#n_fdis_signal = matrix(nrow=nsimu,ncol=10)
+#fdp_all = matrix(nrow=nsimu,ncol=8)
+#auc_all = matrix(nrow=nsimu,ncol=8)
+for(i in 1:nsimu){
   
   which_null = 1*(rowSums(signal_simu$non_null_matrix[[i]])==0)
   non_null_idx = which(rowSums(signal_simu$non_null_matrix[[i]])!=0)
   
-  fdp_signal[i,1] = fdp(get_significant_results(signal_simu$limma_a0[[i]]),non_null_idx) 
-  auc_signal[i,1] = auc(apply(signal_simu$limma_a0[[i]]$result$lfsr,1,min),which_null)
-  #fdp_all[i,1] = fdp(which(signal_simu$limma_a0[[i]]$result$lfsr&lt;0.05),which(signal_simu$non_null_matrix[[i]]!=0)) 
-  #auc_all[i,1] = auc(c(signal_simu$limma_a0[[i]]$result$lfsr),c(1-signal_simu$non_null_matrix[[i]]))
+  fdp_signal[i,1] = fdp(get_significant_results(signal_simu$limma[[i]]),non_null_idx) 
+  auc_signal[i,1] = auc(apply(signal_simu$limma[[i]]$result$lfsr,1,min),which_null)
+  power_signal[i,1] = powr(get_significant_results(signal_simu$limma[[i]]),non_null_idx) 
+  
+  fdp_signal[i,2] = fdp(get_significant_results(signal_simu$voom_limma[[i]]),non_null_idx) 
+  auc_signal[i,2] = auc(apply(signal_simu$voom_limma[[i]]$result$lfsr,1,min),which_null)
+  power_signal[i,2] = powr(get_significant_results(signal_simu$voom_limma[[i]]),non_null_idx)
+
+  fdp_signal[i,3] = fdp(get_significant_results(signal_simu$limma_pb[[i]]),non_null_idx) 
+  auc_signal[i,3] = auc(apply(signal_simu$limma_pb[[i]]$result$lfsr,1,min),which_null)
+  power_signal[i,3] = powr(get_significant_results(signal_simu$voom_limma[[i]]),non_null_idx)
+  
+  fdp_signal[i,4] = fdp(get_significant_results(signal_simu$voom_limma_pb[[i]]),non_null_idx) 
+  auc_signal[i,4] = auc(apply(signal_simu$voom_limma_pb[[i]]$result$lfsr,1,min),which_null)
+  power_signal[i,4] = powr(get_significant_results(signal_simu$voom_limma_pb[[i]]),non_null_idx) 
+  
+  fdp_signal[i,5] = fdp(get_significant_results(signal_simu$deseq_pb[[i]]),non_null_idx) 
+  auc_signal[i,5] = auc(apply(signal_simu$deseq_pb[[i]]$result$lfsr,1,min),which_null)
+  power_signal[i,5] = powr(get_significant_results(signal_simu$deseq_pb[[i]]),non_null_idx) 
+  
+   #fdp_signal[i,7] = fdp(get_significant_results(signal_simu$limma_pb_a1[[i]]),non_null_idx) 
+  #auc_signal[i,7] = auc(apply(signal_simu$limma_pb_a1[[i]]$result$lfsr,1,min),which_null)
+  
+  #fdp_signal[i,8] = fdp(get_significant_results(signal_simu$deseq_pb_a1[[i]]),non_null_idx) 
+  #auc_signal[i,8] = auc(apply(signal_simu$deseq_pb_a1[[i]]$result$lfsr,1,min),which_null)
   
   
-  
-  fdp_signal[i,2] = fdp(get_significant_results(signal_simu$deseq_a0[[i]]),non_null_idx) 
-  auc_signal[i,2] = auc(apply(signal_simu$deseq_a0[[i]]$result$lfsr,1,min),which_null)
-  
-  fdp_signal[i,3] = fdp(get_significant_results(signal_simu$limma_a1[[i]]),non_null_idx) 
-  auc_signal[i,3] = auc(apply(signal_simu$limma_a1[[i]]$result$lfsr,1,min),which_null)
-  
-  fdp_signal[i,4] = fdp(get_significant_results(signal_simu$deseq_a1[[i]]),non_null_idx) 
-  auc_signal[i,4] = auc(apply(signal_simu$deseq_a1[[i]]$result$lfsr,1,min),which_null)
-  
-   fdp_signal[i,5] = fdp(get_significant_results(signal_simu$limma_pb_a0[[i]]),non_null_idx) 
-  auc_signal[i,5] = auc(apply(signal_simu$limma_pb_a0[[i]]$result$lfsr,1,min),which_null)
-  
-  fdp_signal[i,6] = fdp(get_significant_results(signal_simu$deseq_pb_a0[[i]]),non_null_idx) 
-  auc_signal[i,6] = auc(apply(signal_simu$deseq_pb_a0[[i]]$result$lfsr,1,min),which_null)
-  
-   fdp_signal[i,7] = fdp(get_significant_results(signal_simu$limma_pb_a1[[i]]),non_null_idx) 
-  auc_signal[i,7] = auc(apply(signal_simu$limma_pb_a1[[i]]$result$lfsr,1,min),which_null)
-  
-  fdp_signal[i,8] = fdp(get_significant_results(signal_simu$deseq_pb_a1[[i]]),non_null_idx) 
-  auc_signal[i,8] = auc(apply(signal_simu$deseq_pb_a1[[i]]$result$lfsr,1,min),which_null)
-  
-  
-  fdp_signal[i,9] = fdp(signal_simu$anova[[i]]$sig_idx,non_null_idx) 
-  auc_signal[i,9] = auc(p.adjust(signal_simu$anova[[i]]$p_val,method=&#39;BH&#39;),which_null)
+  fdp_signal[i,6] = fdp(signal_simu$anova[[i]]$sig_idx,non_null_idx) 
+  auc_signal[i,6] = auc(p.adjust(signal_simu$anova[[i]]$p_val,method=&#39;BH&#39;),which_null)
+  power_signal[i,6] = powr(signal_simu$anova[[i]]$sig_idx,non_null_idx) 
 }
-colnames(fdp_signal) = names(signal_simu)[1:9]
-colnames(auc_signal) = names(signal_simu)[1:9]
-rownames(auc_signal) = 1:12
+colnames(fdp_signal) = names(signal_simu)[1:6]
+colnames(auc_signal) = names(signal_simu)[1:6]
+rownames(auc_signal) = 1:nsimu
+colnames(power_signal) = names(signal_simu)[1:6]
 
 
-knitr::kable(sort(round(apply(fdp_signal,2,mean),2)[c(1,2,5,6,9)]),col.names = &#39;fdr&#39;)</code></pre>
+knitr::kable(sort(round(apply(fdp_signal,2,mean),2)),col.names = &#39;fdr level 0.05&#39;)</code></pre>
 <table>
 <thead>
 <tr class="header">
 <th></th>
-<th align="right">fdr</th>
+<th align="right">fdr level 0.05</th>
 </tr>
 </thead>
 <tbody>
+<tr class="odd">
+<td>deseq_pb</td>
+<td align="right">0.00</td>
+</tr>
+<tr class="even">
+<td>limma</td>
+<td align="right">0.01</td>
+</tr>
 <tr class="odd">
 <td>anova</td>
 <td align="right">0.05</td>
 </tr>
 <tr class="even">
-<td>deseq_a0</td>
-<td align="right">0.10</td>
+<td>voom_limma_pb</td>
+<td align="right">0.07</td>
 </tr>
 <tr class="odd">
-<td>deseq_pb_a0</td>
+<td>limma_pb</td>
 <td align="right">0.10</td>
 </tr>
 <tr class="even">
-<td>limma_pb_a0</td>
-<td align="right">0.12</td>
-</tr>
-<tr class="odd">
-<td>limma_a0</td>
-<td align="right">0.51</td>
+<td>voom_limma</td>
+<td align="right">0.73</td>
 </tr>
 </tbody>
 </table>
-<pre class="r"><code>knitr::kable(sort(round(apply(auc_signal,2,mean),2)[c(1,2,5,6,9)],decreasing = TRUE),col.names = &#39;auc&#39;)</code></pre>
+<pre class="r"><code>knitr::kable(sort(round(apply(auc_signal,2,mean),2),decreasing = TRUE),col.names = &#39;auc&#39;)</code></pre>
 <table>
 <thead>
 <tr class="header">
@@ -773,27 +1143,270 @@ knitr::kable(sort(round(apply(fdp_signal,2,mean),2)[c(1,2,5,6,9)]),col.names = &
 </thead>
 <tbody>
 <tr class="odd">
-<td>anova</td>
-<td align="right">0.82</td>
+<td>deseq_pb</td>
+<td align="right">0.86</td>
 </tr>
 <tr class="even">
-<td>limma_pb_a0</td>
+<td>voom_limma_pb</td>
 <td align="right">0.80</td>
 </tr>
 <tr class="odd">
-<td>deseq_pb_a0</td>
-<td align="right">0.79</td>
+<td>anova</td>
+<td align="right">0.80</td>
 </tr>
 <tr class="even">
-<td>deseq_a0</td>
-<td align="right">0.71</td>
+<td>limma</td>
+<td align="right">0.78</td>
 </tr>
 <tr class="odd">
-<td>limma_a0</td>
-<td align="right">0.65</td>
+<td>limma_pb</td>
+<td align="right">0.78</td>
+</tr>
+<tr class="even">
+<td>voom_limma</td>
+<td align="right">0.63</td>
 </tr>
 </tbody>
 </table>
+<pre class="r"><code>knitr::kable(sort(round(apply(power_signal,2,mean),2),decreasing = TRUE),col.names = &#39;power at fdr level 0.05&#39;)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th align="right">power at fdr level 0.05</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>voom_limma</td>
+<td align="right">0.75</td>
+</tr>
+<tr class="even">
+<td>limma_pb</td>
+<td align="right">0.75</td>
+</tr>
+<tr class="odd">
+<td>anova</td>
+<td align="right">0.33</td>
+</tr>
+<tr class="even">
+<td>limma</td>
+<td align="right">0.30</td>
+</tr>
+<tr class="odd">
+<td>voom_limma_pb</td>
+<td align="right">0.28</td>
+</tr>
+<tr class="even">
+<td>deseq_pb</td>
+<td align="right">0.12</td>
+</tr>
+</tbody>
+</table>
+<p>Plot ROC</p>
+<pre class="r"><code>which_null = 1*(rowSums(signal_simu$non_null_matrix[[1]])==0)
+  non_null_idx = which(rowSums(signal_simu$non_null_matrix[[1]])!=0)
+roc_out &lt;- list(
+  pROC::roc(response = which_null, predictor = c(apply(signal_simu$deseq_pb[[1]]$result$lfsr,1,min))),
+  pROC::roc(response = which_null, predictor = c(p.adjust(signal_simu$anova[[1]]$p_val,method=&#39;BH&#39;))),
+   pROC::roc(response = which_null, predictor = c(apply(signal_simu$limma[[1]]$result$lfsr,1,min)))
+  )
+name_vec &lt;- c(&quot;deseq_pb&quot;, &quot;anova&quot;,&quot;limma&quot;)
+names(roc_out) &lt;- name_vec
+
+sout &lt;- lapply(roc_out, function(x) { data.frame(TPR = x$sensitivities, FPR = 1 - x$specificities)})
+for (index in 1:length(sout)) {
+  sout[[index]]$Method &lt;- name_vec[index]
+}
+longdat &lt;- do.call(rbind, sout)
+
+shortdat &lt;- dplyr::filter(longdat, Method == &quot;deseq_pb&quot; |
+                            Method == &quot;anova&quot;|
+                            Method == &quot;limma&quot; )
+library(ggplot2)
+ggplot(data = shortdat, mapping = aes(x = FPR, y = TPR, col = Method)) +
+  geom_path() + theme_bw() + ggtitle(&quot;ROC Curves&quot;)</code></pre>
+<p><img src="figure/scMash_simu.Rmd/unnamed-chunk-5-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="cells-3" class="section level3">
+<h3>50 cells</h3>
+<pre class="r"><code>load(&#39;/scratch/midway2/dyxie/sc-cytokine/output/scMash_cytokine_cd4_signal_50CellPerRep.RData&#39;)
+nsimu=20
+fdp_signal = matrix(nrow=nsimu,ncol=6)
+auc_signal = matrix(nrow=nsimu,ncol=6)
+power_signal = matrix(nrow=nsimu,ncol=6)
+#n_fdis_signal = matrix(nrow=nsimu,ncol=10)
+#fdp_all = matrix(nrow=nsimu,ncol=8)
+#auc_all = matrix(nrow=nsimu,ncol=8)
+for(i in 1:nsimu){
+  
+  which_null = 1*(rowSums(signal_simu$non_null_matrix[[i]])==0)
+  non_null_idx = which(rowSums(signal_simu$non_null_matrix[[i]])!=0)
+  
+  fdp_signal[i,1] = fdp(get_significant_results(signal_simu$limma[[i]]),non_null_idx) 
+  auc_signal[i,1] = auc(apply(signal_simu$limma[[i]]$result$lfsr,1,min),which_null)
+  power_signal[i,1] = powr(get_significant_results(signal_simu$limma[[i]]),non_null_idx) 
+  
+  fdp_signal[i,2] = fdp(get_significant_results(signal_simu$voom_limma[[i]]),non_null_idx) 
+  auc_signal[i,2] = auc(apply(signal_simu$voom_limma[[i]]$result$lfsr,1,min),which_null)
+  power_signal[i,2] = powr(get_significant_results(signal_simu$voom_limma[[i]]),non_null_idx)
+
+  fdp_signal[i,3] = fdp(get_significant_results(signal_simu$limma_pb[[i]]),non_null_idx) 
+  auc_signal[i,3] = auc(apply(signal_simu$limma_pb[[i]]$result$lfsr,1,min),which_null)
+  power_signal[i,3] = powr(get_significant_results(signal_simu$voom_limma[[i]]),non_null_idx)
+  
+  fdp_signal[i,4] = fdp(get_significant_results(signal_simu$voom_limma_pb[[i]]),non_null_idx) 
+  auc_signal[i,4] = auc(apply(signal_simu$voom_limma_pb[[i]]$result$lfsr,1,min),which_null)
+  power_signal[i,4] = powr(get_significant_results(signal_simu$voom_limma_pb[[i]]),non_null_idx) 
+  
+  fdp_signal[i,5] = fdp(get_significant_results(signal_simu$deseq_pb[[i]]),non_null_idx) 
+  auc_signal[i,5] = auc(apply(signal_simu$deseq_pb[[i]]$result$lfsr,1,min),which_null)
+  power_signal[i,5] = powr(get_significant_results(signal_simu$deseq_pb[[i]]),non_null_idx) 
+  
+   #fdp_signal[i,7] = fdp(get_significant_results(signal_simu$limma_pb_a1[[i]]),non_null_idx) 
+  #auc_signal[i,7] = auc(apply(signal_simu$limma_pb_a1[[i]]$result$lfsr,1,min),which_null)
+  
+  #fdp_signal[i,8] = fdp(get_significant_results(signal_simu$deseq_pb_a1[[i]]),non_null_idx) 
+  #auc_signal[i,8] = auc(apply(signal_simu$deseq_pb_a1[[i]]$result$lfsr,1,min),which_null)
+  
+  
+  fdp_signal[i,6] = fdp(signal_simu$anova[[i]]$sig_idx,non_null_idx) 
+  auc_signal[i,6] = auc(p.adjust(signal_simu$anova[[i]]$p_val,method=&#39;BH&#39;),which_null)
+  power_signal[i,6] = powr(signal_simu$anova[[i]]$sig_idx,non_null_idx) 
+}
+colnames(fdp_signal) = names(signal_simu)[1:6]
+colnames(auc_signal) = names(signal_simu)[1:6]
+rownames(auc_signal) = 1:nsimu
+colnames(power_signal) = names(signal_simu)[1:6]
+knitr::kable(sort(round(apply(fdp_signal,2,mean),2)),col.names = &#39;fdr level 0.05&#39;)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th align="right">fdr level 0.05</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>limma</td>
+<td align="right">0.01</td>
+</tr>
+<tr class="even">
+<td>deseq_pb</td>
+<td align="right">0.01</td>
+</tr>
+<tr class="odd">
+<td>anova</td>
+<td align="right">0.07</td>
+</tr>
+<tr class="even">
+<td>limma_pb</td>
+<td align="right">0.25</td>
+</tr>
+<tr class="odd">
+<td>voom_limma_pb</td>
+<td align="right">0.27</td>
+</tr>
+<tr class="even">
+<td>voom_limma</td>
+<td align="right">0.88</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>knitr::kable(sort(round(apply(auc_signal,2,mean),2),decreasing = TRUE),col.names = &#39;auc&#39;)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th align="right">auc</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>deseq_pb</td>
+<td align="right">0.73</td>
+</tr>
+<tr class="even">
+<td>voom_limma_pb</td>
+<td align="right">0.69</td>
+</tr>
+<tr class="odd">
+<td>anova</td>
+<td align="right">0.69</td>
+</tr>
+<tr class="even">
+<td>limma</td>
+<td align="right">0.65</td>
+</tr>
+<tr class="odd">
+<td>limma_pb</td>
+<td align="right">0.65</td>
+</tr>
+<tr class="even">
+<td>voom_limma</td>
+<td align="right">0.60</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>knitr::kable(sort(round(apply(power_signal,2,mean),2),decreasing = TRUE),col.names = &#39;power at fdr level 0.05&#39;)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th align="right">power at fdr level 0.05</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>voom_limma</td>
+<td align="right">0.87</td>
+</tr>
+<tr class="even">
+<td>limma_pb</td>
+<td align="right">0.87</td>
+</tr>
+<tr class="odd">
+<td>voom_limma_pb</td>
+<td align="right">0.14</td>
+</tr>
+<tr class="even">
+<td>limma</td>
+<td align="right">0.12</td>
+</tr>
+<tr class="odd">
+<td>anova</td>
+<td align="right">0.12</td>
+</tr>
+<tr class="even">
+<td>deseq_pb</td>
+<td align="right">0.03</td>
+</tr>
+</tbody>
+</table>
+<p>Plot ROC</p>
+<pre class="r"><code>which_null = 1*(rowSums(signal_simu$non_null_matrix[[1]])==0)
+  non_null_idx = which(rowSums(signal_simu$non_null_matrix[[1]])!=0)
+roc_out &lt;- list(
+  pROC::roc(response = which_null, predictor = c(apply(signal_simu$deseq_pb[[1]]$result$lfsr,1,min))),
+  pROC::roc(response = which_null, predictor = c(p.adjust(signal_simu$anova[[1]]$p_val,method=&#39;BH&#39;))),
+   pROC::roc(response = which_null, predictor = c(apply(signal_simu$limma[[1]]$result$lfsr,1,min)))
+  )
+name_vec &lt;- c(&quot;deseq_pb&quot;, &quot;anova&quot;,&quot;limma&quot;)
+names(roc_out) &lt;- name_vec
+
+sout &lt;- lapply(roc_out, function(x) { data.frame(TPR = x$sensitivities, FPR = 1 - x$specificities)})
+for (index in 1:length(sout)) {
+  sout[[index]]$Method &lt;- name_vec[index]
+}
+longdat &lt;- do.call(rbind, sout)
+
+shortdat &lt;- dplyr::filter(longdat, Method == &quot;deseq_pb&quot; |
+                            Method == &quot;anova&quot;|
+                            Method == &quot;limma&quot; )
+library(ggplot2)
+ggplot(data = shortdat, mapping = aes(x = FPR, y = TPR, col = Method)) +
+  geom_path() + theme_bw() + ggtitle(&quot;ROC Curves&quot;)</code></pre>
+<p><img src="figure/scMash_simu.Rmd/unnamed-chunk-8-1.png" width="672" style="display: block; margin: auto;" /></p>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -821,29 +1434,30 @@ attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
-[1] mashr_0.2.21 ashr_2.2-39 
+[1] ggplot2_3.1.1 mashr_0.2.21  ashr_2.2-39  
 
 loaded via a namespace (and not attached):
  [1] tidyselect_0.2.5  purrr_0.3.2       lattice_0.20-38  
  [4] colorspace_1.3-2  htmltools_0.3.6   yaml_2.2.0       
  [7] rlang_0.4.0       mixsqp_0.3-43     later_0.7.5      
-[10] pillar_1.3.1      glue_1.3.0        foreach_1.4.4    
-[13] plyr_1.8.4        stringr_1.3.1     munsell_0.5.0    
-[16] gtable_0.2.0      workflowr_1.6.0   mvtnorm_1.0-8    
-[19] codetools_0.2-15  evaluate_0.12     knitr_1.20       
-[22] pscl_1.5.2        doParallel_1.0.14 httpuv_1.4.5     
-[25] irlba_2.3.3       parallel_3.5.1    highr_0.7        
-[28] Rcpp_1.0.4.6      promises_1.0.1    backports_1.1.2  
-[31] scales_1.0.0      rmeta_3.0         truncnorm_1.0-8  
-[34] abind_1.4-5       fs_1.3.1          ggplot2_3.1.1    
-[37] digest_0.6.18     stringi_1.2.4     dplyr_0.8.0.1    
-[40] grid_3.5.1        rprojroot_1.3-2   tools_3.5.1      
-[43] magrittr_1.5      lazyeval_0.2.1    tibble_2.1.1     
-[46] crayon_1.3.4      whisker_0.3-2     pkgconfig_2.0.2  
-[49] MASS_7.3-51.1     Matrix_1.2-15     SQUAREM_2017.10-1
-[52] pROC_1.13.0       assertthat_0.2.0  rmarkdown_1.10   
-[55] iterators_1.0.10  R6_2.3.0          git2r_0.26.1     
-[58] compiler_3.5.1   </code></pre>
+[10] pillar_1.3.1      withr_2.1.2       glue_1.3.0       
+[13] foreach_1.4.4     plyr_1.8.4        stringr_1.3.1    
+[16] munsell_0.5.0     gtable_0.2.0      workflowr_1.6.0  
+[19] mvtnorm_1.0-8     codetools_0.2-15  evaluate_0.12    
+[22] labeling_0.3      knitr_1.20        pscl_1.5.2       
+[25] doParallel_1.0.14 httpuv_1.4.5      irlba_2.3.3      
+[28] parallel_3.5.1    highr_0.7         Rcpp_1.0.4.6     
+[31] promises_1.0.1    backports_1.1.2   scales_1.0.0     
+[34] rmeta_3.0         truncnorm_1.0-8   abind_1.4-5      
+[37] fs_1.3.1          digest_0.6.18     stringi_1.2.4    
+[40] dplyr_0.8.0.1     grid_3.5.1        rprojroot_1.3-2  
+[43] tools_3.5.1       magrittr_1.5      lazyeval_0.2.1   
+[46] tibble_2.1.1      crayon_1.3.4      whisker_0.3-2    
+[49] pkgconfig_2.0.2   MASS_7.3-51.1     Matrix_1.2-15    
+[52] SQUAREM_2017.10-1 pROC_1.13.0       assertthat_0.2.0 
+[55] rmarkdown_1.10    iterators_1.0.10  R6_2.3.0         
+[58] git2r_0.26.1      compiler_3.5.1   </code></pre>
+</div>
 </div>
 </div>
 
