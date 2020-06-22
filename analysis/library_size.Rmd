@@ -1,0 +1,208 @@
+---
+title: "How does library size influence DE?"
+author: "DongyueXie"
+date: "2020-06-22"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+---
+
+## Introduction
+
+```{r}
+library(seqgendiff)
+library(limma)
+library(DESeq2)
+library(edgeR)
+
+BH = function(p,alpha=0.05){
+  n=length(p)
+  i=rank(p)
+  idx = which(p<=(i/n*alpha))
+  if(length(idx)==0){
+    NULL
+  }else{
+    i0= max(i[idx])
+    rej.idx = which(i<=i0)
+    rej.idx
+  }
+}
+```
+
+## NULL setting
+
+10 samples assigned to 2 groups. The first group has library size $50*$number of genes while the second one has library size $500*$number of genes. 
+
+```{r}
+set.seed(12345)
+nsamp = 10
+ngene = 1000
+
+designmat = cbind(rep(c(0, 1), each = nsamp / 2), 
+                   rep(c(0, 1), length.out = nsamp))
+designmat
+
+B = matrix(0,nrow=2,ncol=ngene)
+
+S = rep(c(100*ngene,1000*ngene),each=5)
+
+L = exp(designmat%*%B)
+L = apply(L,1,function(z){z/sum(z)})
+
+
+Y = matrix(rpois(nsamp*ngene,L%*%diag(S)),nrow=ngene)
+
+
+new_design = cbind(rep(1,10),designmat)
+vout = limma::voom(counts = Y, design = new_design)
+lout = limma::lmFit(vout)
+eout = eBayes(lout)
+coefhat = coef(lout)[, -1, drop = FALSE]
+hist(eout$p.value[,2],breaks = 30)
+BH(eout$p.value[,2])
+
+rownames(Y) = 1:nrow(Y)
+colnames(Y) = 1:ncol(Y)
+coldata = data.frame(trt=as.factor(designmat[,1]),sex=as.factor(designmat[,2]))
+dds = DESeqDataSetFromMatrix(countData = Y,colData = coldata,design = ~trt+sex)
+dds = DESeq(dds,quiet = TRUE,fitType="local")
+res = results(dds,name=resultsNames(dds)[2])
+hist(res$pvalue,breaks = 30)
+BH(res$pvalue)
+
+
+y = DGEList(counts = Y,group=new_design[,2])
+y <- calcNormFactors(y)
+y <- estimateDisp(y,design = new_design)
+fit <- glmQLFit(y, new_design)
+results <- glmQLFTest(fit)
+hist(results$table$PValue,breaks = 30)
+BH(results$table$PValue)
+```
+
+
+Both limma and DEseq2 have no false discovery under NULL setting. 
+
+
+## Thinning
+
+```{r}
+set.seed(12345)
+nreps=20
+L = matrix(1/ngene,nrow=ngene,ncol=nsamp)
+new_design = cbind(rep(1,10),designmat[,1])
+fdp = matrix(nrow=nreps,ncol=3)
+power = matrix(nrow=nreps,ncol=3)
+for(i in 1:nreps){
+  which_non_null = sample(1:ngene,0.1*ngene)
+non_null_idx = rep(0,ngene)
+non_null_idx[which_non_null] = 1
+B = (rnorm(ngene,0,1))
+B = B*(non_null_idx)
+
+Y = matrix(rpois(nsamp*ngene,L%*%diag(S)),nrow=ngene)
+
+thout = thin_diff(mat          = Y, 
+                   design_fixed = designmat[,1,drop=FALSE], 
+                   coef_fixed   = cbind(B))
+
+
+
+vout = limma::voom(counts = thout$mat, design = new_design)
+lout = limma::lmFit(vout)
+eout = eBayes(lout)
+
+coldata = data.frame(trt=as.factor(designmat[,1]))
+dds = DESeqDataSetFromMatrix(countData = thout$mat,colData = coldata,design = ~trt)
+dds = DESeq(dds,quiet = TRUE,fitType="local")
+res = results(dds,name=resultsNames(dds)[2])
+
+
+fdp[i,] = c(1-sum(BH(eout$p.value[,2])%in%which_non_null)/length(BH(eout$p.value[,2])) , 1-sum(BH(res$pvalue)%in%which_non_null)/length(BH(res$pvalue)),
+            1-sum(BH(results$table$PValue)%in%which_non_null)/length(BH(results$table$PValue)))
+power[i,] = c(sum(BH(eout$p.value[,2])%in%which_non_null)/length(which_non_null),
+              sum(BH(res$pvalue)%in%which_non_null)/length(which_non_null),
+              sum(BH(results$table$PValue)%in%which_non_null)/length(which_non_null))
+#print(paste("fdp:",round(1-sum(BH(eout$p.value[,2])%in%which_non_null)/length(BH(eout$p.value[,2])),2)))
+#print(paste("power:",sum(BH(eout$p.value[,2])%in%which_non_null)/length(which_non_null)))
+
+
+
+
+#print(paste("fdp:",round(1-sum(BH(res$pvalue)%in%which_non_null)/length(BH(res$pvalue)),2)))
+#print(paste("power:",sum(BH(res$pvalue)%in%which_non_null)/length(which_non_null)))
+}
+
+colnames(fdp)=c("voom-limma","DESeq","edgeR")
+colnames(power) = c("voom-limma","DESeq","edgeR")
+boxplot(fdp)
+boxplot(power)
+```
+
+
+
+generate data from a model instead of thinning
+
+```{r}
+set.seed(12345)
+nreps=20
+S = rep(c(1000*ngene,100*ngene),each=5)
+
+fdp = matrix(nrow=nreps,ncol=3)
+power = matrix(nrow=nreps,ncol=3)
+for(i in 1:nreps){
+  which_non_null = sample(1:ngene,0.1*ngene)
+non_null_idx = rep(0,ngene)
+non_null_idx[which_non_null] = 1
+
+
+#B = matrix(0,nrow=2,ncol=ngene)
+B = (rnorm(ngene,0,1))
+B = rbind(rep(0,ngene),B)
+B = B%*%diag(non_null_idx)
+
+L = t(exp(new_design%*%B))
+#L = apply(L,1,function(z){z/sum(z)})
+
+
+Y = matrix(rpois(nsamp*ngene,L%*%diag(S/ngene)),nrow=ngene)
+
+vout = limma::voom(counts = Y, design = new_design)
+lout = limma::lmFit(vout)
+#lout = limma::lmFit(log(Y%*%diag(c(1/colSums(Y)))*1e6),design = new_design)
+eout = eBayes(lout)
+
+coldata = data.frame(trt=as.factor(designmat[,1]))
+dds = DESeqDataSetFromMatrix(countData = Y,colData = coldata,design = ~trt)
+dds = DESeq(dds,quiet = TRUE,fitType="mean")
+res = results(dds,name=resultsNames(dds)[2])
+
+
+y = DGEList(counts = Y,group=new_design[,2])
+y <- calcNormFactors(y)
+y <- estimateDisp(y,design = new_design)
+fit <- glmQLFit(y, new_design)
+results <- glmQLFTest(fit)
+
+fdp[i,] = c(1-sum(BH(eout$p.value[,2])%in%which_non_null)/length(BH(eout$p.value[,2])) , 1-sum(BH(res$pvalue)%in%which_non_null)/length(BH(res$pvalue)),
+            1-sum(BH(results$table$PValue)%in%which_non_null)/length(BH(results$table$PValue)))
+power[i,] = c(sum(BH(eout$p.value[,2])%in%which_non_null)/length(which_non_null),
+              sum(BH(res$pvalue)%in%which_non_null)/length(which_non_null),
+              sum(BH(results$table$PValue)%in%which_non_null)/length(which_non_null))
+#print(paste("fdp:",round(1-sum(BH(eout$p.value[,2])%in%which_non_null)/length(BH(eout$p.value[,2])),2)))
+#print(paste("power:",sum(BH(eout$p.value[,2])%in%which_non_null)/length(which_non_null)))
+
+
+
+
+#print(paste("fdp:",round(1-sum(BH(res$pvalue)%in%which_non_null)/length(BH(res$pvalue)),2)))
+#print(paste("power:",sum(BH(res$pvalue)%in%which_non_null)/length(which_non_null)))
+}
+
+colnames(fdp)=c("voom-limma","DESeq","edgeR")
+colnames(power) = c("voom-limma","DESeq","edgeR")
+boxplot(fdp)
+boxplot(power)
+```
+
+
