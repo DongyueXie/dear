@@ -2,7 +2,9 @@
 title: "bulkMash_simu"
 author: "DongyueXie"
 date: "2020-06-19"
-output: workflowr::wflow_html
+output:
+  workflowr::wflow_html:
+    code_folding: hide
 editor_options:
   chunk_output_type: console
 ---
@@ -374,7 +376,7 @@ rownames(auc_signal) = 1:nsimu
 colnames(power_signal) = method
 
 
-knitr::kable(sort(round(apply(fdp_signal,2,mean),2)),col.names = 'lfsr level 0.05')
+knitr::kable(sort(round(apply(fdp_signal,2,mean),2)),col.names = 'fdr level 0.05')
 knitr::kable(sort(round(apply(auc_signal,2,mean),2),decreasing = TRUE),col.names = 'auc')
 knitr::kable(sort(round(apply(power_signal,2,mean),2),decreasing = TRUE),col.names = 'power')
 ```
