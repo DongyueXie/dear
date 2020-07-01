@@ -344,7 +344,7 @@ div.section {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2020-06-23
+<strong>Last updated:</strong> 2020-06-30
 </p>
 <p>
 <strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
@@ -435,10 +435,10 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomDongyueXiedeartree57f8f5bb06245ebc598415730cd61003c8ecc41btargetblank57f8f5ba"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/DongyueXie/dear/tree/57f8f5bb06245ebc598415730cd61003c8ecc41b" target="_blank">57f8f5b</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomDongyueXiedeartree5d77a3e70817d4db311570c6f05944f9aee4c0a5targetblank5d77a3ea"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/DongyueXie/dear/tree/5d77a3e70817d4db311570c6f05944f9aee4c0a5" target="_blank">5d77a3e</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomDongyueXiedeartree57f8f5bb06245ebc598415730cd61003c8ecc41btargetblank57f8f5ba" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomDongyueXiedeartree5d77a3e70817d4db311570c6f05944f9aee4c0a5targetblank5d77a3ea" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility. The version displayed above was the version of the Git repository at the time these results were generated. <br><br> Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -450,10 +450,13 @@ Ignored files:
     Ignored:    analysis/figure/
 
 Untracked files:
+    Untracked:  analysis/check_mash.Rmd
     Untracked:  analysis/lash_real_data.Rmd
     Untracked:  analysis/log_ratio_approx.Rmd
     Untracked:  analysis/plnruv.Rmd
     Untracked:  analysis/scMash.Rmd
+    Untracked:  code/bulkMash_simu.R
+    Untracked:  code/bulkMash_simu_edgeR_correct.R
     Untracked:  code/check_size_factor.R
     Untracked:  code/cytokine_null_simu_cd4_yusha.R
     Untracked:  code/lash_real_data.R
@@ -462,6 +465,7 @@ Untracked files:
     Untracked:  code/scMash2.R
     Untracked:  code/scMash_simu.R
     Untracked:  data/BR_log_cpm.RDS
+    Untracked:  data/bulk_cytokin_SI.RData
     Untracked:  data/cytokine_cd4.RData
     Untracked:  data/filtered_gene_bc_matrices/
     Untracked:  data/pbmc3k_cellType.RData
@@ -514,6 +518,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/DongyueXie/dear/blob/5d77a3e70817d4db311570c6f05944f9aee4c0a5/analysis/library_size.Rmd" target="_blank">5d77a3e</a>
+</td>
+<td>
+DongyueXie
+</td>
+<td>
+2020-06-30
+</td>
+<td>
+wflow_publish(“analysis/library_size.Rmd”)
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/DongyueXie/dear/76a5ec64981ad81600c1844ce382a5020f85baa8/docs/library_size.html" target="_blank">76a5ec6</a>
+</td>
+<td>
+DongyueXie
+</td>
+<td>
+2020-06-23
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -655,6 +693,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/DongyueXie/dear/blob/76a5ec64981ad81600c1844ce382a5020f85baa8/docs/figure/library_size.Rmd/unnamed-chunk-3-1.png" target="_blank">76a5ec6</a>
+</td>
+<td>
+DongyueXie
+</td>
+<td>
+2020-06-23
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/DongyueXie/dear/blob/f89120e68a52721d2204220bc049cecbe2e423b9/docs/figure/library_size.Rmd/unnamed-chunk-3-1.png" target="_blank">f89120e</a>
 </td>
 <td>
@@ -702,6 +751,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/DongyueXie/dear/blob/76a5ec64981ad81600c1844ce382a5020f85baa8/docs/figure/library_size.Rmd/unnamed-chunk-3-2.png" target="_blank">76a5ec6</a>
+</td>
+<td>
+DongyueXie
+</td>
+<td>
+2020-06-23
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/DongyueXie/dear/blob/f89120e68a52721d2204220bc049cecbe2e423b9/docs/figure/library_size.Rmd/unnamed-chunk-3-2.png" target="_blank">f89120e</a>
 </td>
 <td>
@@ -724,6 +784,43 @@ fit &lt;- glmQLFit(y, new_design)
 results &lt;- glmQLFTest(fit)
 hist(results$table$PValue,breaks = 30)</code></pre>
 <p><img src="figure/library_size.Rmd/unnamed-chunk-3-3.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-3-3">
+Past versions of unnamed-chunk-3-3.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-3-3" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/DongyueXie/dear/blob/76a5ec64981ad81600c1844ce382a5020f85baa8/docs/figure/library_size.Rmd/unnamed-chunk-3-3.png" target="_blank">76a5ec6</a>
+</td>
+<td>
+DongyueXie
+</td>
+<td>
+2020-06-23
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>BH(results$table$PValue)</code></pre>
 <pre><code>NULL</code></pre>
 <p>Both limma and DEseq2 have no false discovery under NULL setting.</p>
@@ -810,6 +907,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/DongyueXie/dear/blob/76a5ec64981ad81600c1844ce382a5020f85baa8/docs/figure/library_size.Rmd/unnamed-chunk-4-1.png" target="_blank">76a5ec6</a>
+</td>
+<td>
+DongyueXie
+</td>
+<td>
+2020-06-23
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/DongyueXie/dear/blob/f89120e68a52721d2204220bc049cecbe2e423b9/docs/figure/library_size.Rmd/unnamed-chunk-4-1.png" target="_blank">f89120e</a>
 </td>
 <td>
@@ -847,6 +955,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/DongyueXie/dear/blob/76a5ec64981ad81600c1844ce382a5020f85baa8/docs/figure/library_size.Rmd/unnamed-chunk-4-2.png" target="_blank">76a5ec6</a>
+</td>
+<td>
+DongyueXie
+</td>
+<td>
+2020-06-23
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/DongyueXie/dear/blob/f89120e68a52721d2204220bc049cecbe2e423b9/docs/figure/library_size.Rmd/unnamed-chunk-4-2.png" target="_blank">f89120e</a>
@@ -920,8 +1039,82 @@ colnames(fdp)=c(&quot;voom-limma&quot;,&quot;DESeq&quot;,&quot;edgeR&quot;)
 colnames(power) = c(&quot;voom-limma&quot;,&quot;DESeq&quot;,&quot;edgeR&quot;)
 boxplot(fdp)</code></pre>
 <p><img src="figure/library_size.Rmd/unnamed-chunk-5-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-5-1">
+Past versions of unnamed-chunk-5-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-5-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/DongyueXie/dear/blob/76a5ec64981ad81600c1844ce382a5020f85baa8/docs/figure/library_size.Rmd/unnamed-chunk-5-1.png" target="_blank">76a5ec6</a>
+</td>
+<td>
+DongyueXie
+</td>
+<td>
+2020-06-23
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>boxplot(power)</code></pre>
 <p><img src="figure/library_size.Rmd/unnamed-chunk-5-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-5-2">
+Past versions of unnamed-chunk-5-2.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-5-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/DongyueXie/dear/blob/76a5ec64981ad81600c1844ce382a5020f85baa8/docs/figure/library_size.Rmd/unnamed-chunk-5-2.png" target="_blank">76a5ec6</a>
+</td>
+<td>
+DongyueXie
+</td>
+<td>
+2020-06-23
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <p>How about RLE-VOOM-LIMMA to deal with unequal library size?</p>
 <pre class="r"><code>set.seed(12345)
 nreps=20
@@ -952,8 +1145,9 @@ eout = eBayes(lout)
 
 # RLE-VOOM-LIMMA
 
-s.factor = estimateSizeFactorsForMatrix(thout$mat)
-vout = limma::voom(counts = thout$mat%*%diag(1/s.factor), design = new_design)
+Y = DGEList(thout$mat)
+Y = calcNormFactors(Y,method=&#39;RLE&#39;)
+vout = limma::voom(counts = Y, design = new_design)
 lout = limma::lmFit(vout)
 #lout = limma::lmFit(log(Y%*%diag(c(1/colSums(Y)))*1e6),design = new_design)
 eout2 = eBayes(lout)
@@ -991,16 +1185,90 @@ colnames(fdp)=c(&quot;voom-limma&quot;,&quot;rle-voom-limma&quot;,&quot;DESeq&qu
 colnames(power) = c(&quot;voom-limma&quot;,&quot;rle-voom-limma&quot;,&quot;DESeq&quot;,&quot;edgeR&quot;)
 boxplot(fdp)</code></pre>
 <p><img src="figure/library_size.Rmd/unnamed-chunk-6-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-6-1">
+Past versions of unnamed-chunk-6-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-6-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/DongyueXie/dear/blob/76a5ec64981ad81600c1844ce382a5020f85baa8/docs/figure/library_size.Rmd/unnamed-chunk-6-1.png" target="_blank">76a5ec6</a>
+</td>
+<td>
+DongyueXie
+</td>
+<td>
+2020-06-23
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>boxplot(power)</code></pre>
 <p><img src="figure/library_size.Rmd/unnamed-chunk-6-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-6-2">
+Past versions of unnamed-chunk-6-2.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-6-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/DongyueXie/dear/blob/76a5ec64981ad81600c1844ce382a5020f85baa8/docs/figure/library_size.Rmd/unnamed-chunk-6-2.png" target="_blank">76a5ec6</a>
+</td>
+<td>
+DongyueXie
+</td>
+<td>
+2020-06-23
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <p>how about equal library size but all beta positive?</p>
 <pre class="r"><code>set.seed(12345)
 nreps=20
 S = rep(c(100*ngene,100*ngene),each=5)
 L = matrix(1/ngene,nrow=ngene,ncol=nsamp)
 new_design = cbind(rep(1,10),designmat[,1])
-fdp = matrix(nrow=nreps,ncol=3)
-power = matrix(nrow=nreps,ncol=3)
+fdp = matrix(nrow=nreps,ncol=4)
+power = matrix(nrow=nreps,ncol=4)
 for(i in 1:nreps){
   which_non_null = sample(1:ngene,0.1*ngene)
 non_null_idx = rep(0,ngene)
@@ -1020,6 +1288,14 @@ vout = limma::voom(counts = thout$mat, design = new_design)
 lout = limma::lmFit(vout)
 eout = eBayes(lout)
 
+# RLE-VOOM-LIMMA
+Y = DGEList(thout$mat)
+Y = calcNormFactors(Y,method=&#39;RLE&#39;)
+vout = limma::voom(counts = Y, design = new_design)
+lout = limma::lmFit(vout)
+#lout = limma::lmFit(log(Y%*%diag(c(1/colSums(Y)))*1e6),design = new_design)
+eout2 = eBayes(lout)
+
 coldata = data.frame(trt=as.factor(designmat[,1]))
 dds = DESeqDataSetFromMatrix(countData = thout$mat,colData = coldata,design = ~trt)
 dds = DESeq(dds,quiet = TRUE,fitType=&quot;local&quot;)
@@ -1032,9 +1308,11 @@ fit &lt;- glmQLFit(y, new_design)
 results &lt;- glmQLFTest(fit)
 
 
-fdp[i,] = c(1-sum(BH(eout$p.value[,2])%in%which_non_null)/length(BH(eout$p.value[,2])) , 1-sum(BH(res$pvalue)%in%which_non_null)/length(BH(res$pvalue)),
+fdp[i,] = c(1-sum(BH(eout$p.value[,2])%in%which_non_null)/length(BH(eout$p.value[,2])) ,
+            1-sum(BH(eout2$p.value[,2])%in%which_non_null)/length(BH(eout2$p.value[,2])) ,1-sum(BH(res$pvalue)%in%which_non_null)/length(BH(res$pvalue)),
             1-sum(BH(results$table$PValue)%in%which_non_null)/length(BH(results$table$PValue)))
 power[i,] = c(sum(BH(eout$p.value[,2])%in%which_non_null)/length(which_non_null),
+              sum(BH(eout2$p.value[,2])%in%which_non_null)/length(which_non_null),
               sum(BH(res$pvalue)%in%which_non_null)/length(which_non_null),
               sum(BH(results$table$PValue)%in%which_non_null)/length(which_non_null))
 #print(paste(&quot;fdp:&quot;,round(1-sum(BH(eout$p.value[,2])%in%which_non_null)/length(BH(eout$p.value[,2])),2)))
@@ -1047,12 +1325,86 @@ power[i,] = c(sum(BH(eout$p.value[,2])%in%which_non_null)/length(which_non_null)
 #print(paste(&quot;power:&quot;,sum(BH(res$pvalue)%in%which_non_null)/length(which_non_null)))
 }
 
-colnames(fdp)=c(&quot;voom-limma&quot;,&quot;DESeq&quot;,&quot;edgeR&quot;)
-colnames(power) = c(&quot;voom-limma&quot;,&quot;DESeq&quot;,&quot;edgeR&quot;)
+colnames(fdp)=c(&quot;voom-limma&quot;,&quot;rle-voom-limma&quot;,&quot;DESeq&quot;,&quot;edgeR&quot;)
+colnames(power) = c(&quot;voom-limma&quot;,&quot;rle-voom-limma&quot;,&quot;DESeq&quot;,&quot;edgeR&quot;)
 boxplot(fdp)</code></pre>
 <p><img src="figure/library_size.Rmd/unnamed-chunk-7-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-7-1">
+Past versions of unnamed-chunk-7-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-7-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/DongyueXie/dear/blob/76a5ec64981ad81600c1844ce382a5020f85baa8/docs/figure/library_size.Rmd/unnamed-chunk-7-1.png" target="_blank">76a5ec6</a>
+</td>
+<td>
+DongyueXie
+</td>
+<td>
+2020-06-23
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>boxplot(power)</code></pre>
 <p><img src="figure/library_size.Rmd/unnamed-chunk-7-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-7-2">
+Past versions of unnamed-chunk-7-2.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-7-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/DongyueXie/dear/blob/76a5ec64981ad81600c1844ce382a5020f85baa8/docs/figure/library_size.Rmd/unnamed-chunk-7-2.png" target="_blank">76a5ec6</a>
+</td>
+<td>
+DongyueXie
+</td>
+<td>
+2020-06-23
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="generate-data-from-a-model-instead-of-thinning" class="section level2">
 <h2>generate data from a model instead of thinning</h2>
@@ -1088,8 +1440,9 @@ eout = eBayes(lout)
 
 # RLE-VOOM-LIMMA
 
-s.factor = estimateSizeFactorsForMatrix(Y)
-vout = limma::voom(counts = Y%*%diag(1/s.factor), design = new_design)
+y = DGEList(Y)
+y = calcNormFactors(y,method=&#39;RLE&#39;)
+vout = limma::voom(counts = y, design = new_design)
 lout = limma::lmFit(vout)
 #lout = limma::lmFit(log(Y%*%diag(c(1/colSums(Y)))*1e6),design = new_design)
 eout2 = eBayes(lout)
@@ -1127,8 +1480,82 @@ colnames(fdp)=c(&quot;voom-limma&quot;,&quot;rle-voom-limma&quot;,&quot;DESeq&qu
 colnames(power) = c(&quot;voom-limma&quot;,&quot;rle-voom-limma&quot;,&quot;DESeq&quot;,&quot;edgeR&quot;)
 boxplot(fdp)</code></pre>
 <p><img src="figure/library_size.Rmd/unnamed-chunk-8-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-8-1">
+Past versions of unnamed-chunk-8-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-8-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/DongyueXie/dear/blob/76a5ec64981ad81600c1844ce382a5020f85baa8/docs/figure/library_size.Rmd/unnamed-chunk-8-1.png" target="_blank">76a5ec6</a>
+</td>
+<td>
+DongyueXie
+</td>
+<td>
+2020-06-23
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>boxplot(power)</code></pre>
 <p><img src="figure/library_size.Rmd/unnamed-chunk-8-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-8-2">
+Past versions of unnamed-chunk-8-2.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-8-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/DongyueXie/dear/blob/76a5ec64981ad81600c1844ce382a5020f85baa8/docs/figure/library_size.Rmd/unnamed-chunk-8-2.png" target="_blank">76a5ec6</a>
+</td>
+<td>
+DongyueXie
+</td>
+<td>
+2020-06-23
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <p>unequal library size</p>
 <pre class="r"><code>set.seed(12345)
 nreps=20
@@ -1161,8 +1588,9 @@ eout = eBayes(lout)
 
 # RLE-VOOM-LIMMA
 
-s.factor = estimateSizeFactorsForMatrix(Y)
-vout = limma::voom(counts = Y%*%diag(1/s.factor), design = new_design)
+y = DGEList(Y)
+y = calcNormFactors(y,method=&#39;RLE&#39;)
+vout = limma::voom(counts = y, design = new_design)
 lout = limma::lmFit(vout)
 #lout = limma::lmFit(log(Y%*%diag(c(1/colSums(Y)))*1e6),design = new_design)
 eout2 = eBayes(lout)
@@ -1200,8 +1628,82 @@ colnames(fdp)=c(&quot;voom-limma&quot;,&quot;rle-voom-limma&quot;,&quot;DESeq&qu
 colnames(power) = c(&quot;voom-limma&quot;,&quot;rle-voom-limma&quot;,&quot;DESeq&quot;,&quot;edgeR&quot;)
 boxplot(fdp)</code></pre>
 <p><img src="figure/library_size.Rmd/unnamed-chunk-9-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-9-1">
+Past versions of unnamed-chunk-9-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-9-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/DongyueXie/dear/blob/76a5ec64981ad81600c1844ce382a5020f85baa8/docs/figure/library_size.Rmd/unnamed-chunk-9-1.png" target="_blank">76a5ec6</a>
+</td>
+<td>
+DongyueXie
+</td>
+<td>
+2020-06-23
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>boxplot(power)</code></pre>
 <p><img src="figure/library_size.Rmd/unnamed-chunk-9-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-9-2">
+Past versions of unnamed-chunk-9-2.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-9-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/DongyueXie/dear/blob/76a5ec64981ad81600c1844ce382a5020f85baa8/docs/figure/library_size.Rmd/unnamed-chunk-9-2.png" target="_blank">76a5ec6</a>
+</td>
+<td>
+DongyueXie
+</td>
+<td>
+2020-06-23
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
