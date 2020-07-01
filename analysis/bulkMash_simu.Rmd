@@ -1,0 +1,382 @@
+---
+title: "bulkMash_simu"
+author: "DongyueXie"
+date: "2020-06-19"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+---
+
+# Introduction
+
+methods: 
+
+0. limma
+1. voom-limma
+2. RLE-voom-limma: apply RLE normalization first 
+3. RLE-voom-limma_V: apply RLE normalization first and plug covariance matrix into mash
+4. deseq
+
+5. anova: simple anova applied to log(Y+0.5) after RLE normalziation
+6. kw: Kruskal-Wallis Rank Sum Test
+7. edgeR: likelihood ratio test
+
+
+Design: 
+
+1. NUll: each simulation, draw 3000 genes and 30 samples, randomly assign 30 samples to 10 groups with 3 replicates in each group.  
+
+2. Signal: generate thinning coefficients from $N(0,0.8^2)$, randomly select $0.1$ genes to be non-NULL and for non-null genes, $2-4$ groups are randomly selected to be non-null. Apply thinning to null matrix. 
+
+Evaluation:
+
+1. false discovery rate; 2. area under curve; 3. power.
+
+Is there a ROC-like plot for fdr vs tpr?
+
+
+
+
+```{r}
+library(mashr)
+fdp = function(dis.idx, true.idx){
+  if(length(dis.idx)==0){
+    0
+  }else{
+    1-mean(dis.idx%in%true.idx)
+  }
+}
+
+
+auc = function(pred,true.label){
+  auc=pROC::roc(response = true.label, predictor = pred)
+  auc$auc
+}
+
+powr = function(dis.idx, true.idx){
+  if(length(dis.idx)==0){
+    0
+  }else{
+    sum(dis.idx%in%true.idx)/length(true.idx)
+  }
+}
+```
+
+# NULL
+
+## Compare to mean
+
+```{r}
+load('/scratch/midway2/dyxie/sc-cytokine/output/bulkMash_cytokine_SI_null.RData')
+nsimu=18
+
+methods = names(null_simu)
+method = methods[c(1,2,3,4)]
+
+fdp_all = matrix(nrow=nsimu,ncol=length(method))
+n_fdis = matrix(nrow=nsimu,ncol=length(method))
+for(i in 1:nsimu){
+  
+  for(j in 1:length(method)){
+    
+    m = which(names(null_simu)==method[j])
+    
+    fdp_all[i,j] = fdp(get_significant_results(null_simu[[m]][[i]]$mash),0) 
+    n_fdis[i,j] = length(get_significant_results(null_simu[[m]][[i]]$mash))
+    
+  }
+
+}
+colnames(fdp_all) = method
+colnames(n_fdis) = method
+rownames(n_fdis) = 1:nsimu
+knitr::kable(n_fdis,caption='number of false discoveries')
+
+```
+
+Let's look at plots of $z$ scores of the second simulation since voom-limma has a number of false discoveries. compare limma, voom-limma and deseq
+
+### limma z score
+
+```{r,fig.width=9,fig.height=9}
+Bhat = null_simu$limma[[2]]$mash$input$Bhat
+Shat = null_simu$limma[[2]]$mash$input$Shat
+
+data = mash_set_data(Bhat,Shat)
+data.L = mash_update_data(data,ref='mean')
+
+titles = colnames(data.L$Bhat)
+
+par(mfrow=c(3,3))
+for(i in 1:length(titles)){
+  z = data.L$Bhat[,i]/data.L$Shat[,i]
+  hist(z,breaks = 30,xlab='z', main=titles[i],freq = FALSE,ylim = c(0,0.45))
+  
+  xfit<-seq(min(z),max(z),length=40)
+  yfit<-dnorm(xfit,mean=0,sd=1)
+  lines(xfit, yfit, col="red", lwd=2)
+}
+
+```
+
+### voom-limma z score
+
+```{r,fig.width=9,fig.height=9}
+Bhat = null_simu$voom_limma[[2]]$mash$input$Bhat
+Shat = null_simu$voom_limma[[2]]$mash$input$Shat
+
+data = mash_set_data(Bhat,Shat)
+data.L = mash_update_data(data,ref='mean')
+
+titles = colnames(data.L$Bhat)
+
+par(mfrow=c(3,3))
+for(i in 1:length(titles)){
+  z = data.L$Bhat[,i]/data.L$Shat[,i]
+  hist(z,breaks = 30,xlab='z', main=titles[i],freq = FALSE,ylim = c(0,0.45))
+  
+  xfit<-seq(min(z),max(z),length=40)
+  yfit<-dnorm(xfit,mean=0,sd=1)
+  lines(xfit, yfit, col="red", lwd=2)
+}
+
+```
+
+
+### rle-voom-limma z score
+
+```{r,fig.width=9,fig.height=9}
+Bhat = null_simu$rle_voom_limma[[2]]$mash$input$Bhat
+Shat = null_simu$rle_voom_limma[[2]]$mash$input$Shat
+
+data = mash_set_data(Bhat,Shat)
+data.L = mash_update_data(data,ref='mean')
+
+titles = colnames(data.L$Bhat)
+
+par(mfrow=c(3,3))
+for(i in 1:length(titles)){
+  z = data.L$Bhat[,i]/data.L$Shat[,i]
+  hist(z,breaks = 30,xlab='z', main=titles[i],freq = FALSE,ylim = c(0,0.45))
+  
+  xfit<-seq(min(z),max(z),length=40)
+  yfit<-dnorm(xfit,mean=0,sd=1)
+  lines(xfit, yfit, col="red", lwd=2)
+}
+
+```
+
+### deseq z score
+
+```{r,fig.width=9,fig.height=9}
+Bhat = null_simu$deseq[[2]]$mash$input$Bhat
+Shat = null_simu$deseq[[2]]$mash$input$Shat
+
+data = mash_set_data(Bhat,Shat)
+data.L = mash_update_data(data,ref='mean')
+
+titles = colnames(data.L$Bhat)
+
+par(mfrow=c(3,3))
+for(i in 1:length(titles)){
+  z = data.L$Bhat[,i]/data.L$Shat[,i]
+  hist(z,breaks = 30,xlab='z', main=titles[i],freq = FALSE,ylim = c(0,0.6))
+  
+  xfit<-seq(min(z),max(z),length=40)
+  yfit<-dnorm(xfit,mean=0,sd=1)
+  lines(xfit, yfit, col="red", lwd=2)
+}
+
+```
+
+
+## Look at some specific false discoveies of voom-limma
+
+```{r}
+n_sig_cond = as.numeric(get_n_significant_conditions(null_simu$voom_limma[[2]]$mash))
+hist(n_sig_cond)
+```
+
+either none or all....
+
+```{r}
+Bhat = null_simu$voom_limma[[2]]$mash$input$Bhat
+Shat = null_simu$voom_limma[[2]]$mash$input$Shat
+data = mash_set_data(Bhat,Shat)
+data.L = mash_update_data(data,ref='mean')
+data.L$Bhat[3,]
+data.L$Shat[3,]
+null_simu$voom_limma[[2]]$mash$result$lfsr[3,]
+```
+
+The results are weried. Look at large Shat, near 0 Bhat but small lfsr.
+
+Let's run this specific see what happened.
+
+```{r}
+U.c = cov_canonical(data.L)
+m.1by1 = mash_1by1(data.L)
+strong = get_significant_results(m.1by1)
+length(strong)
+U.pca = cov_pca(data.L,2,subset=strong)
+U.ed = cov_ed(data.L, U.pca, subset=strong)
+m = mash(data.L, c(U.c,U.ed), algorithm.version = 'Rcpp',verbose = F)
+length(get_significant_results(m))
+m$loglik
+```
+
+So ash 1by1 identifies 14 significant genes while mash finds 127. How about just use canonical matrix?
+
+```{r}
+m = mash(data.L, c(U.c), algorithm.version = 'Rcpp',verbose = F)
+length(get_significant_results(m))
+m$loglik
+```
+
+Only one! The prior covariance matrix has such huge influence on the results!!
+
+How about compare to the control?
+
+```{r}
+data.L = mash_update_data(data,ref=1)
+U.c = cov_canonical(data.L)
+m.1by1 = mash_1by1(data.L)
+strong = get_significant_results(m.1by1)
+length(strong)
+m = mash(data.L, c(U.c), algorithm.version = 'Rcpp',verbose = F)
+length(get_significant_results(m))
+m$loglik
+```
+
+So ash 1by1 identifies 0 gene and mash with canonical cov identifies 6.
+
+# Signal
+
+## Compare to mean
+
+```{r}
+load('/scratch/midway2/dyxie/sc-cytokine/output/bulkMash_cytokine_SI_signal_mean_ref.RData')
+nsimu=18
+methods = names(signal_simu_mean)
+method = methods[c(1:4)]
+
+fdp_signal = matrix(nrow=nsimu,ncol=length(method))
+auc_signal = matrix(nrow=nsimu,ncol=length(method))
+power_signal = matrix(nrow=nsimu,ncol=length(method))
+
+
+
+for(i in 1:nsimu){
+  
+  which_null = 1*(rowSums(signal_simu_mean$non_null_matrix[[i]])==0)
+  non_null_idx = which(rowSums(signal_simu_mean$non_null_matrix[[i]])!=0)
+  
+
+  
+  for(j in 1:length(method)){
+    
+    m = which(names(signal_simu_mean)==method[j])
+    
+    fdp_signal[i,j] = fdp(get_significant_results(signal_simu_mean[[m]][[i]]$mash),non_null_idx) 
+    auc_signal[i,j] = auc(apply(signal_simu_mean[[m]][[i]]$mash$result$lfsr,1,min),which_null)
+    power_signal[i,j] = powr(get_significant_results(signal_simu_mean[[m]][[i]]$mash),non_null_idx) 
+    
+  }
+  
+  
+}
+colnames(fdp_signal) = method
+colnames(auc_signal) = method
+rownames(auc_signal) = 1:nsimu
+colnames(power_signal) = method
+
+
+knitr::kable(sort(round(apply(fdp_signal,2,mean),2)),col.names = 'lfsr level 0.05')
+knitr::kable(sort(round(apply(auc_signal,2,mean),2),decreasing = TRUE),col.names = 'auc')
+knitr::kable(sort(round(apply(power_signal,2,mean),2),decreasing = TRUE),col.names = 'power at lfsr level 0.05')
+```
+
+
+
+## Compare to control
+
+
+
+```{r}
+load('/scratch/midway2/dyxie/sc-cytokine/output/bulkMash_cytokine_SI_signal_control_ref.RData')
+nsimu=18
+methods = names(signal_simu_control)
+method = methods[c(1,2,3,4)]
+
+fdp_signal = matrix(nrow=nsimu,ncol=length(method))
+auc_signal = matrix(nrow=nsimu,ncol=length(method))
+power_signal = matrix(nrow=nsimu,ncol=length(method))
+
+for(i in 1:nsimu){
+  
+  which_null = 1*(rowSums(signal_simu_control$non_null_matrix[[i]])==0)
+  non_null_idx = which(rowSums(signal_simu_control$non_null_matrix[[i]])!=0)
+  
+  for(j in 1:length(method)){
+    
+    m = which(names(signal_simu_control)==method[j])
+    
+    fdp_signal[i,j] = fdp(get_significant_results(signal_simu_control[[m]][[i]]$mash),non_null_idx) 
+    auc_signal[i,j] = auc(apply(signal_simu_control[[m]][[i]]$mash$result$lfsr,1,min),which_null)
+    power_signal[i,j] = powr(get_significant_results(signal_simu_control[[m]][[i]]$mash),non_null_idx) 
+    
+  }
+  
+  
+}
+colnames(fdp_signal) = method
+colnames(auc_signal) = method
+rownames(auc_signal) = 1:nsimu
+colnames(power_signal) = method
+
+
+knitr::kable(sort(round(apply(fdp_signal,2,mean),2)),col.names = 'lfsr level 0.05')
+knitr::kable(sort(round(apply(auc_signal,2,mean),2),decreasing = TRUE),col.names = 'auc')
+knitr::kable(sort(round(apply(power_signal,2,mean),2),decreasing = TRUE),col.names = 'power')
+```
+
+
+## other methods based on p-value
+
+```{r}
+methods = names(signal_simu_control)
+method = methods[c(5,6,7)]
+
+fdp_signal = matrix(nrow=nsimu,ncol=length(method))
+auc_signal = matrix(nrow=nsimu,ncol=length(method))
+power_signal = matrix(nrow=nsimu,ncol=length(method))
+
+for(i in 1:nsimu){
+  
+  which_null = 1*(rowSums(signal_simu_control$non_null_matrix[[i]])==0)
+  non_null_idx = which(rowSums(signal_simu_control$non_null_matrix[[i]])!=0)
+  
+  for(j in 1:length(method)){
+    
+    m = which(names(signal_simu_control)==method[j])
+    
+    fdp_signal[i,j] = fdp((signal_simu_control[[m]][[i]]$sig_idx),non_null_idx) 
+    auc_signal[i,j] = auc(p.adjust(signal_simu_control[[m]][[i]]$p_val,method='BH'),which_null)
+    power_signal[i,j] = powr(signal_simu_control[[m]][[i]]$sig_idx,non_null_idx) 
+    
+  }
+  
+  
+}
+colnames(fdp_signal) = method
+colnames(auc_signal) = method
+rownames(auc_signal) = 1:nsimu
+colnames(power_signal) = method
+
+
+knitr::kable(sort(round(apply(fdp_signal,2,mean),2)),col.names = 'lfsr level 0.05')
+knitr::kable(sort(round(apply(auc_signal,2,mean),2),decreasing = TRUE),col.names = 'auc')
+knitr::kable(sort(round(apply(power_signal,2,mean),2),decreasing = TRUE),col.names = 'power')
+```
+
+
