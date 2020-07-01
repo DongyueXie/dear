@@ -248,8 +248,9 @@ eout = eBayes(lout)
 
 # RLE-VOOM-LIMMA
 
-s.factor = estimateSizeFactorsForMatrix(thout$mat)
-vout = limma::voom(counts = thout$mat%*%diag(1/s.factor), design = new_design)
+Y = DGEList(thout$mat)
+Y = calcNormFactors(Y,method='RLE')
+vout = limma::voom(counts = Y, design = new_design)
 lout = limma::lmFit(vout)
 #lout = limma::lmFit(log(Y%*%diag(c(1/colSums(Y)))*1e6),design = new_design)
 eout2 = eBayes(lout)
@@ -299,8 +300,8 @@ nreps=20
 S = rep(c(100*ngene,100*ngene),each=5)
 L = matrix(1/ngene,nrow=ngene,ncol=nsamp)
 new_design = cbind(rep(1,10),designmat[,1])
-fdp = matrix(nrow=nreps,ncol=3)
-power = matrix(nrow=nreps,ncol=3)
+fdp = matrix(nrow=nreps,ncol=4)
+power = matrix(nrow=nreps,ncol=4)
 for(i in 1:nreps){
   which_non_null = sample(1:ngene,0.1*ngene)
 non_null_idx = rep(0,ngene)
@@ -320,6 +321,14 @@ vout = limma::voom(counts = thout$mat, design = new_design)
 lout = limma::lmFit(vout)
 eout = eBayes(lout)
 
+# RLE-VOOM-LIMMA
+Y = DGEList(thout$mat)
+Y = calcNormFactors(Y,method='RLE')
+vout = limma::voom(counts = Y, design = new_design)
+lout = limma::lmFit(vout)
+#lout = limma::lmFit(log(Y%*%diag(c(1/colSums(Y)))*1e6),design = new_design)
+eout2 = eBayes(lout)
+
 coldata = data.frame(trt=as.factor(designmat[,1]))
 dds = DESeqDataSetFromMatrix(countData = thout$mat,colData = coldata,design = ~trt)
 dds = DESeq(dds,quiet = TRUE,fitType="local")
@@ -332,9 +341,11 @@ fit <- glmQLFit(y, new_design)
 results <- glmQLFTest(fit)
 
 
-fdp[i,] = c(1-sum(BH(eout$p.value[,2])%in%which_non_null)/length(BH(eout$p.value[,2])) , 1-sum(BH(res$pvalue)%in%which_non_null)/length(BH(res$pvalue)),
+fdp[i,] = c(1-sum(BH(eout$p.value[,2])%in%which_non_null)/length(BH(eout$p.value[,2])) ,
+            1-sum(BH(eout2$p.value[,2])%in%which_non_null)/length(BH(eout2$p.value[,2])) ,1-sum(BH(res$pvalue)%in%which_non_null)/length(BH(res$pvalue)),
             1-sum(BH(results$table$PValue)%in%which_non_null)/length(BH(results$table$PValue)))
 power[i,] = c(sum(BH(eout$p.value[,2])%in%which_non_null)/length(which_non_null),
+              sum(BH(eout2$p.value[,2])%in%which_non_null)/length(which_non_null),
               sum(BH(res$pvalue)%in%which_non_null)/length(which_non_null),
               sum(BH(results$table$PValue)%in%which_non_null)/length(which_non_null))
 #print(paste("fdp:",round(1-sum(BH(eout$p.value[,2])%in%which_non_null)/length(BH(eout$p.value[,2])),2)))
@@ -347,8 +358,8 @@ power[i,] = c(sum(BH(eout$p.value[,2])%in%which_non_null)/length(which_non_null)
 #print(paste("power:",sum(BH(res$pvalue)%in%which_non_null)/length(which_non_null)))
 }
 
-colnames(fdp)=c("voom-limma","DESeq","edgeR")
-colnames(power) = c("voom-limma","DESeq","edgeR")
+colnames(fdp)=c("voom-limma","rle-voom-limma","DESeq","edgeR")
+colnames(power) = c("voom-limma","rle-voom-limma","DESeq","edgeR")
 boxplot(fdp)
 boxplot(power)
 ```
@@ -389,8 +400,9 @@ eout = eBayes(lout)
 
 # RLE-VOOM-LIMMA
 
-s.factor = estimateSizeFactorsForMatrix(Y)
-vout = limma::voom(counts = Y%*%diag(1/s.factor), design = new_design)
+y = DGEList(Y)
+y = calcNormFactors(y,method='RLE')
+vout = limma::voom(counts = y, design = new_design)
 lout = limma::lmFit(vout)
 #lout = limma::lmFit(log(Y%*%diag(c(1/colSums(Y)))*1e6),design = new_design)
 eout2 = eBayes(lout)
@@ -464,8 +476,9 @@ eout = eBayes(lout)
 
 # RLE-VOOM-LIMMA
 
-s.factor = estimateSizeFactorsForMatrix(Y)
-vout = limma::voom(counts = Y%*%diag(1/s.factor), design = new_design)
+y = DGEList(Y)
+y = calcNormFactors(y,method='RLE')
+vout = limma::voom(counts = y, design = new_design)
 lout = limma::lmFit(vout)
 #lout = limma::lmFit(log(Y%*%diag(c(1/colSums(Y)))*1e6),design = new_design)
 eout2 = eBayes(lout)
