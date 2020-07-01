@@ -25,6 +25,7 @@
 <link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
 <script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
 <link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
 <link href="site_libs/font-awesome-5.0.13/css/fa-svg-with-js.css" rel="stylesheet" />
@@ -170,6 +171,14 @@ $(document).ready(function () {
 </script>
 
 <!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
 
 
 
@@ -315,6 +324,14 @@ div.section {
 
 <div class="fluid-row" id="header">
 
+<div class="btn-group pull-right">
+<button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
 
 
 <h1 class="title toc-ignore">bulkMash_simu</h1>
@@ -435,10 +452,10 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomDongyueXiedeartreeb53889645c3475db8aa3a0c8f7a641574aae5aadtargetblankb538896a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/DongyueXie/dear/tree/b53889645c3475db8aa3a0c8f7a641574aae5aad" target="_blank">b538896</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomDongyueXiedeartreef2d9a54003ccc927c397d1a45939826277e95c4btargetblankf2d9a54a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/DongyueXie/dear/tree/f2d9a54003ccc927c397d1a45939826277e95c4b" target="_blank">f2d9a54</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomDongyueXiedeartreeb53889645c3475db8aa3a0c8f7a641574aae5aadtargetblankb538896a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomDongyueXiedeartreef2d9a54003ccc927c397d1a45939826277e95c4btargetblankf2d9a54a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility. The version displayed above was the version of the Git repository at the time these results were generated. <br><br> Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -447,7 +464,6 @@ Great! You are using Git for version control. Tracking code development and conn
 Ignored files:
     Ignored:    .Rhistory
     Ignored:    .Rproj.user/
-    Ignored:    analysis/figure/
 
 Untracked files:
     Untracked:  analysis/check_mash.Rmd
@@ -518,6 +534,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/DongyueXie/dear/blob/f2d9a54003ccc927c397d1a45939826277e95c4b/analysis/bulkMash_simu.Rmd" target="_blank">f2d9a54</a>
+</td>
+<td>
+DongyueXie
+</td>
+<td>
+2020-06-30
+</td>
+<td>
+wflow_publish(“analysis/bulkMash_simu.Rmd”)
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/DongyueXie/dear/b0cddfcb7fb579350df72d9624bf5109b38f39db/docs/bulkMash_simu.html" target="_blank">b0cddfc</a>
+</td>
+<td>
+DongyueXie
+</td>
+<td>
+2020-06-30
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -759,6 +809,43 @@ for(i in 1:length(titles)){
   lines(xfit, yfit, col=&quot;red&quot;, lwd=2)
 }</code></pre>
 <p><img src="figure/bulkMash_simu.Rmd/unnamed-chunk-3-1.png" width="864" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-3-1">
+Past versions of unnamed-chunk-3-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-3-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/DongyueXie/dear/blob/b0cddfcb7fb579350df72d9624bf5109b38f39db/docs/figure/bulkMash_simu.Rmd/unnamed-chunk-3-1.png" target="_blank">b0cddfc</a>
+</td>
+<td>
+DongyueXie
+</td>
+<td>
+2020-06-30
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="voom-limma-z-score" class="section level3">
 <h3>voom-limma z score</h3>
@@ -780,6 +867,43 @@ for(i in 1:length(titles)){
   lines(xfit, yfit, col=&quot;red&quot;, lwd=2)
 }</code></pre>
 <p><img src="figure/bulkMash_simu.Rmd/unnamed-chunk-4-1.png" width="864" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-4-1">
+Past versions of unnamed-chunk-4-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-4-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/DongyueXie/dear/blob/b0cddfcb7fb579350df72d9624bf5109b38f39db/docs/figure/bulkMash_simu.Rmd/unnamed-chunk-4-1.png" target="_blank">b0cddfc</a>
+</td>
+<td>
+DongyueXie
+</td>
+<td>
+2020-06-30
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="rle-voom-limma-z-score" class="section level3">
 <h3>rle-voom-limma z score</h3>
@@ -801,6 +925,43 @@ for(i in 1:length(titles)){
   lines(xfit, yfit, col=&quot;red&quot;, lwd=2)
 }</code></pre>
 <p><img src="figure/bulkMash_simu.Rmd/unnamed-chunk-5-1.png" width="864" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-5-1">
+Past versions of unnamed-chunk-5-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-5-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/DongyueXie/dear/blob/b0cddfcb7fb579350df72d9624bf5109b38f39db/docs/figure/bulkMash_simu.Rmd/unnamed-chunk-5-1.png" target="_blank">b0cddfc</a>
+</td>
+<td>
+DongyueXie
+</td>
+<td>
+2020-06-30
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="deseq-z-score" class="section level3">
 <h3>deseq z score</h3>
@@ -822,6 +983,43 @@ for(i in 1:length(titles)){
   lines(xfit, yfit, col=&quot;red&quot;, lwd=2)
 }</code></pre>
 <p><img src="figure/bulkMash_simu.Rmd/unnamed-chunk-6-1.png" width="864" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-6-1">
+Past versions of unnamed-chunk-6-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-6-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/DongyueXie/dear/blob/b0cddfcb7fb579350df72d9624bf5109b38f39db/docs/figure/bulkMash_simu.Rmd/unnamed-chunk-6-1.png" target="_blank">b0cddfc</a>
+</td>
+<td>
+DongyueXie
+</td>
+<td>
+2020-06-30
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 </div>
 <div id="look-at-some-specific-false-discoveies-of-voom-limma" class="section level2">
@@ -829,6 +1027,43 @@ for(i in 1:length(titles)){
 <pre class="r"><code>n_sig_cond = as.numeric(get_n_significant_conditions(null_simu$voom_limma[[2]]$mash))
 hist(n_sig_cond)</code></pre>
 <p><img src="figure/bulkMash_simu.Rmd/unnamed-chunk-7-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-7-1">
+Past versions of unnamed-chunk-7-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-7-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/DongyueXie/dear/blob/b0cddfcb7fb579350df72d9624bf5109b38f39db/docs/figure/bulkMash_simu.Rmd/unnamed-chunk-7-1.png" target="_blank">b0cddfc</a>
+</td>
+<td>
+DongyueXie
+</td>
+<td>
+2020-06-30
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <p>either none or all….</p>
 <pre class="r"><code>Bhat = null_simu$voom_limma[[2]]$mash$input$Bhat
 Shat = null_simu$voom_limma[[2]]$mash$input$Shat
@@ -1155,12 +1390,12 @@ rownames(auc_signal) = 1:nsimu
 colnames(power_signal) = method
 
 
-knitr::kable(sort(round(apply(fdp_signal,2,mean),2)),col.names = &#39;lfsr level 0.05&#39;)</code></pre>
+knitr::kable(sort(round(apply(fdp_signal,2,mean),2)),col.names = &#39;fdr level 0.05&#39;)</code></pre>
 <table>
 <thead>
 <tr class="header">
 <th></th>
-<th align="right">lfsr level 0.05</th>
+<th align="right">fdr level 0.05</th>
 </tr>
 </thead>
 <tbody>
