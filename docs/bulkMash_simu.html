@@ -361,7 +361,7 @@ div.section {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2020-06-30
+<strong>Last updated:</strong> 2020-07-02
 </p>
 <p>
 <strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
@@ -452,10 +452,10 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomDongyueXiedeartreef2d9a54003ccc927c397d1a45939826277e95c4btargetblankf2d9a54a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/DongyueXie/dear/tree/f2d9a54003ccc927c397d1a45939826277e95c4b" target="_blank">f2d9a54</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomDongyueXiedeartreebaaaedc41a1a73f02def1e4bd1263cfd3fcf83eetargetblankbaaaedca"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/DongyueXie/dear/tree/baaaedc41a1a73f02def1e4bd1263cfd3fcf83ee" target="_blank">baaaedc</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomDongyueXiedeartreef2d9a54003ccc927c397d1a45939826277e95c4btargetblankf2d9a54a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomDongyueXiedeartreebaaaedc41a1a73f02def1e4bd1263cfd3fcf83eetargetblankbaaaedca" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility. The version displayed above was the version of the Git repository at the time these results were generated. <br><br> Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -471,15 +471,6 @@ Untracked files:
     Untracked:  analysis/log_ratio_approx.Rmd
     Untracked:  analysis/plnruv.Rmd
     Untracked:  analysis/scMash.Rmd
-    Untracked:  code/bulkMash_simu.R
-    Untracked:  code/bulkMash_simu_edgeR_correct.R
-    Untracked:  code/check_size_factor.R
-    Untracked:  code/cytokine_null_simu_cd4_yusha.R
-    Untracked:  code/lash_real_data.R
-    Untracked:  code/mash_example.r
-    Untracked:  code/scMash.R
-    Untracked:  code/scMash2.R
-    Untracked:  code/scMash_simu.R
     Untracked:  data/BR_log_cpm.RDS
     Untracked:  data/bulk_cytokin_SI.RData
     Untracked:  data/cytokine_cd4.RData
@@ -534,6 +525,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/DongyueXie/dear/blob/baaaedc41a1a73f02def1e4bd1263cfd3fcf83ee/analysis/bulkMash_simu.Rmd" target="_blank">baaaedc</a>
+</td>
+<td>
+DongyueXie
+</td>
+<td>
+2020-07-02
+</td>
+<td>
+wflow_publish(“analysis/bulkMash_simu.Rmd”)
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/DongyueXie/dear/625f7dc4c189c4381da727ef79667749c0fbb368/docs/bulkMash_simu.html" target="_blank">625f7dc</a>
+</td>
+<td>
+DongyueXie
+</td>
+<td>
+2020-06-30
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -1241,6 +1266,11 @@ knitr::kable(sort(round(apply(fdp_signal,2,mean),2)),col.names = &#39;lfsr level
 </tr>
 </tbody>
 </table>
+<pre class="r"><code>par(mfrow=c(1,3))
+boxplot(fdp_signal,main=&#39;fdp&#39;)
+boxplot(auc_signal,main=&#39;auc&#39;)
+boxplot(power_signal,main=&#39;power&#39;)</code></pre>
+<p><img src="figure/bulkMash_simu.Rmd/unnamed-chunk-13-1.png" width="1440" style="display: block; margin: auto;" /></p>
 </div>
 <div id="compare-to-control" class="section level2">
 <h2>Compare to control</h2>
@@ -1357,6 +1387,11 @@ knitr::kable(sort(round(apply(fdp_signal,2,mean),2)),col.names = &#39;lfsr level
 </tr>
 </tbody>
 </table>
+<pre class="r"><code>par(mfrow=c(1,3))
+boxplot(fdp_signal,main=&#39;fdp&#39;)
+boxplot(auc_signal,main=&#39;auc&#39;)
+boxplot(power_signal,main=&#39;power&#39;)</code></pre>
+<p><img src="figure/bulkMash_simu.Rmd/unnamed-chunk-15-1.png" width="1440" style="display: block; margin: auto;" /></p>
 </div>
 <div id="other-methods-based-on-p-value" class="section level2">
 <h2>other methods based on p-value</h2>
@@ -1459,6 +1494,11 @@ knitr::kable(sort(round(apply(fdp_signal,2,mean),2)),col.names = &#39;fdr level 
 </tr>
 </tbody>
 </table>
+<pre class="r"><code>par(mfrow=c(1,3))
+boxplot(fdp_signal,main=&#39;fdp&#39;)
+boxplot(auc_signal,main=&#39;auc&#39;)
+boxplot(power_signal,main=&#39;power&#39;)</code></pre>
+<p><img src="figure/bulkMash_simu.Rmd/unnamed-chunk-17-1.png" width="1440" style="display: block; margin: auto;" /></p>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
