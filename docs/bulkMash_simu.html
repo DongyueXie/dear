@@ -361,7 +361,7 @@ div.section {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2020-07-06
+<strong>Last updated:</strong> 2020-07-07
 </p>
 <p>
 <strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
@@ -452,10 +452,10 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomDongyueXiedeartree829434429316c67736cc38fc95d83c8b070397e7targetblank8294344a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/DongyueXie/dear/tree/829434429316c67736cc38fc95d83c8b070397e7" target="_blank">8294344</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomDongyueXiedeartreee8c669275d46c3af95709e43089e24bbdbff6104targetblanke8c6692a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/DongyueXie/dear/tree/e8c669275d46c3af95709e43089e24bbdbff6104" target="_blank">e8c6692</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomDongyueXiedeartree829434429316c67736cc38fc95d83c8b070397e7targetblank8294344a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomDongyueXiedeartreee8c669275d46c3af95709e43089e24bbdbff6104targetblanke8c6692a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility. The version displayed above was the version of the Git repository at the time these results were generated. <br><br> Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -464,13 +464,13 @@ Great! You are using Git for version control. Tracking code development and conn
 Ignored files:
     Ignored:    .Rhistory
     Ignored:    .Rproj.user/
-    Ignored:    analysis/figure/
 
 Untracked files:
     Untracked:  analysis/lash_real_data.Rmd
     Untracked:  analysis/log_ratio_approx.Rmd
     Untracked:  analysis/plnruv.Rmd
     Untracked:  analysis/scMash.Rmd
+    Untracked:  code/bulkMash_simu_new.R
     Untracked:  data/BR_log_cpm.RDS
     Untracked:  data/bulk_cytokin_SI.RData
     Untracked:  data/cytokine_cd4.RData
@@ -489,7 +489,9 @@ Untracked files:
     Untracked:  output/slm_cytokine_null_simu_cd4.RData
 
 Unstaged changes:
+    Modified:   analysis/bulkMash_simu_no_dataDriven_cov.Rmd
     Modified:   code/pln_simu_summary.R
+    Modified:   code/scMash2.R
 
 </code></pre>
 <p>
@@ -528,6 +530,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/DongyueXie/dear/blob/e8c669275d46c3af95709e43089e24bbdbff6104/analysis/bulkMash_simu.Rmd" target="_blank">e8c6692</a>
+</td>
+<td>
+DongyueXie
+</td>
+<td>
+2020-07-07
+</td>
+<td>
+wflow_publish(“analysis/bulkMash_simu.Rmd”)
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/DongyueXie/dear/945daf7299aa1aa130d665d6dac13c3d1a0c2567/docs/bulkMash_simu.html" target="_blank">945daf7</a>
+</td>
+<td>
+DongyueXie
+</td>
+<td>
+2020-07-06
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -657,8 +693,7 @@ wflow_publish(“analysis/bulkMash_simu.Rmd”)
 <div id="introduction" class="section level1">
 <h1>Introduction</h1>
 <p>methods:</p>
-<ol start="0" style="list-style-type: decimal">
-<li>limma</li>
+<ol style="list-style-type: decimal">
 <li>voom-limma</li>
 <li>RLE-voom-limma: apply RLE normalization first</li>
 <li>RLE-voom-limma_V: apply RLE normalization first and plug covariance matrix into mash</li>
@@ -669,8 +704,8 @@ wflow_publish(“analysis/bulkMash_simu.Rmd”)
 </ol>
 <p>Design:</p>
 <ol style="list-style-type: decimal">
-<li><p>NUll: each simulation, draw 3000 genes and 30 samples, randomly assign 30 samples to 10 groups with 3 replicates in each group.</p></li>
-<li><p>Signal: generate thinning coefficients from <span class="math inline">\(N(0,0.8^2)\)</span>, randomly select <span class="math inline">\(0.1\)</span> genes to be non-NULL and for non-null genes, <span class="math inline">\(2-4\)</span> groups are randomly selected to be non-null. Apply thinning to null matrix.</p></li>
+<li><p>NUll: each simulation, draw 2000 genes and 30 samples, randomly assign 30 samples to 10 groups with 3 replicates in each group.</p></li>
+<li><p>Signal: generate thinning coefficients from <span class="math">\(N(0,0.8^2)\)</span>, randomly select <span class="math">\(0.1\)</span> genes to be non-NULL and for non-null genes, <span class="math">\(3\)</span> groups are selected to be non-null. Apply thinning to null matrix.</p></li>
 </ol>
 <p>Evaluation:</p>
 <ol style="list-style-type: decimal">
@@ -681,44 +716,16 @@ wflow_publish(“analysis/bulkMash_simu.Rmd”)
 <pre><code>Loading required package: ashr</code></pre>
 <pre class="r"><code>source(&#39;code/pln_simu_summary.R&#39;)</code></pre>
 </div>
-<div id="null" class="section level1">
-<h1>NULL</h1>
-<div id="compare-to-mean" class="section level2">
-<h2>Compare to mean</h2>
-<pre class="r"><code>load(&#39;/scratch/midway2/dyxie/sc-cytokine/output/bulkMash_cytokine_SI_null.RData&#39;)
-load(&#39;/scratch/midway2/dyxie/sc-cytokine/output/bulkMash_cytokine_SI_signal_mean_ref.RData&#39;)
-load(&#39;/scratch/midway2/dyxie/sc-cytokine/output/bulkMash_cytokine_SI_signal_control_ref.RData&#39;)
-
-simu_all = list(signal_simu_control=signal_simu_control,signal_simu_mean=signal_simu_mean)
-
-nsimu=18
-
-methods = names(null_simu)
-method = methods[c(1,2,3,4)]
-
-fdp_all = matrix(nrow=nsimu,ncol=length(method))
-n_fdis = matrix(nrow=nsimu,ncol=length(method))
-for(i in 1:nsimu){
-  
-  for(j in 1:length(method)){
-    
-    m = which(names(null_simu)==method[j])
-    
-    fdp_all[i,j] = fdp(get_significant_results(null_simu[[m]][[i]]$mash),0) 
-    n_fdis[i,j] = length(get_significant_results(null_simu[[m]][[i]]$mash))
-    
-  }
-
-}
-colnames(fdp_all) = method
-colnames(n_fdis) = method
-rownames(n_fdis) = 1:nsimu
-knitr::kable(n_fdis,caption=&#39;number of false discoveries&#39;)</code></pre>
+<div id="three-replicates" class="section level1">
+<h1>Three replicates</h1>
+<pre class="r"><code>load(&#39;/scratch/midway2/dyxie/sc-cytokine/output/bulkMash_3rep.RData&#39;)
+summary_pln_simu(simu_all)</code></pre>
+<p>NULL case: compare with control and mean</p>
+<p>Looking at null_simu_control</p>
 <table>
 <caption>number of false discoveries</caption>
 <thead>
 <tr class="header">
-<th align="right">limma</th>
 <th align="right">voom_limma</th>
 <th align="right">rle_voom_limma</th>
 <th align="right">deseq</th>
@@ -726,236 +733,226 @@ knitr::kable(n_fdis,caption=&#39;number of false discoveries&#39;)</code></pre>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="right">15</td>
-<td align="right">12</td>
-<td align="right">33</td>
-<td align="right">0</td>
-</tr>
-<tr class="even">
-<td align="right">33</td>
-<td align="right">127</td>
-<td align="right">128</td>
-<td align="right">0</td>
-</tr>
-<tr class="odd">
-<td align="right">27</td>
-<td align="right">27</td>
-<td align="right">27</td>
-<td align="right">1</td>
-</tr>
-<tr class="even">
-<td align="right">14</td>
-<td align="right">0</td>
-<td align="right">1</td>
-<td align="right">1</td>
-</tr>
-<tr class="odd">
-<td align="right">48</td>
-<td align="right">49</td>
-<td align="right">24</td>
-<td align="right">3</td>
-</tr>
-<tr class="even">
-<td align="right">10</td>
-<td align="right">9</td>
-<td align="right">10</td>
-<td align="right">0</td>
-</tr>
-<tr class="odd">
-<td align="right">19</td>
-<td align="right">19</td>
-<td align="right">29</td>
-<td align="right">0</td>
-</tr>
-<tr class="even">
-<td align="right">23</td>
-<td align="right">8</td>
-<td align="right">7</td>
-<td align="right">0</td>
-</tr>
-<tr class="odd">
-<td align="right">15</td>
-<td align="right">21</td>
-<td align="right">3</td>
-<td align="right">0</td>
-</tr>
-<tr class="even">
-<td align="right">21</td>
-<td align="right">6</td>
-<td align="right">6</td>
-<td align="right">0</td>
-</tr>
-<tr class="odd">
-<td align="right">13</td>
-<td align="right">8</td>
-<td align="right">7</td>
-<td align="right">0</td>
-</tr>
-<tr class="even">
-<td align="right">6</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">1</td>
-</tr>
-<tr class="odd">
-<td align="right">16</td>
-<td align="right">4</td>
-<td align="right">9</td>
-<td align="right">4</td>
-</tr>
-<tr class="even">
-<td align="right">34</td>
-<td align="right">1</td>
-<td align="right">1</td>
-<td align="right">1</td>
-</tr>
-<tr class="odd">
-<td align="right">14</td>
+<td align="right">2</td>
 <td align="right">5</td>
-<td align="right">2</td>
 <td align="right">0</td>
 </tr>
 <tr class="even">
-<td align="right">16</td>
-<td align="right">7</td>
-<td align="right">6</td>
+<td align="right">0</td>
+<td align="right">1</td>
 <td align="right">0</td>
 </tr>
 <tr class="odd">
-<td align="right">7</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">42</td>
+<td align="right">3</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">5</td>
+<td align="right">5</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
 <td align="right">0</td>
 <td align="right">0</td>
 <td align="right">0</td>
 </tr>
 <tr class="even">
-<td align="right">76</td>
-<td align="right">9</td>
+<td align="right">631</td>
+<td align="right">75</td>
+<td align="right">3</td>
+</tr>
+<tr class="odd">
+<td align="right">226</td>
+<td align="right">39</td>
+<td align="right">13</td>
+</tr>
+<tr class="even">
 <td align="right">2</td>
 <td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="right">125</td>
+<td align="right">185</td>
+<td align="right">54</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="right">8</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">95</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">75</td>
+<td align="right">64</td>
+<td align="right">10</td>
+</tr>
+<tr class="odd">
+<td align="right">106</td>
+<td align="right">99</td>
+<td align="right">6</td>
+</tr>
+<tr class="even">
+<td align="right">6</td>
+<td align="right">4</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="right">20</td>
+<td align="right">27</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="right">4</td>
+<td align="right">40</td>
+<td align="right">1</td>
 </tr>
 </tbody>
 </table>
-<p>Let’s look at plots of <span class="math inline">\(z\)</span> scores of the second simulation since voom-limma has a number of false discoveries. compare limma, voom-limma and deseq</p>
-<div id="limma-z-score" class="section level3">
-<h3>limma z score</h3>
-<pre class="r"><code>Bhat = null_simu$limma[[2]]$mash$input$Bhat
-Shat = null_simu$limma[[2]]$mash$input$Shat
-
-data = mash_set_data(Bhat,Shat)
-data.L = mash_update_data(data,ref=&#39;mean&#39;)
-
-titles = colnames(data.L$Bhat)
-
-par(mfrow=c(3,3))
-for(i in 1:length(titles)){
-  z = data.L$Bhat[,i]/data.L$Shat[,i]
-  hist(z,breaks = 30,xlab=&#39;z&#39;, main=titles[i],freq = FALSE,ylim = c(0,0.45))
-  
-  xfit&lt;-seq(min(z),max(z),length=40)
-  yfit&lt;-dnorm(xfit,mean=0,sd=1)
-  lines(xfit, yfit, col=&quot;red&quot;, lwd=2)
-}</code></pre>
-<p><img src="figure/bulkMash_simu.Rmd/unnamed-chunk-3-1.png" width="864" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-3-1">
-Past versions of unnamed-chunk-3-1.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-3-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
+<p>Looking at null_simu_mean</p>
+<table>
+<caption>number of false discoveries</caption>
 <thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
+<tr class="header">
+<th align="right">voom_limma</th>
+<th align="right">rle_voom_limma</th>
+<th align="right">deseq</th>
 </tr>
 </thead>
 <tbody>
-<tr>
-<td>
-<a href="https://github.com/DongyueXie/dear/blob/b0cddfcb7fb579350df72d9624bf5109b38f39db/docs/figure/bulkMash_simu.Rmd/unnamed-chunk-3-1.png" target="_blank">b0cddfc</a>
-</td>
-<td>
-DongyueXie
-</td>
-<td>
-2020-06-30
-</td>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">24</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">21</td>
+<td align="right">1</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">340</td>
+<td align="right">12</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">11</td>
+<td align="right">19</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="right">3</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">649</td>
+<td align="right">55</td>
+<td align="right">3</td>
+</tr>
+<tr class="odd">
+<td align="right">234</td>
+<td align="right">243</td>
+<td align="right">65</td>
+</tr>
+<tr class="even">
+<td align="right">25</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="right">111</td>
+<td align="right">170</td>
+<td align="right">48</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="right">52</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="right">0</td>
+<td align="right">101</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">37</td>
+<td align="right">25</td>
+<td align="right">4</td>
+</tr>
+<tr class="odd">
+<td align="right">89</td>
+<td align="right">95</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="right">33</td>
+<td align="right">22</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="right">18</td>
+<td align="right">32</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">31</td>
+<td align="right">37</td>
+<td align="right">1</td>
 </tr>
 </tbody>
 </table>
-</div>
-</div>
-</div>
-<div id="voom-limma-z-score" class="section level3">
-<h3>voom-limma z score</h3>
-<pre class="r"><code>Bhat = null_simu$voom_limma[[2]]$mash$input$Bhat
-Shat = null_simu$voom_limma[[2]]$mash$input$Shat
-
-data = mash_set_data(Bhat,Shat)
-data.L = mash_update_data(data,ref=&#39;mean&#39;)
-
-titles = colnames(data.L$Bhat)
-
-par(mfrow=c(3,3))
-for(i in 1:length(titles)){
-  z = data.L$Bhat[,i]/data.L$Shat[,i]
-  hist(z,breaks = 30,xlab=&#39;z&#39;, main=titles[i],freq = FALSE,ylim = c(0,0.45))
-  
-  xfit&lt;-seq(min(z),max(z),length=40)
-  yfit&lt;-dnorm(xfit,mean=0,sd=1)
-  lines(xfit, yfit, col=&quot;red&quot;, lwd=2)
-}</code></pre>
-<p><img src="figure/bulkMash_simu.Rmd/unnamed-chunk-4-1.png" width="864" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-4-1">
-Past versions of unnamed-chunk-4-1.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-4-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/DongyueXie/dear/blob/b0cddfcb7fb579350df72d9624bf5109b38f39db/docs/figure/bulkMash_simu.Rmd/unnamed-chunk-4-1.png" target="_blank">b0cddfc</a>
-</td>
-<td>
-DongyueXie
-</td>
-<td>
-2020-06-30
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-</div>
+<p>Identifying significant genes<img src="figure/bulkMash_simu.Rmd/unnamed-chunk-2-1.png" width="672" style="display: block; margin: auto;" />Identifying significant conditions<img src="figure/bulkMash_simu.Rmd/unnamed-chunk-2-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Let’s look at plots of <span class="math">\(z\)</span> scores since voom-limma has a number of false discoveries. Compare rle-voom-limma and deseq</p>
 <div id="rle-voom-limma-z-score" class="section level3">
 <h3>rle-voom-limma z score</h3>
-<pre class="r"><code>Bhat = null_simu$rle_voom_limma[[2]]$mash$input$Bhat
-Shat = null_simu$rle_voom_limma[[2]]$mash$input$Shat
+<pre class="r"><code>Bhat = simu_all$null_simu_mean$rle_voom_limma[[9]]$mash$input$Bhat
+Shat = simu_all$null_simu_mean$rle_voom_limma[[9]]$mash$input$Shat
 
 data = mash_set_data(Bhat,Shat)
 data.L = mash_update_data(data,ref=&#39;mean&#39;)
@@ -1012,8 +1009,8 @@ DongyueXie
 </div>
 <div id="deseq-z-score" class="section level3">
 <h3>deseq z score</h3>
-<pre class="r"><code>Bhat = null_simu$deseq[[2]]$mash$input$Bhat
-Shat = null_simu$deseq[[2]]$mash$input$Shat
+<pre class="r"><code>Bhat = simu_all$null_simu_mean$deseq[[9]]$mash$input$Bhat
+Shat = simu_all$null_simu_mean$deseq[[9]]$mash$input$Shat
 
 data = mash_set_data(Bhat,Shat)
 data.L = mash_update_data(data,ref=&#39;mean&#39;)
@@ -1068,11 +1065,11 @@ DongyueXie
 </div>
 </div>
 </div>
-</div>
 <div id="look-at-some-specific-false-discoveies-of-voom-limma" class="section level2">
 <h2>Look at some specific false discoveies of voom-limma</h2>
-<pre class="r"><code>n_sig_cond = as.numeric(get_n_significant_conditions(null_simu$voom_limma[[2]]$mash))
-hist(n_sig_cond)</code></pre>
+<pre class="r"><code>n_sig_cond = as.numeric(get_n_significant_conditions(simu_all$null_simu_mean$rle_voom_limma[[9]]$mash))
+par(mfrow=c(1,1))
+hist(n_sig_cond,breaks=100)</code></pre>
 <p><img src="figure/bulkMash_simu.Rmd/unnamed-chunk-7-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-7-1">
@@ -1111,175 +1108,281 @@ DongyueXie
 </table>
 </div>
 </div>
-<p>either none or all….</p>
-<pre class="r"><code>Bhat = null_simu$voom_limma[[2]]$mash$input$Bhat
-Shat = null_simu$voom_limma[[2]]$mash$input$Shat
+<p>either none or most of conditions are significant….</p>
+<pre class="r"><code>Bhat = simu_all$null_simu_mean$rle_voom_limma[[9]]$mash$input$Bhat
+Shat = simu_all$null_simu_mean$rle_voom_limma[[9]]$mash$input$Shat
 data = mash_set_data(Bhat,Shat)
 data.L = mash_update_data(data,ref=&#39;mean&#39;)
-data.L$Bhat[3,]</code></pre>
-<pre><code>      1-mean       2-mean       3-mean       4-mean       5-mean 
- 0.051172990 -0.004858339 -0.470693226 -0.358374429 -0.600697690 
-      6-mean       7-mean       8-mean       9-mean 
- 0.139581662  0.253623864 -0.088464514  1.070019499 </code></pre>
-<pre class="r"><code>data.L$Shat[3,]</code></pre>
+data.L$Bhat[1484,]</code></pre>
+<pre><code>     1-mean      2-mean      3-mean      4-mean      5-mean      6-mean 
+ 0.22192819  0.16275459 -0.45988753  0.24222562 -0.09479704  0.26680613 
+     7-mean      8-mean      9-mean 
+-0.64613312  0.09251086  0.18754422 </code></pre>
+<pre class="r"><code>data.L$Shat[1484,]</code></pre>
 <pre><code>   1-mean    2-mean    3-mean    4-mean    5-mean    6-mean    7-mean 
-0.3913273 0.3725051 0.4858868 0.4244804 0.4522583 0.3602569 0.3569673 
+0.1372138 0.1362131 0.1411604 0.1356561 0.1426471 0.1367904 0.1442832 
    8-mean    9-mean 
-0.3950418 0.3045983 </code></pre>
-<pre class="r"><code>null_simu$voom_limma[[2]]$mash$result$lfsr[3,]</code></pre>
-<pre><code>    1-mean     2-mean     3-mean     4-mean     5-mean     6-mean 
-0.03511943 0.03136038 0.03101373 0.03138272 0.03134107 0.03135549 
-    7-mean     8-mean     9-mean    10-mean 
-0.03146220 0.03308622 0.03137283 0.03120332 </code></pre>
-<p>The results are weried. Look at large Shat, near 0 Bhat but small lfsr.</p>
+0.1385865 0.1357481 </code></pre>
+<pre class="r"><code>simu_all$null_simu_mean$rle_voom_limma[[9]]$mash$result$lfsr[1484,]</code></pre>
+<pre><code>      1-mean       2-mean       3-mean       4-mean       5-mean 
+1.002285e-02 3.679494e-07 9.219987e-08 9.175160e-08 9.797120e-08 
+      6-mean       7-mean       8-mean       9-mean      10-mean 
+1.315189e-07 9.199837e-08 3.386752e-01 9.901908e-08 1.107432e-06 </code></pre>
+<p>The results are weried. Look at large Shat compared to Bhat but small lfsr.</p>
 <p>Let’s run this specific see what happened.</p>
 <pre class="r"><code>U.c = cov_canonical(data.L)
 m.1by1 = mash_1by1(data.L)
 strong = get_significant_results(m.1by1)
 length(strong)</code></pre>
-<pre><code>[1] 14</code></pre>
+<pre><code>[1] 69</code></pre>
 <pre class="r"><code>U.pca = cov_pca(data.L,2,subset=strong)
 U.ed = cov_ed(data.L, U.pca, subset=strong)
 m = mash(data.L, c(U.c,U.ed), algorithm.version = &#39;Rcpp&#39;,verbose = F)
 length(get_significant_results(m))</code></pre>
-<pre><code>[1] 127</code></pre>
+<pre><code>[1] 243</code></pre>
 <pre class="r"><code>m$loglik</code></pre>
-<pre><code>[1] -11879.34</code></pre>
-<p>So ash 1by1 identifies 14 significant genes while mash finds 127. How about just use canonical matrix?</p>
+<pre><code>[1] 395.783</code></pre>
+<p>So ash 1by1 identifies 69 significant genes while mash finds 243. How about just use canonical matrix?</p>
 <pre class="r"><code>m = mash(data.L, c(U.c), algorithm.version = &#39;Rcpp&#39;,verbose = F)
 length(get_significant_results(m))</code></pre>
-<pre><code>[1] 1</code></pre>
+<pre><code>[1] 12</code></pre>
 <pre class="r"><code>m$loglik</code></pre>
-<pre><code>[1] -12346.52</code></pre>
-<p>Only one! The prior covariance matrix has such huge influence on the results!!</p>
-<p>How about compare to the control?</p>
-<pre class="r"><code>data.L = mash_update_data(data,ref=1)
-U.c = cov_canonical(data.L)
-m.1by1 = mash_1by1(data.L)
-strong = get_significant_results(m.1by1)
-length(strong)</code></pre>
-<pre><code>[1] 0</code></pre>
-<pre class="r"><code>m = mash(data.L, c(U.c), algorithm.version = &#39;Rcpp&#39;,verbose = F)
-length(get_significant_results(m))</code></pre>
-<pre><code>[1] 6</code></pre>
-<pre class="r"><code>m$loglik</code></pre>
-<pre><code>[1] -19135.97</code></pre>
-<p>So ash 1by1 identifies 0 gene and mash with canonical cov identifies 6.</p>
+<pre><code>[1] -472.4913</code></pre>
+<p>Only 12! The prior covariance matrix has such huge influence on the results!!</p>
 </div>
 </div>
-<div id="signal" class="section level1">
-<h1>Signal</h1>
-<pre class="r"><code>summary_pln_simu(simu_all,c(2,3,4),signal_names_simu = names(simu_all),skip_null = TRUE,non_null_mat_dim = &#39;notFull&#39;)</code></pre>
-<pre><code>Identifying significant genes</code></pre>
-<p><img src="figure/bulkMash_simu.Rmd/unnamed-chunk-12-1.png" width="672" style="display: block; margin: auto;" /></p>
-<pre><code>Identifying significant conditions</code></pre>
-<p><img src="figure/bulkMash_simu.Rmd/unnamed-chunk-12-2.png" width="672" style="display: block; margin: auto;" /></p>
-<div id="other-methods-based-on-p-value" class="section level2">
-<h2>other methods based on p-value</h2>
-<pre class="r"><code>methods = names(signal_simu_control)
-method = methods[c(5,6,7)]
-
-fdp_signal = matrix(nrow=nsimu,ncol=length(method))
-auc_signal = matrix(nrow=nsimu,ncol=length(method))
-power_signal = matrix(nrow=nsimu,ncol=length(method))
-
-for(i in 1:nsimu){
-  
-  which_null = 1*(rowSums(signal_simu_control$non_null_matrix[[i]])==0)
-  non_null_idx = which(rowSums(signal_simu_control$non_null_matrix[[i]])!=0)
-  
-  for(j in 1:length(method)){
-    
-    m = which(names(signal_simu_control)==method[j])
-    
-    fdp_signal[i,j] = fdp((signal_simu_control[[m]][[i]]$sig_idx),non_null_idx) 
-    auc_signal[i,j] = auc(p.adjust(signal_simu_control[[m]][[i]]$p_val,method=&#39;BH&#39;),which_null)
-    power_signal[i,j] = powr(signal_simu_control[[m]][[i]]$sig_idx,non_null_idx) 
-    
-  }
-  
-  
-}
-colnames(fdp_signal) = method
-colnames(auc_signal) = method
-rownames(auc_signal) = 1:nsimu
-colnames(power_signal) = method
-
-
-knitr::kable(sort(round(apply(fdp_signal,2,mean),2)),col.names = &#39;fdr level 0.05&#39;)</code></pre>
+<div id="ten-replicates" class="section level1">
+<h1>Ten replicates</h1>
+<pre class="r"><code>load(&#39;/scratch/midway2/dyxie/sc-cytokine/output/bulkMash_10rep.RData&#39;)
+summary_pln_simu(simu_all)</code></pre>
+<p>NULL case: compare with control and mean</p>
+<p>Looking at null_simu_control</p>
 <table>
+<caption>number of false discoveries</caption>
 <thead>
 <tr class="header">
-<th></th>
-<th align="right">fdr level 0.05</th>
+<th align="right">voom_limma</th>
+<th align="right">rle_voom_limma</th>
+<th align="right">deseq</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>kw</td>
-<td align="right">0.00</td>
+<td align="right">85</td>
+<td align="right">1</td>
+<td align="right">0</td>
 </tr>
 <tr class="even">
-<td>anova</td>
-<td align="right">0.11</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
 </tr>
 <tr class="odd">
-<td>edgeR</td>
-<td align="right">0.14</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="right">6</td>
+<td align="right">4</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="right">358</td>
+<td align="right">52</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">4</td>
+<td align="right">2</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="right">5</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="right">2</td>
+<td align="right">1</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="right">113</td>
+<td align="right">89</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">3</td>
+</tr>
+<tr class="odd">
+<td align="right">101</td>
+<td align="right">60</td>
+<td align="right">41</td>
+</tr>
+<tr class="even">
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="right">17</td>
+<td align="right">34</td>
+<td align="right">14</td>
+</tr>
+<tr class="even">
+<td align="right">654</td>
+<td align="right">0</td>
+<td align="right">0</td>
 </tr>
 </tbody>
 </table>
-<pre class="r"><code>knitr::kable(sort(round(apply(auc_signal,2,mean),2),decreasing = TRUE),col.names = &#39;auc&#39;)</code></pre>
+<p>Looking at null_simu_mean</p>
 <table>
+<caption>number of false discoveries</caption>
 <thead>
 <tr class="header">
-<th></th>
-<th align="right">auc</th>
+<th align="right">voom_limma</th>
+<th align="right">rle_voom_limma</th>
+<th align="right">deseq</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>edgeR</td>
-<td align="right">0.63</td>
+<td align="right">100</td>
+<td align="right">0</td>
+<td align="right">0</td>
 </tr>
 <tr class="even">
-<td>anova</td>
-<td align="right">0.62</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
 </tr>
 <tr class="odd">
-<td>kw</td>
-<td align="right">0.58</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="right">13</td>
+<td align="right">11</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="right">217</td>
+<td align="right">3</td>
+<td align="right">2</td>
+</tr>
+<tr class="even">
+<td align="right">44</td>
+<td align="right">2</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="right">173</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="right">76</td>
+<td align="right">69</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">3</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="right">148</td>
+<td align="right">66</td>
+<td align="right">47</td>
+</tr>
+<tr class="even">
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="right">0</td>
+<td align="right">21</td>
+<td align="right">11</td>
+</tr>
+<tr class="even">
+<td align="right">685</td>
+<td align="right">0</td>
+<td align="right">0</td>
 </tr>
 </tbody>
 </table>
-<pre class="r"><code>knitr::kable(sort(round(apply(power_signal,2,mean),2),decreasing = TRUE),col.names = &#39;power&#39;)</code></pre>
-<table>
-<thead>
-<tr class="header">
-<th></th>
-<th align="right">power</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>edgeR</td>
-<td align="right">0.04</td>
-</tr>
-<tr class="even">
-<td>anova</td>
-<td align="right">0.02</td>
-</tr>
-<tr class="odd">
-<td>kw</td>
-<td align="right">0.00</td>
-</tr>
-</tbody>
-</table>
-<pre class="r"><code>par(mfrow=c(1,3))
-boxplot(fdp_signal,main=&#39;fdp&#39;)
-boxplot(auc_signal,main=&#39;auc&#39;)
-boxplot(power_signal,main=&#39;power&#39;)</code></pre>
-<p><img src="figure/bulkMash_simu.Rmd/unnamed-chunk-14-1.png" width="864" style="display: block; margin: auto;" /></p>
+<p>Identifying significant genes<img src="figure/bulkMash_simu.Rmd/unnamed-chunk-11-1.png" width="672" style="display: block; margin: auto;" />Identifying significant conditions<img src="figure/bulkMash_simu.Rmd/unnamed-chunk-11-2.png" width="672" style="display: block; margin: auto;" /></p>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -1296,12 +1399,7 @@ Matrix products: default
 BLAS/LAPACK: /software/openblas-0.2.19-el7-x86_64/lib/libopenblas_haswellp-r0.2.19.so
 
 locale:
- [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
- [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    
- [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   
- [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 
- [9] LC_ADDRESS=C               LC_TELEPHONE=C            
-[11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
+[1] C
 
 attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
@@ -1330,7 +1428,6 @@ loaded via a namespace (and not attached):
 [52] Matrix_1.2-15     SQUAREM_2017.10-1 pROC_1.13.0      
 [55] assertthat_0.2.0  rmarkdown_1.10    iterators_1.0.10 
 [58] R6_2.3.0          git2r_0.26.1      compiler_3.5.1   </code></pre>
-</div>
 </div>
 </div>
 
