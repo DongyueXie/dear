@@ -1,0 +1,71 @@
+---
+title: "Poisson log normal model simulation"
+author: "DongyueXie"
+date: "2020-07-03"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(warning = F,message = F)
+```
+
+## Introduction
+
+Denote sample as $i=1,2,...,n$ and genes as $g =1,2,...,G$. Generate data from Poisson log Normal model \[Y_{ig}\sim Poisson(\text{e}^{\log(S_i*\frac{\exp({x_i^T\beta_g})}{\sum_g \exp({x_i^T\beta_g})})+\epsilon_{ig}-\frac{1}{2}\sigma^2_g}),\] where $\epsilon_{ig}\sim N(0,\sigma^2_g)$ and $S_i$ is the library size of sample $i$. The mean of $Y_{ig}$ is \[E(Y_{ig}) = S_i*\frac{\exp({x_i^T\beta_g})}{\sum_g \exp({x_i^T\beta_g})}\] and its variance is larger than its mean so overdispersion exists. 
+
+The term $-\frac{1}{2}\sigma^2_g$ is only for illustration purpose and let the mean of $Y_{ig}$ interpretable. In practice, it will not affect the inference even if we generate data without this term, since we are comparing expressions given a gene, among samples. 
+
+One advantage of the model is that we can induce dependence among genes in the latent space. For example, we have a dense $G\times G$ covariance matrix $\Sigma$ and we can generate a sample $Y_i$ of length $G$ in the following way: draw a length $G$ vector from \[Z_i\sim N(\log(S_i*\frac{\exp({x_i^T\beta_g})}{\sum_g \exp({x_i^T\beta_g})}),\Sigma)\] and draw \[Y_i|Z_i\sim Poisson(\exp(Z_i-\frac{1}{2}\text{diag}(\Sigma))\]. 
+
+This simulation study compares (voom-limma, rle-voom-limma, deseq2)+(ashr). The number of genes is set to be $2000$, library size is $S_i = s_i*G$ where $s_i\sim Poisson(50)$ and number of simulations is 20.
+
+Let's start with the simplest case where we have two conditions and each condition has equal number of samples. 
+
+
+Assume there are 2000 genes and 3 replicates in each condition.
+
+For the coefficients matrix $B\in R^{G*2}$, its first column $B_1$ is the intercept term and WLOG, are set to 1 and second column $B_2$ is the contrasts of two conditions. If all genes are null, then all elements of $B_2$ are 0; if some of genes(set to $10\%$ here) are non-null, then their $B_2$ are drawn from $N(0,0.8^2)$. 
+
+## Diagnal Sigma all equal
+
+```{r}
+load("output/pln_simu_diagSigma01.RData")
+source('code/pln_simu_summary.R')
+summary_pln_simu(pln_simu)
+```
+
+## Diagnal Sigma from PLN fit
+
+```{r}
+load("output/pln_simu_diagSigma_plnFit.RData")
+load("output/PLNfit_bulk_cytokin_SI.RData")
+Sigma = diag(sigma(myPLN))
+Sigma[which(Sigma>0.6)] = 0.3
+hist(Sigma,breaks = 50)
+
+summary_pln_simu(pln_simu)
+```
+
+## Full Sigma from PLN fit
+
+```{r}
+load("output/pln_simu_denseSigma_plnFit.RData")
+
+summary_pln_simu(pln_simu)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
