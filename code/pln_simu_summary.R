@@ -21,49 +21,64 @@ powr = function(dis.idx, true.idx){
   }
 }
 
-summary_pln_simu = function(pln_simu){
+summary_pln_simu = function(pln_simu,method.idx=c(1,2,3),null_names_simu = names(pln_simu)[1:2],
+                            signal_names_simu=names(pln_simu)[3:4],skip_null=FALSE,non_null_mat_dim='full'){
 
   library(ggplot2)
 
+
   names_simu = names(pln_simu)
 
-  cat("NULL case: compare with control and mean")
+  if(!skip_null){
 
-  null_summary = c()
+    cat("NULL case: compare with control and mean")
+    cat('\n\n\n\n')
 
-  for(l in 1:2){
+    null_summary = c()
+    null_summary_sd = c()
 
-    #cat("Looking at",names_simu[l])
-    methods = names(pln_simu[[l]])
-    method = methods[c(1,2,3)]
+    for(nn in null_names_simu){
 
-    nsimu = length(pln_simu[[l]]$voom_limma)
-    fdp_all = matrix(nrow=nsimu,ncol=length(method))
-    n_fdis = matrix(nrow=nsimu,ncol=length(method))
-    for(i in 1:nsimu){
+      l = which(names_simu == nn)
 
-      for(j in 1:length(method)){
+      cat("Looking at",names_simu[l])
+      methods = names(pln_simu[[l]])
+      method = methods[method.idx]
 
-        m = which(names(pln_simu[[l]])==method[j])
+      nsimu = length(pln_simu[[l]]$voom_limma)
+      fdp_all = matrix(nrow=nsimu,ncol=length(method))
+      n_fdis = matrix(nrow=nsimu,ncol=length(method))
+      for(i in 1:nsimu){
 
-        fdp_all[i,j] = fdp(get_significant_results(pln_simu[[l]][[m]][[i]]$mash),0)
-        n_fdis[i,j] = length(get_significant_results(pln_simu[[l]][[m]][[i]]$mash))
+        for(j in 1:length(method)){
+
+          m = which(names(pln_simu[[l]])==method[j])
+
+          fdp_all[i,j] = fdp(get_significant_results(pln_simu[[l]][[m]][[i]]$mash),0)
+          n_fdis[i,j] = length(get_significant_results(pln_simu[[l]][[m]][[i]]$mash))
+
+        }
 
       }
+      colnames(fdp_all) = method
+      colnames(n_fdis) = method
+      rownames(n_fdis) = 1:nsimu
+      null_summary = cbind(null_summary,c(apply(n_fdis,2,mean)))
+      null_summary_sd = cbind(null_summary_sd,c(apply(n_fdis,2,sd)))
+      print(knitr::kable(n_fdis,caption='number of false discoveries'))
+      cat('\n\n\n\n')
 
     }
-    colnames(fdp_all) = method
-    colnames(n_fdis) = method
-    rownames(n_fdis) = 1:nsimu
-    null_summary = cbind(null_summary,c(apply(n_fdis,2,mean)))
-    #print(knitr::kable(n_fdis,caption='number of false discoveries'))
-    #cat('\n\n<!-- -->\n\n')
+    colnames(null_summary) = c("control","mean")
+    colnames(null_summary_sd) = c("control","mean")
+    #print(knitr::kable(null_summary,caption='average #false discoveries'))
+    #print(knitr::kable(null_summary_sd,caption='s.d. #false discoveries'))
+
+    #cat('\n\n\n\n')
+
 
   }
-  colnames(null_summary) = c("control","mean")
-  print(knitr::kable(null_summary,caption='average #false discoveries'))
 
-  cat('\n\n\n\n')
 
   cat("Identifying significant genes")
 
@@ -71,11 +86,12 @@ summary_pln_simu = function(pln_simu){
   auc_for_ggplot = data.frame()
   power_for_ggplot = data.frame()
 
-  for(l in 3:4){
+  for(nn in signal_names_simu){
 
+    l = which(names_simu==nn)
     #cat("Looking at",names_simu[l])
     methods = names(pln_simu[[l]])
-    method = methods[c(1,2,3)]
+    method = methods[method.idx]
 
     nsimu = length(pln_simu[[l]]$voom_limma)
 
@@ -121,26 +137,28 @@ summary_pln_simu = function(pln_simu){
     #cat('\n\n<!-- -->\n\n')
 
   }
-  colnames(fdp_for_ggplot) = c("fdp","method","compare")
-  colnames(auc_for_ggplot) = c("auc","method","compare")
-  colnames(power_for_ggplot) = c("power","method","compare")
+  colnames(fdp_for_ggplot) = c("fdp","method","reference")
+  colnames(auc_for_ggplot) = c("auc","method","reference")
+  colnames(power_for_ggplot) = c("power","method","reference")
 
 
-  fdp_for_ggplot$fdp = as.numeric(fdp_for_ggplot$fdp)
-  auc_for_ggplot$auc = as.numeric(auc_for_ggplot$auc)
-  power_for_ggplot$power = as.numeric(power_for_ggplot$power)
+  fdp_for_ggplot$fdp = as.numeric(as.character(fdp_for_ggplot$fdp))
+  auc_for_ggplot$auc = as.numeric(as.character(auc_for_ggplot$auc))
+  power_for_ggplot$power = as.numeric(as.character(power_for_ggplot$power))
 
 
-  p1 = ggplot(fdp_for_ggplot, aes(x=method, y=fdp, fill=compare)) +
+  p1 = ggplot(fdp_for_ggplot, aes(x=method, y=fdp, fill=reference)) +
     geom_boxplot() + theme(legend.position="none")
 
-  p2 = ggplot(auc_for_ggplot, aes(x=method, y=auc, fill=compare)) +
+  p2 = ggplot(auc_for_ggplot, aes(x=method, y=auc, fill=reference)) +
     geom_boxplot() + theme(legend.position="none")
 
-  p3 = ggplot(power_for_ggplot, aes(x=method, y=power, fill=compare)) +
+  p3 = ggplot(power_for_ggplot, aes(x=method, y=power, fill=reference)) +
     geom_boxplot()+ theme(legend.position="bottom")
 
   gridExtra::grid.arrange(p1,p2,p3,nrow=2)
+
+  #browser()
 
 
   # identify  correct condition?
@@ -151,11 +169,12 @@ summary_pln_simu = function(pln_simu){
   auc_for_ggplot = data.frame()
   power_for_ggplot = data.frame()
 
-  for(l in 3:4){
+  for(nn in signal_names_simu){
 
     #cat("Looking at",names_simu[l])
+    l = which(names_simu==nn)
     methods = names(pln_simu[[l]])
-    method = methods[c(1,2,3)]
+    method = methods[method.idx]
 
     nsimu = length(pln_simu[[l]]$voom_limma)
 
@@ -166,14 +185,27 @@ summary_pln_simu = function(pln_simu){
     for(i in 1:nsimu){
 
 
-
-      if(names_simu[l]=="signal_simu_control"){
+      if(non_null_mat_dim=='full'){
+        if(names_simu[l]=="signal_simu_control"){
         which_null = c(1-(pln_simu[[l]]$non_null_matrix[[i]])[,-1])
         non_null_idx = which((pln_simu[[l]]$non_null_matrix[[i]])[,-1] != 0)
       }else{
         which_null = c(1-pln_simu[[l]]$non_null_matrix[[i]])
         non_null_idx = which(pln_simu[[l]]$non_null_matrix[[i]]!=0)
       }
+      }else{
+        if(names_simu[l]=="signal_simu_control"){
+          which_null = c(1-(pln_simu[[l]]$non_null_matrix[[i]]))
+          non_null_idx = which((pln_simu[[l]]$non_null_matrix[[i]]) != 0)
+        }else{
+          which_null = c(1-cbind(rep(0,nrow(pln_simu[[l]]$non_null_matrix[[i]])),pln_simu[[l]]$non_null_matrix[[i]]))
+          non_null_idx = which(cbind(rep(0,nrow(pln_simu[[l]]$non_null_matrix[[i]])),pln_simu[[l]]$non_null_matrix[[i]])!=0)
+        }
+      }
+
+
+
+      #browser()
 
       for(j in 1:length(method)){
 
@@ -204,22 +236,22 @@ summary_pln_simu = function(pln_simu){
 
   }
 
-  colnames(fdp_for_ggplot) = c("fdp","method","compare")
-  colnames(auc_for_ggplot) = c("auc","method","compare")
-  colnames(power_for_ggplot) = c("power","method","compare")
+  colnames(fdp_for_ggplot) = c("fdp","method","reference")
+  colnames(auc_for_ggplot) = c("auc","method","reference")
+  colnames(power_for_ggplot) = c("power","method","reference")
 
 
-  fdp_for_ggplot$fdp = as.numeric(fdp_for_ggplot$fdp)
-  auc_for_ggplot$auc = as.numeric(auc_for_ggplot$auc)
-  power_for_ggplot$power = as.numeric(power_for_ggplot$power)
+  fdp_for_ggplot$fdp = as.numeric(as.character(fdp_for_ggplot$fdp))
+  auc_for_ggplot$auc = as.numeric(as.character(auc_for_ggplot$auc))
+  power_for_ggplot$power = as.numeric(as.character(power_for_ggplot$power))
 
-  p1 = ggplot(fdp_for_ggplot, aes(x=method, y=fdp, fill=compare)) +
+  p1 = ggplot(fdp_for_ggplot, aes(x=method, y=fdp, fill=reference)) +
     geom_boxplot() + theme(legend.position="none")
 
-  p2 = ggplot(auc_for_ggplot, aes(x=method, y=auc, fill=compare)) +
+  p2 = ggplot(auc_for_ggplot, aes(x=method, y=auc, fill=reference)) +
     geom_boxplot() + theme(legend.position="none")
 
-  p3 = ggplot(power_for_ggplot, aes(x=method, y=power, fill=compare)) +
+  p3 = ggplot(power_for_ggplot, aes(x=method, y=power, fill=reference)) +
     geom_boxplot()+ theme(legend.position="bottom")
 
   gridExtra::grid.arrange(p1,p2,p3,nrow=2)

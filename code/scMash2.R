@@ -16,7 +16,7 @@ library(mashr)
 
 mde_mash = function(mat,condition,
                     normalization = "RLE", test.method = 'DESeq2',
-                    ref='mean',pseudoBulk=FALSE,num.reps=3,verbose=FALSE,data.driven.cov=FALSE){
+                    ref='mean',pseudoBulk=FALSE,num.reps=3,verbose=FALSE,data.driven.cov=T){
 
   G = nrow(mat)
   N = ncol(mat)
