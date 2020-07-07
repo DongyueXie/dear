@@ -1,5 +1,4 @@
 library(seqgendiff)
-#library(Seurat)
 library(limma)
 library(DESeq2)
 library(edgeR)
@@ -24,7 +23,7 @@ mde_mash = function(mat,condition,
   out = list()
   out$input = list(mat=mat,condition=condition,normalization=normalization,
                    test.method=test.method,
-                   ref=ref,pseudoBulk=pseudoBulk,num.reps=num.reps)
+                   ref=ref,pseudoBulk=pseudoBulk,num.reps=num.reps,data.driven.cov=data.driven.cov)
   V = NULL
 
   condition = as.factor(condition)
@@ -32,8 +31,6 @@ mde_mash = function(mat,condition,
     condition = relevel(condition,ref)
   }
   cond_level = levels(condition)
-
-
   n_cond = length(cond_level)
   cov_of_interest = 1:n_cond
 
