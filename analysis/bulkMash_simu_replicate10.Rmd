@@ -14,27 +14,7 @@ In a previous [simulation](bulkMash_simu.html), the number of replicates in each
 
 ```{r}
 library(mashr)
-fdp = function(dis.idx, true.idx){
-  if(length(dis.idx)==0){
-    0
-  }else{
-    1-mean(dis.idx%in%true.idx)
-  }
-}
-
-
-auc = function(pred,true.label){
-  auc=pROC::roc(response = true.label, predictor = pred)
-  auc$auc
-}
-
-powr = function(dis.idx, true.idx){
-  if(length(dis.idx)==0){
-    0
-  }else{
-    sum(dis.idx%in%true.idx)/length(true.idx)
-  }
-}
+source('code/pln_simu_summary.R')
 ```
 
 # NULL
@@ -170,106 +150,14 @@ for(i in 1:length(titles)){
 
 # Signal
 
-## Compare to mean
 
 ```{r}
 load('/scratch/midway2/dyxie/sc-cytokine/output/bulkMash_cytokine_SI_signal_mean_ref_replicate10.RData')
-nsimu=10
-methods = names(signal_simu_mean)
-method = methods[c(1:4)]
-
-fdp_signal = matrix(nrow=nsimu,ncol=length(method))
-auc_signal = matrix(nrow=nsimu,ncol=length(method))
-power_signal = matrix(nrow=nsimu,ncol=length(method))
-
-
-
-for(i in 1:nsimu){
-  
-  which_null = 1*(rowSums(signal_simu_mean$non_null_matrix[[i]])==0)
-  non_null_idx = which(rowSums(signal_simu_mean$non_null_matrix[[i]])!=0)
-  
-
-  
-  for(j in 1:length(method)){
-    
-    m = which(names(signal_simu_mean)==method[j])
-    
-    fdp_signal[i,j] = fdp(get_significant_results(signal_simu_mean[[m]][[i]]$mash),non_null_idx) 
-    auc_signal[i,j] = auc(apply(signal_simu_mean[[m]][[i]]$mash$result$lfsr,1,min),which_null)
-    power_signal[i,j] = powr(get_significant_results(signal_simu_mean[[m]][[i]]$mash),non_null_idx) 
-    
-  }
-  
-  
-}
-colnames(fdp_signal) = method
-colnames(auc_signal) = method
-rownames(auc_signal) = 1:nsimu
-colnames(power_signal) = method
-
-
-knitr::kable(sort(round(apply(fdp_signal,2,mean),2)),col.names = 'lfsr level 0.05')
-knitr::kable(sort(round(apply(auc_signal,2,mean),2),decreasing = TRUE),col.names = 'auc')
-knitr::kable(sort(round(apply(power_signal,2,mean),2),decreasing = TRUE),col.names = 'power at lfsr level 0.05')
-```
-
-```{r,fig.width=15,fig.height=5}
-par(mfrow=c(1,3))
-boxplot(fdp_signal,main='fdp')
-boxplot(auc_signal,main='auc')
-boxplot(power_signal,main='power')
-```
-
-
-## Compare to control
-
-
-
-```{r}
 load('/scratch/midway2/dyxie/sc-cytokine/output/bulkMash_cytokine_SI_signal_control_ref_replicate10.RData')
-nsimu=10
-methods = names(signal_simu_control)
-method = methods[c(1,2,3,4)]
-
-fdp_signal = matrix(nrow=nsimu,ncol=length(method))
-auc_signal = matrix(nrow=nsimu,ncol=length(method))
-power_signal = matrix(nrow=nsimu,ncol=length(method))
-
-for(i in 1:nsimu){
-  
-  which_null = 1*(rowSums(signal_simu_control$non_null_matrix[[i]])==0)
-  non_null_idx = which(rowSums(signal_simu_control$non_null_matrix[[i]])!=0)
-  
-  for(j in 1:length(method)){
-    
-    m = which(names(signal_simu_control)==method[j])
-    
-    fdp_signal[i,j] = fdp(get_significant_results(signal_simu_control[[m]][[i]]$mash),non_null_idx) 
-    auc_signal[i,j] = auc(apply(signal_simu_control[[m]][[i]]$mash$result$lfsr,1,min),which_null)
-    power_signal[i,j] = powr(get_significant_results(signal_simu_control[[m]][[i]]$mash),non_null_idx) 
-    
-  }
-  
-  
-}
-colnames(fdp_signal) = method
-colnames(auc_signal) = method
-rownames(auc_signal) = 1:nsimu
-colnames(power_signal) = method
-
-
-knitr::kable(sort(round(apply(fdp_signal,2,mean),2)),col.names = 'lfsr level 0.05')
-knitr::kable(sort(round(apply(auc_signal,2,mean),2),decreasing = TRUE),col.names = 'auc')
-knitr::kable(sort(round(apply(power_signal,2,mean),2),decreasing = TRUE),col.names = 'power')
+simu_all = list(signal_simu_control=signal_simu_control,signal_simu_mean=signal_simu_mean)
+summary_pln_simu(simu_all,c(2,3,4),signal_names_simu = names(simu_all),skip_null = TRUE,non_null_mat_dim = 'notFull')
 ```
 
-```{r,fig.width=15,fig.height=5}
-par(mfrow=c(1,3))
-boxplot(fdp_signal,main='fdp')
-boxplot(auc_signal,main='auc')
-boxplot(power_signal,main='power')
-```
 
 ## other methods based on p-value
 
@@ -309,7 +197,7 @@ knitr::kable(sort(round(apply(auc_signal,2,mean),2),decreasing = TRUE),col.names
 knitr::kable(sort(round(apply(power_signal,2,mean),2),decreasing = TRUE),col.names = 'power')
 ```
 
-```{r,fig.width=15,fig.height=5}
+```{r,fig.width=9,fig.height=3}
 par(mfrow=c(1,3))
 boxplot(fdp_signal,main='fdp')
 boxplot(auc_signal,main='auc')
