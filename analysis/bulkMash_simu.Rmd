@@ -13,7 +13,6 @@ editor_options:
 
 methods: 
 
-0. limma
 1. voom-limma
 2. RLE-voom-limma: apply RLE normalization first 
 3. RLE-voom-limma_V: apply RLE normalization first and plug covariance matrix into mash
@@ -26,9 +25,9 @@ methods:
 
 Design: 
 
-1. NUll: each simulation, draw 3000 genes and 30 samples, randomly assign 30 samples to 10 groups with 3 replicates in each group.  
+1. NUll: each simulation, draw 2000 genes and 30 samples, randomly assign 30 samples to 10 groups with 3 replicates in each group.  
 
-2. Signal: generate thinning coefficients from $N(0,0.8^2)$, randomly select $0.1$ genes to be non-NULL and for non-null genes, $2-4$ groups are randomly selected to be non-null. Apply thinning to null matrix. 
+2. Signal: generate thinning coefficients from $N(0,0.8^2)$, randomly select $0.1$ genes to be non-NULL and for non-null genes, $3$ groups are selected to be non-null. Apply thinning to null matrix. 
 
 Evaluation:
 
@@ -44,49 +43,25 @@ library(mashr)
 source('code/pln_simu_summary.R')
 ```
 
-# NULL
+# Three replicates
 
-## Compare to mean
-
-```{r}
-load('/scratch/midway2/dyxie/sc-cytokine/output/bulkMash_cytokine_SI_null.RData')
-load('/scratch/midway2/dyxie/sc-cytokine/output/bulkMash_cytokine_SI_signal_mean_ref.RData')
-load('/scratch/midway2/dyxie/sc-cytokine/output/bulkMash_cytokine_SI_signal_control_ref.RData')
-
-simu_all = list(signal_simu_control=signal_simu_control,signal_simu_mean=signal_simu_mean)
-
-nsimu=18
-
-methods = names(null_simu)
-method = methods[c(1,2,3,4)]
-
-fdp_all = matrix(nrow=nsimu,ncol=length(method))
-n_fdis = matrix(nrow=nsimu,ncol=length(method))
-for(i in 1:nsimu){
-  
-  for(j in 1:length(method)){
-    
-    m = which(names(null_simu)==method[j])
-    
-    fdp_all[i,j] = fdp(get_significant_results(null_simu[[m]][[i]]$mash),0) 
-    n_fdis[i,j] = length(get_significant_results(null_simu[[m]][[i]]$mash))
-    
-  }
-
-}
-colnames(fdp_all) = method
-colnames(n_fdis) = method
-rownames(n_fdis) = 1:nsimu
-knitr::kable(n_fdis,caption='number of false discoveries')
-
+```{r,results='asis'}
+load('/scratch/midway2/dyxie/sc-cytokine/output/bulkMash_3rep.RData')
+summary_pln_simu(simu_all)
 ```
 
-Let's look at plots of $z$ scores of the second simulation since voom-limma has a number of false discoveries. compare limma, voom-limma and deseq
+
+
+
+Let's look at plots of $z$ scores since voom-limma has a number of false discoveries. Compare rle-voom-limma and deseq
+
+
+
+```{r,fig.width=9,fig.height=9,eval=F,include=F}
 
 ### limma z score
 
-```{r,fig.width=9,fig.height=9}
-Bhat = null_simu$limma[[2]]$mash$input$Bhat
+Bhat = simu_all$null_simu_mean$limma[[2]]$mash$input$Bhat
 Shat = null_simu$limma[[2]]$mash$input$Shat
 
 data = mash_set_data(Bhat,Shat)
@@ -106,9 +81,12 @@ for(i in 1:length(titles)){
 
 ```
 
+
+
+```{r,fig.width=9,fig.height=9,eval=F,include=F}
+
 ### voom-limma z score
 
-```{r,fig.width=9,fig.height=9}
 Bhat = null_simu$voom_limma[[2]]$mash$input$Bhat
 Shat = null_simu$voom_limma[[2]]$mash$input$Shat
 
@@ -133,8 +111,8 @@ for(i in 1:length(titles)){
 ### rle-voom-limma z score
 
 ```{r,fig.width=9,fig.height=9}
-Bhat = null_simu$rle_voom_limma[[2]]$mash$input$Bhat
-Shat = null_simu$rle_voom_limma[[2]]$mash$input$Shat
+Bhat = simu_all$null_simu_mean$rle_voom_limma[[9]]$mash$input$Bhat
+Shat = simu_all$null_simu_mean$rle_voom_limma[[9]]$mash$input$Shat
 
 data = mash_set_data(Bhat,Shat)
 data.L = mash_update_data(data,ref='mean')
@@ -156,8 +134,8 @@ for(i in 1:length(titles)){
 ### deseq z score
 
 ```{r,fig.width=9,fig.height=9}
-Bhat = null_simu$deseq[[2]]$mash$input$Bhat
-Shat = null_simu$deseq[[2]]$mash$input$Shat
+Bhat = simu_all$null_simu_mean$deseq[[9]]$mash$input$Bhat
+Shat = simu_all$null_simu_mean$deseq[[9]]$mash$input$Shat
 
 data = mash_set_data(Bhat,Shat)
 data.L = mash_update_data(data,ref='mean')
@@ -180,23 +158,24 @@ for(i in 1:length(titles)){
 ## Look at some specific false discoveies of voom-limma
 
 ```{r}
-n_sig_cond = as.numeric(get_n_significant_conditions(null_simu$voom_limma[[2]]$mash))
-hist(n_sig_cond)
+n_sig_cond = as.numeric(get_n_significant_conditions(simu_all$null_simu_mean$rle_voom_limma[[9]]$mash))
+par(mfrow=c(1,1))
+hist(n_sig_cond,breaks=100)
 ```
 
-either none or all....
+either none or most of conditions are significant....
 
 ```{r}
-Bhat = null_simu$voom_limma[[2]]$mash$input$Bhat
-Shat = null_simu$voom_limma[[2]]$mash$input$Shat
+Bhat = simu_all$null_simu_mean$rle_voom_limma[[9]]$mash$input$Bhat
+Shat = simu_all$null_simu_mean$rle_voom_limma[[9]]$mash$input$Shat
 data = mash_set_data(Bhat,Shat)
 data.L = mash_update_data(data,ref='mean')
-data.L$Bhat[3,]
-data.L$Shat[3,]
-null_simu$voom_limma[[2]]$mash$result$lfsr[3,]
+data.L$Bhat[1484,]
+data.L$Shat[1484,]
+simu_all$null_simu_mean$rle_voom_limma[[9]]$mash$result$lfsr[1484,]
 ```
 
-The results are weried. Look at large Shat, near 0 Bhat but small lfsr.
+The results are weried. Look at large Shat compared to Bhat but small lfsr.
 
 Let's run this specific see what happened.
 
@@ -212,7 +191,7 @@ length(get_significant_results(m))
 m$loglik
 ```
 
-So ash 1by1 identifies 14 significant genes while mash finds 127. How about just use canonical matrix?
+So ash 1by1 identifies 69 significant genes while mash finds 243. How about just use canonical matrix?
 
 ```{r}
 m = mash(data.L, c(U.c), algorithm.version = 'Rcpp',verbose = F)
@@ -220,34 +199,33 @@ length(get_significant_results(m))
 m$loglik
 ```
 
-Only one! The prior covariance matrix has such huge influence on the results!!
+Only 12! The prior covariance matrix has such huge influence on the results!!
 
-How about compare to the control?
 
-```{r}
-data.L = mash_update_data(data,ref=1)
-U.c = cov_canonical(data.L)
-m.1by1 = mash_1by1(data.L)
-strong = get_significant_results(m.1by1)
-length(strong)
-m = mash(data.L, c(U.c), algorithm.version = 'Rcpp',verbose = F)
-length(get_significant_results(m))
-m$loglik
+
+
+
+
+# Ten replicates
+
+
+```{r,results='asis'}
+load('/scratch/midway2/dyxie/sc-cytokine/output/bulkMash_10rep.RData')
+summary_pln_simu(simu_all)
 ```
 
-So ash 1by1 identifies 0 gene and mash with canonical cov identifies 6.
-
-# Signal
 
 
-```{r}
-summary_pln_simu(simu_all,c(2,3,4),signal_names_simu = names(simu_all),skip_null = TRUE,non_null_mat_dim = 'notFull')
-```
 
+
+
+
+
+
+```{r,eval=F,include=F}
 
 ## other methods based on p-value
 
-```{r}
 methods = names(signal_simu_control)
 method = methods[c(5,6,7)]
 
@@ -281,12 +259,63 @@ colnames(power_signal) = method
 knitr::kable(sort(round(apply(fdp_signal,2,mean),2)),col.names = 'fdr level 0.05')
 knitr::kable(sort(round(apply(auc_signal,2,mean),2),decreasing = TRUE),col.names = 'auc')
 knitr::kable(sort(round(apply(power_signal,2,mean),2),decreasing = TRUE),col.names = 'power')
-```
 
-```{r,fig.width=9,fig.height=3}
+
 par(mfrow=c(1,3))
 boxplot(fdp_signal,main='fdp')
 boxplot(auc_signal,main='auc')
 boxplot(power_signal,main='power')
 ```
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+```{r,eval=F,include=F}
+load('/scratch/midway2/dyxie/sc-cytokine/output/bulkMash_cytokine_SI_null.RData')
+load('/scratch/midway2/dyxie/sc-cytokine/output/bulkMash_cytokine_SI_signal_mean_ref.RData')
+load('/scratch/midway2/dyxie/sc-cytokine/output/bulkMash_cytokine_SI_signal_control_ref.RData')
+
+simu_all = list(signal_simu_control=signal_simu_control,signal_simu_mean=signal_simu_mean)
+
+nsimu=18
+
+methods = names(null_simu)
+method = methods[c(1,2,3,4)]
+
+fdp_all = matrix(nrow=nsimu,ncol=length(method))
+n_fdis = matrix(nrow=nsimu,ncol=length(method))
+for(i in 1:nsimu){
+  
+  for(j in 1:length(method)){
+    
+    m = which(names(null_simu)==method[j])
+    
+    fdp_all[i,j] = fdp(get_significant_results(null_simu[[m]][[i]]$mash),0) 
+    n_fdis[i,j] = length(get_significant_results(null_simu[[m]][[i]]$mash))
+    
+  }
+
+}
+colnames(fdp_all) = method
+colnames(n_fdis) = method
+rownames(n_fdis) = 1:nsimu
+knitr::kable(n_fdis,caption='number of false discoveries')
+
+```
