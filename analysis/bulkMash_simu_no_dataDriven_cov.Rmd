@@ -17,7 +17,7 @@ source('code/pln_simu_summary.R')
 # Three replicates
 
 ```{r,results='asis'}
-load('/scratch/midway2/dyxie/sc-cytokine/output/bulkMash_3rep.RData')
+load('/scratch/midway2/dyxie/sc-cytokine/output/bulkMash_3rep_no_datadriven_cov.RData')
 summary_pln_simu(simu_all)
 ```
 
@@ -25,6 +25,6 @@ summary_pln_simu(simu_all)
 
 
 ```{r,results='asis'}
-load('/scratch/midway2/dyxie/sc-cytokine/output/bulkMash_10rep.RData')
+load('/scratch/midway2/dyxie/sc-cytokine/output/bulkMash_10repno_datadriven_cov.RData')
 summary_pln_simu(simu_all)
 ```
