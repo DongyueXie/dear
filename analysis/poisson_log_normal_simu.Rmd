@@ -29,7 +29,7 @@ For the coefficients matrix $B\in R^{G*2}$, its first column $B_1$ is the interc
 
 ## Diagnal Sigma all equal
 
-```{r}
+```{r,results='asis'}
 load("output/pln_simu_diagSigma01.RData")
 source('code/pln_simu_summary.R')
 summary_pln_simu(pln_simu)
@@ -37,7 +37,7 @@ summary_pln_simu(pln_simu)
 
 ## Diagnal Sigma from PLN fit
 
-```{r}
+```{r,results='asis'}
 load("output/pln_simu_diagSigma_plnFit.RData")
 load("output/PLNfit_bulk_cytokin_SI.RData")
 Sigma = diag(sigma(myPLN))
@@ -49,7 +49,7 @@ summary_pln_simu(pln_simu)
 
 ## Full Sigma from PLN fit
 
-```{r}
+```{r,results='asis'}
 load("output/pln_simu_denseSigma_plnFit.RData")
 
 summary_pln_simu(pln_simu)
