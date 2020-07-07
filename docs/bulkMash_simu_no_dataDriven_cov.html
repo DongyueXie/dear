@@ -435,10 +435,10 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomDongyueXiedeartreee7f4bab5a1e4ffe86b8897c789d94e0c4ff9a70btargetblanke7f4baba"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/DongyueXie/dear/tree/e7f4bab5a1e4ffe86b8897c789d94e0c4ff9a70b" target="_blank">e7f4bab</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomDongyueXiedeartree340fafb826df0ce3eafe5b699be3c0f7c3f0a3a9targetblank340fafba"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/DongyueXie/dear/tree/340fafb826df0ce3eafe5b699be3c0f7c3f0a3a9" target="_blank">340fafb</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomDongyueXiedeartreee7f4bab5a1e4ffe86b8897c789d94e0c4ff9a70btargetblanke7f4baba" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomDongyueXiedeartree340fafb826df0ce3eafe5b699be3c0f7c3f0a3a9targetblank340fafba" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility. The version displayed above was the version of the Git repository at the time these results were generated. <br><br> Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -512,6 +512,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/DongyueXie/dear/blob/340fafb826df0ce3eafe5b699be3c0f7c3f0a3a9/analysis/bulkMash_simu_no_dataDriven_cov.Rmd" target="_blank">340fafb</a>
+</td>
+<td>
+DongyueXie
+</td>
+<td>
+2020-07-07
+</td>
+<td>
+wflow_publish(“analysis/bulkMash_simu_no_dataDriven_cov.Rmd”)
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/DongyueXie/dear/5b049fe56836bc3050ff39f6a1ad281a8e18a47d/docs/bulkMash_simu_no_dataDriven_cov.html" target="_blank">5b049fe</a>
+</td>
+<td>
+DongyueXie
+</td>
+<td>
+2020-07-07
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -627,7 +661,7 @@ add replicates and no datadriven cov
 <pre class="r"><code>source(&#39;code/pln_simu_summary.R&#39;)</code></pre>
 <div id="three-replicates" class="section level1">
 <h1>Three replicates</h1>
-<pre class="r"><code>load(&#39;/scratch/midway2/dyxie/sc-cytokine/output/bulkMash_3rep.RData&#39;)
+<pre class="r"><code>load(&#39;/scratch/midway2/dyxie/sc-cytokine/output/bulkMash_3rep_no_datadriven_cov.RData&#39;)
 summary_pln_simu(simu_all)</code></pre>
 <p>NULL case: compare with control and mean</p>
 <p>Looking at null_simu_control</p>
@@ -647,64 +681,14 @@ summary_pln_simu(simu_all)</code></pre>
 <td align="right">0</td>
 </tr>
 <tr class="even">
-<td align="right">0</td>
-<td align="right">1</td>
-<td align="right">0</td>
-</tr>
-<tr class="odd">
 <td align="right">1</td>
 <td align="right">1</td>
-<td align="right">0</td>
-</tr>
-<tr class="even">
-<td align="right">42</td>
-<td align="right">3</td>
 <td align="right">1</td>
 </tr>
 <tr class="odd">
-<td align="right">0</td>
-<td align="right">1</td>
-<td align="right">0</td>
-</tr>
-<tr class="even">
 <td align="right">5</td>
-<td align="right">5</td>
-<td align="right">0</td>
-</tr>
-<tr class="odd">
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-</tr>
-<tr class="even">
-<td align="right">631</td>
-<td align="right">75</td>
-<td align="right">3</td>
-</tr>
-<tr class="odd">
-<td align="right">226</td>
-<td align="right">39</td>
-<td align="right">13</td>
-</tr>
-<tr class="even">
-<td align="right">2</td>
-<td align="right">0</td>
-<td align="right">0</td>
-</tr>
-<tr class="odd">
-<td align="right">125</td>
-<td align="right">185</td>
-<td align="right">54</td>
-</tr>
-<tr class="even">
-<td align="right">2</td>
 <td align="right">8</td>
-<td align="right">0</td>
-</tr>
-<tr class="odd">
-<td align="right">0</td>
-<td align="right">1</td>
-<td align="right">0</td>
+<td align="right">2</td>
 </tr>
 <tr class="even">
 <td align="right">0</td>
@@ -712,33 +696,83 @@ summary_pln_simu(simu_all)</code></pre>
 <td align="right">0</td>
 </tr>
 <tr class="odd">
-<td align="right">1</td>
-<td align="right">95</td>
+<td align="right">0</td>
+<td align="right">0</td>
 <td align="right">0</td>
 </tr>
 <tr class="even">
-<td align="right">75</td>
-<td align="right">64</td>
+<td align="right">135</td>
+<td align="right">103</td>
+<td align="right">24</td>
+</tr>
+<tr class="odd">
+<td align="right">3</td>
+<td align="right">4</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="right">16</td>
+<td align="right">2</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="right">21</td>
+<td align="right">17</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
 <td align="right">10</td>
+<td align="right">35</td>
+<td align="right">2</td>
 </tr>
 <tr class="odd">
-<td align="right">106</td>
-<td align="right">99</td>
-<td align="right">6</td>
+<td align="right">4</td>
+<td align="right">0</td>
+<td align="right">0</td>
 </tr>
 <tr class="even">
-<td align="right">6</td>
-<td align="right">4</td>
+<td align="right">0</td>
+<td align="right">0</td>
 <td align="right">1</td>
 </tr>
 <tr class="odd">
-<td align="right">20</td>
-<td align="right">27</td>
+<td align="right">0</td>
+<td align="right">3</td>
 <td align="right">1</td>
 </tr>
 <tr class="even">
-<td align="right">4</td>
-<td align="right">40</td>
+<td align="right">11</td>
+<td align="right">11</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="right">2</td>
+<td align="right">3</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">6</td>
+<td align="right">9</td>
+<td align="right">5</td>
+</tr>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">3</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">5</td>
+<td align="right">0</td>
 <td align="right">1</td>
 </tr>
 </tbody>
@@ -756,111 +790,186 @@ summary_pln_simu(simu_all)</code></pre>
 <tbody>
 <tr class="odd">
 <td align="right">1</td>
-<td align="right">24</td>
+<td align="right">3</td>
 <td align="right">0</td>
 </tr>
 <tr class="even">
-<td align="right">21</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="right">3</td>
+<td align="right">3</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
 <td align="right">1</td>
 <td align="right">0</td>
 </tr>
 <tr class="odd">
-<td align="right">0</td>
-<td align="right">1</td>
-<td align="right">0</td>
-</tr>
-<tr class="even">
-<td align="right">340</td>
-<td align="right">12</td>
-<td align="right">0</td>
-</tr>
-<tr class="odd">
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-</tr>
-<tr class="even">
-<td align="right">11</td>
-<td align="right">19</td>
-<td align="right">0</td>
-</tr>
-<tr class="odd">
-<td align="right">3</td>
-<td align="right">0</td>
-<td align="right">0</td>
-</tr>
-<tr class="even">
-<td align="right">649</td>
-<td align="right">55</td>
-<td align="right">3</td>
-</tr>
-<tr class="odd">
-<td align="right">234</td>
-<td align="right">243</td>
-<td align="right">65</td>
-</tr>
-<tr class="even">
-<td align="right">25</td>
-<td align="right">0</td>
-<td align="right">0</td>
-</tr>
-<tr class="odd">
-<td align="right">111</td>
-<td align="right">170</td>
-<td align="right">48</td>
-</tr>
-<tr class="even">
 <td align="right">2</td>
-<td align="right">52</td>
-<td align="right">0</td>
-</tr>
-<tr class="odd">
-<td align="right">0</td>
-<td align="right">0</td>
+<td align="right">2</td>
 <td align="right">0</td>
 </tr>
 <tr class="even">
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-</tr>
-<tr class="odd">
-<td align="right">0</td>
-<td align="right">101</td>
-<td align="right">0</td>
-</tr>
-<tr class="even">
-<td align="right">37</td>
-<td align="right">25</td>
-<td align="right">4</td>
-</tr>
-<tr class="odd">
-<td align="right">89</td>
-<td align="right">95</td>
-<td align="right">3</td>
-</tr>
-<tr class="even">
-<td align="right">33</td>
 <td align="right">22</td>
+<td align="right">31</td>
 <td align="right">2</td>
 </tr>
 <tr class="odd">
-<td align="right">18</td>
-<td align="right">32</td>
+<td align="right">0</td>
+<td align="right">0</td>
 <td align="right">0</td>
 </tr>
 <tr class="even">
-<td align="right">31</td>
-<td align="right">37</td>
+<td align="right">102</td>
+<td align="right">1</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="right">6</td>
+<td align="right">5</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">3</td>
+<td align="right">7</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="right">19</td>
+<td align="right">5</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">17</td>
+<td align="right">19</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">3</td>
+<td align="right">3</td>
+<td align="right">3</td>
+</tr>
+<tr class="odd">
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="right">3</td>
+<td align="right">3</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">0</td>
+<td align="right">0</td>
 <td align="right">1</td>
 </tr>
 </tbody>
 </table>
-<p>Identifying significant genes<img src="figure/bulkMash_simu_no_dataDriven_cov.Rmd/unnamed-chunk-2-1.png" width="672" style="display: block; margin: auto;" />Identifying significant conditions<img src="figure/bulkMash_simu_no_dataDriven_cov.Rmd/unnamed-chunk-2-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Identifying significant genes<img src="figure/bulkMash_simu_no_dataDriven_cov.Rmd/unnamed-chunk-2-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-2-1">
+Past versions of unnamed-chunk-2-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-2-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/DongyueXie/dear/blob/5b049fe56836bc3050ff39f6a1ad281a8e18a47d/docs/figure/bulkMash_simu_no_dataDriven_cov.Rmd/unnamed-chunk-2-1.png" target="_blank">5b049fe</a>
+</td>
+<td>
+DongyueXie
+</td>
+<td>
+2020-07-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>Identifying significant conditions<img src="figure/bulkMash_simu_no_dataDriven_cov.Rmd/unnamed-chunk-2-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-2-2">
+Past versions of unnamed-chunk-2-2.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-2-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/DongyueXie/dear/blob/5b049fe56836bc3050ff39f6a1ad281a8e18a47d/docs/figure/bulkMash_simu_no_dataDriven_cov.Rmd/unnamed-chunk-2-2.png" target="_blank">5b049fe</a>
+</td>
+<td>
+DongyueXie
+</td>
+<td>
+2020-07-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="ten-replicates" class="section level1">
 <h1>Ten replicates</h1>
-<pre class="r"><code>load(&#39;/scratch/midway2/dyxie/sc-cytokine/output/bulkMash_10rep.RData&#39;)
+<pre class="r"><code>load(&#39;/scratch/midway2/dyxie/sc-cytokine/output/bulkMash_10repno_datadriven_cov.RData&#39;)
 summary_pln_simu(simu_all)</code></pre>
 <p>NULL case: compare with control and mean</p>
 <p>Looking at null_simu_control</p>
@@ -875,7 +984,27 @@ summary_pln_simu(simu_all)</code></pre>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="right">85</td>
+<td align="right">13</td>
+<td align="right">1</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">29</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="right">0</td>
 <td align="right">1</td>
 <td align="right">0</td>
 </tr>
@@ -886,36 +1015,36 @@ summary_pln_simu(simu_all)</code></pre>
 </tr>
 <tr class="odd">
 <td align="right">1</td>
-<td align="right">0</td>
-<td align="right">0</td>
-</tr>
-<tr class="even">
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-</tr>
-<tr class="odd">
-<td align="right">6</td>
-<td align="right">4</td>
+<td align="right">2</td>
 <td align="right">0</td>
 </tr>
 <tr class="even">
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
 </tr>
 <tr class="odd">
-<td align="right">358</td>
-<td align="right">52</td>
 <td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
 </tr>
 <tr class="even">
 <td align="right">4</td>
 <td align="right">2</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">0</td>
+<td align="right">1</td>
 <td align="right">1</td>
 </tr>
 <tr class="odd">
-<td align="right">5</td>
+<td align="right">0</td>
 <td align="right">0</td>
 <td align="right">0</td>
 </tr>
@@ -925,13 +1054,23 @@ summary_pln_simu(simu_all)</code></pre>
 <td align="right">0</td>
 </tr>
 <tr class="odd">
-<td align="right">2</td>
 <td align="right">1</td>
-<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
 </tr>
 <tr class="even">
-<td align="right">113</td>
-<td align="right">89</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="right">27</td>
+<td align="right">8</td>
+<td align="right">7</td>
+</tr>
+<tr class="even">
+<td align="right">0</td>
+<td align="right">1</td>
 <td align="right">0</td>
 </tr>
 <tr class="odd">
@@ -940,39 +1079,9 @@ summary_pln_simu(simu_all)</code></pre>
 <td align="right">0</td>
 </tr>
 <tr class="even">
-<td align="right">1</td>
-<td align="right">1</td>
-<td align="right">3</td>
-</tr>
-<tr class="odd">
-<td align="right">101</td>
-<td align="right">60</td>
-<td align="right">41</td>
-</tr>
-<tr class="even">
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">1</td>
-</tr>
-<tr class="odd">
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">1</td>
-</tr>
-<tr class="even">
-<td align="right">1</td>
-<td align="right">0</td>
-<td align="right">0</td>
-</tr>
-<tr class="odd">
-<td align="right">17</td>
-<td align="right">34</td>
+<td align="right">11</td>
+<td align="right">18</td>
 <td align="right">14</td>
-</tr>
-<tr class="even">
-<td align="right">654</td>
-<td align="right">0</td>
-<td align="right">0</td>
 </tr>
 </tbody>
 </table>
@@ -988,68 +1097,18 @@ summary_pln_simu(simu_all)</code></pre>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="right">100</td>
-<td align="right">0</td>
-<td align="right">0</td>
-</tr>
-<tr class="even">
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-</tr>
-<tr class="odd">
 <td align="right">0</td>
 <td align="right">0</td>
 <td align="right">0</td>
 </tr>
 <tr class="even">
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-</tr>
-<tr class="odd">
-<td align="right">13</td>
-<td align="right">11</td>
 <td align="right">1</td>
-</tr>
-<tr class="even">
-<td align="right">0</td>
 <td align="right">0</td>
 <td align="right">0</td>
 </tr>
 <tr class="odd">
-<td align="right">217</td>
-<td align="right">3</td>
-<td align="right">2</td>
-</tr>
-<tr class="even">
-<td align="right">44</td>
-<td align="right">2</td>
-<td align="right">1</td>
-</tr>
-<tr class="odd">
-<td align="right">173</td>
-<td align="right">0</td>
-<td align="right">0</td>
-</tr>
-<tr class="even">
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">0</td>
-</tr>
-<tr class="odd">
-<td align="right">0</td>
 <td align="right">0</td>
 <td align="right">1</td>
-</tr>
-<tr class="even">
-<td align="right">76</td>
-<td align="right">69</td>
-<td align="right">0</td>
-</tr>
-<tr class="odd">
-<td align="right">0</td>
-<td align="right">0</td>
 <td align="right">0</td>
 </tr>
 <tr class="even">
@@ -1058,18 +1117,38 @@ summary_pln_simu(simu_all)</code></pre>
 <td align="right">0</td>
 </tr>
 <tr class="odd">
-<td align="right">148</td>
-<td align="right">66</td>
-<td align="right">47</td>
+<td align="right">0</td>
+<td align="right">2</td>
+<td align="right">1</td>
 </tr>
 <tr class="even">
+<td align="right">1</td>
 <td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
 <td align="right">0</td>
 <td align="right">1</td>
 </tr>
 <tr class="odd">
 <td align="right">0</td>
 <td align="right">0</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="right">0</td>
+<td align="right">0</td>
 <td align="right">0</td>
 </tr>
 <tr class="even">
@@ -1079,13 +1158,43 @@ summary_pln_simu(simu_all)</code></pre>
 </tr>
 <tr class="odd">
 <td align="right">0</td>
-<td align="right">21</td>
-<td align="right">11</td>
+<td align="right">0</td>
+<td align="right">0</td>
 </tr>
 <tr class="even">
-<td align="right">685</td>
 <td align="right">0</td>
 <td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="right">16</td>
+<td align="right">8</td>
+<td align="right">2</td>
+</tr>
+<tr class="even">
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="right">0</td>
+<td align="right">2</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">1</td>
 </tr>
 </tbody>
 </table>
@@ -1114,6 +1223,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/DongyueXie/dear/blob/5b049fe56836bc3050ff39f6a1ad281a8e18a47d/docs/figure/bulkMash_simu_no_dataDriven_cov.Rmd/unnamed-chunk-3-1.png" target="_blank">5b049fe</a>
+</td>
+<td>
+DongyueXie
+</td>
+<td>
+2020-07-07
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/DongyueXie/dear/blob/d72e264b374452f96f3e62d15e301cca3ea69bec/docs/figure/bulkMash_simu_no_dataDriven_cov.Rmd/unnamed-chunk-3-1.png" target="_blank">d72e264</a>
 </td>
 <td>
@@ -1128,6 +1248,43 @@ DongyueXie
 </div>
 </div>
 <p>Identifying significant conditions<img src="figure/bulkMash_simu_no_dataDriven_cov.Rmd/unnamed-chunk-3-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-3-2">
+Past versions of unnamed-chunk-3-2.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-3-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/DongyueXie/dear/blob/5b049fe56836bc3050ff39f6a1ad281a8e18a47d/docs/figure/bulkMash_simu_no_dataDriven_cov.Rmd/unnamed-chunk-3-2.png" target="_blank">5b049fe</a>
+</td>
+<td>
+DongyueXie
+</td>
+<td>
+2020-07-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
