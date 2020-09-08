@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
 <meta name="author" content="DongyueXie" />
@@ -27,9 +27,16 @@
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
-<link href="site_libs/font-awesome-5.0.13/css/fa-svg-with-js.css" rel="stylesheet" />
-<script src="site_libs/font-awesome-5.0.13/js/fontawesome-all.min.js"></script>
-<script src="site_libs/font-awesome-5.0.13/js/fa-v4-shims.min.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/master/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css">
@@ -77,9 +84,7 @@ h6 {
 </style>
 
 
-</head>
 
-<body>
 
 <style type = "text/css">
 .main-container {
@@ -93,7 +98,6 @@ code {
 }
 img {
   max-width:100%;
-  height: auto;
 }
 .tabbed-pane {
   padding-top: 12px;
@@ -103,6 +107,9 @@ img {
 }
 button.code-folding-btn:focus {
   outline: none;
+}
+summary {
+  display: list-item;
 }
 </style>
 
@@ -118,7 +125,6 @@ body {
   padding-top: 56px;
   margin-top: -56px;
 }
-
 .section h2 {
   padding-top: 56px;
   margin-top: -56px;
@@ -138,6 +144,43 @@ body {
 .section h6 {
   padding-top: 56px;
   margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
 }
 </style>
 
@@ -159,47 +202,66 @@ $(document).ready(function () {
 });
 </script>
 
-
-<div class="container-fluid main-container">
-
 <!-- tabsets -->
-<script>
-$(document).ready(function () {
-  window.buildTabsets("TOC");
-});
-</script>
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
 
 <!-- code folding -->
 
 
-
-
-<script>
-$(document).ready(function ()  {
-
-    // move toc-ignore selectors from section div to header
-    $('div.section.toc-ignore')
-        .removeClass('toc-ignore')
-        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
-
-    // establish options
-    var options = {
-      selectors: "h1,h2,h3",
-      theme: "bootstrap3",
-      context: '.toc-content',
-      hashGenerator: function (text) {
-        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
-      },
-      ignoreSelector: ".toc-ignore",
-      scrollTo: 0
-    };
-    options.showAndHide = true;
-    options.smoothScroll = true;
-
-    // tocify
-    var toc = $("#TOC").tocify(options).data("toc-tocify");
-});
-</script>
 
 <style type="text/css">
 
@@ -213,6 +275,12 @@ $(document).ready(function ()  {
 }
 }
 
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
 
 .toc-content {
   padding-left: 30px;
@@ -248,8 +316,6 @@ div.tocify {
 
 .tocify-subheader .tocify-item {
   font-size: 0.90em;
-  padding-left: 25px;
-  text-indent: 0;
 }
 
 .tocify .list-group-item {
@@ -258,6 +324,16 @@ div.tocify {
 
 
 </style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
 
 <!-- setup 3col/9col grid for toc_float and main content  -->
 <div class="row-fluid">
@@ -306,20 +382,13 @@ div.tocify {
   </div><!--/.container -->
 </div><!--/.navbar -->
 
-<!-- Add a small amount of space between sections. -->
-<style type="text/css">
-div.section {
-  padding-top: 12px;
-}
-</style>
-
 <div class="fluid-row" id="header">
 
 
 
 <h1 class="title toc-ignore">check mash</h1>
-<h4 class="author"><em>DongyueXie</em></h4>
-<h4 class="date"><em>2020-06-29</em></h4>
+<h4 class="author">DongyueXie</h4>
+<h4 class="date">2020-06-29</h4>
 
 </div>
 
@@ -344,7 +413,7 @@ div.section {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2020-07-05
+<strong>Last updated:</strong> 2020-09-08
 </p>
 <p>
 <strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
@@ -354,7 +423,7 @@ div.section {
 </p>
 <p>
 This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis was created with <a
-  href="https://github.com/jdblischak/workflowr">workflowr</a> (version 1.6.0). The <em>Checks</em> tab describes the reproducibility checks that were applied when the results were created. The <em>Past versions</em> tab lists the development history.
+  href="https://github.com/jdblischak/workflowr">workflowr</a> (version 1.6.2). The <em>Checks</em> tab describes the reproducibility checks that were applied when the results were created. The <em>Past versions</em> tab lists the development history.
 </p>
 <hr>
 </div>
@@ -392,7 +461,7 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 </div>
 <div id="strongSeedstrongcodesetseed20200403code" class="panel-collapse collapse">
 <div class="panel-body">
-<p>The command <code>set.seed(20200403)</code> was run prior to running the code in the R Markdown file. Setting a seed ensures that any results that rely on randomness, e.g. subsampling or permutations, are reproducible.</p>
+<p>The command <code>set.seed(20200403)</code> was run prior to running the code in the R Markdown file. Setting a seed ensures that any results that rely on randomness, e.g. subsampling or permutations, are reproducible.</p>
 </div>
 </div>
 </div>
@@ -435,13 +504,19 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomDongyueXiedeartree24f13d835348f921493f6cd8f6c4d92a0b1d9242targetblank24f13d8a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/DongyueXie/dear/tree/24f13d835348f921493f6cd8f6c4d92a0b1d9242" target="_blank">24f13d8</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomDongyueXiedeartree0e1b100b99378690d145d69e43fb4cdfef524e52targetblank0e1b100a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/DongyueXie/dear/tree/0e1b100b99378690d145d69e43fb4cdfef524e52" target="_blank">0e1b100</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomDongyueXiedeartree24f13d835348f921493f6cd8f6c4d92a0b1d9242targetblank24f13d8a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomDongyueXiedeartree0e1b100b99378690d145d69e43fb4cdfef524e52targetblank0e1b100a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
-Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility. The version displayed above was the version of the Git repository at the time these results were generated. <br><br> Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
+Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version <a href="https://github.com/DongyueXie/dear/tree/0e1b100b99378690d145d69e43fb4cdfef524e52" target="_blank">0e1b100</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
 </p>
 <pre><code>
 Ignored files:
@@ -449,26 +524,13 @@ Ignored files:
     Ignored:    .Rproj.user/
 
 Untracked files:
-    Untracked:  analysis/lash_real_data.Rmd
-    Untracked:  analysis/log_ratio_approx.Rmd
-    Untracked:  analysis/plnruv.Rmd
-    Untracked:  analysis/scMash.Rmd
-    Untracked:  data/BR_log_cpm.RDS
+    Untracked:  analysis/mash_mean.Rmd
     Untracked:  data/bulk_cytokin_SI.RData
-    Untracked:  data/cytokine_cd4.RData
-    Untracked:  data/filtered_gene_bc_matrices/
-    Untracked:  data/pbmc3k_cellType.RData
-    Untracked:  data/pbmc3k_filtered_gene_bc_matrices.tar.gz
-    Untracked:  output/compare_lm_sample.RData
-    Untracked:  output/cytokine_null_simu_cd4_r250_yusha.RData
-    Untracked:  output/lm_cytokine_Nonnull_simu_cd4.RData
-    Untracked:  output/lm_cytokine_Nonnull_simu_cd4_2trteffect.RData
-    Untracked:  output/lm_cytokine_Nonnull_simu_cd4_2trteffect_sizesd001.RData
-    Untracked:  output/lm_cytokine_Nonnull_simu_cd4_2trteffect_sizesd005.RData
-    Untracked:  output/lm_cytokine_Nonnull_simu_cd4_2trteffect_sizesd01.RData
-    Untracked:  output/lm_cytokine_Nonnull_simu_cd4_2trteffect_sizesd4.RData
-    Untracked:  output/lm_cytokine_null_simu_cd4.RData
-    Untracked:  output/slm_cytokine_null_simu_cd4.RData
+    Untracked:  output/PLNfit_bulk_cytokin_SI.RData
+    Untracked:  output/PLNfit_bulk_cytokin_SI_1_30.RData
+    Untracked:  output/pln_simu_denseSigma_plnFit.RData
+    Untracked:  output/pln_simu_diagSigma01.RData
+    Untracked:  output/pln_simu_diagSigma_plnFit.RData
 
 </code></pre>
 <p>
@@ -483,7 +545,7 @@ Note that any generated files, e.g. HTML, png, CSS, etc., are not included in t
 <div id="versions" class="tab-pane fade">
 
 <p>
-These are the previous versions of the R Markdown and HTML files. If you’ve configured a remote Git repository (see <code>?wflow_git_remote</code>), click on the hyperlinks in the table below to view them.
+These are the previous versions of the repository in which changes were made to the R Markdown (<code>analysis/check_mash.Rmd</code>) and HTML (<code>docs/check_mash.html</code>) files. If you’ve configured a remote Git repository (see <code>?wflow_git_remote</code>), click on the hyperlinks in the table below to view the files as they were in that past version.
 </p>
 <div class="table-responsive">
 <table class="table table-condensed table-hover">
@@ -512,6 +574,40 @@ Message
 Rmd
 </td>
 <td>
+<a href="https://github.com/DongyueXie/dear/blob/0e1b100b99378690d145d69e43fb4cdfef524e52/analysis/check_mash.Rmd" target="_blank">0e1b100</a>
+</td>
+<td>
+DongyueXie
+</td>
+<td>
+2020-09-08
+</td>
+<td>
+wflow_publish(“analysis/check_mash.Rmd”)
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/DongyueXie/dear/200217f61671d6298ebd7f43ef63e920a3bdbe48/docs/check_mash.html" target="_blank">200217f</a>
+</td>
+<td>
+DongyueXie
+</td>
+<td>
+2020-07-05
+</td>
+<td>
+Build site.
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
 <a href="https://github.com/DongyueXie/dear/blob/24f13d835348f921493f6cd8f6c4d92a0b1d9242/analysis/check_mash.Rmd" target="_blank">24f13d8</a>
 </td>
 <td>
@@ -531,8 +627,1916 @@ wflow_publish(c(“analysis/bulkMash_simu_replicate10.Rmd”, “analysis/check_
 </div>
 </div>
 </div>
+<div id="summary" class="section level2">
+<h2>summary</h2>
+<ol style="list-style-type: decimal">
+<li><p>If the true B were generated from a subset of canonical covariance matrix, then using canonical covs, canonical covs+data driven ones, and true ones give very similar results, and both lfsr and lfdr could control FDR. See the section Canonical covariance matrix, where I included four canonical ones: NULL, condition 1, identity, equal effects.</p></li>
+<li><p>If the true B were generated from a subset of canonical covariance matrix, and non-canonical matrices, then 1. lfdr cannot control fdr, when using only canonical matrices or using both canonical and data driven ones. 2. lfsr could control fdr, when using only canonical matrices. See section Canonical covariance matrix + additional ones, where I included NULL, identity, condition 1 and 2, condition 3 to 5.</p></li>
+</ol>
+<p><strong>The method is good at identifying significant genes while have trouble identifying conditions</strong>.</p>
+<p>My reasoning of this phenomena:</p>
+<p>A. Why everything is good on identifying genes(samples)?</p>
+<p>The posterior distribution is a mixture of normal distributions, for each sample mean. When identifying genes, we are working with a 2-class hypothesis: null vs non-null. It’s a much easier problem than finding conditions, and as long as the posterior probability concentrates on the NULL mixture component(<span class="math inline">\(N(0,0)\)</span>) for those true nulls, the method should be able to identify significant genes. The posterior probability indeed concentrates on the NULL mixture component(<span class="math inline">\(N(0,0)\)</span>) for those true nulls since we are using maximum likelihood.</p>
+<p>When we look at each condition, things are different. Because every element of one sample mean shares the same mixture of normal distributions, while actually they differ in being null and non-null.</p>
+<p>B. why everything is good when data are generated with canonical covariances.</p>
+<p>When data are generated from canonical variances, the maximum marginal likelihood estimate could identify those true canonical covariance matrices, and put little weights on those covraiances that are not involved in data generating.</p>
+<p>C. When data are generated with canonical covariances and non-canonical ones, why lfdr results in inflated fdp while lfsr not;</p>
+<p>lfdr needs the diagonal of posterior covariance matrix to be exactly 0 to include that weights into calculation. However, with only canonical covariances, posteriors concentrate one dense ones(simple hets ones); with data drivens, posterior weights concentrate on those close to true ones but data-drivens are not sparse(being really 0!). This would not happen with lfsr becuase it’s calculation does not require the posterior covs being exactly 0.</p>
+<p>D. Why lfsr results in inflated fdp with data driven covs while not with only canonical ones.</p>
+<p>The calculation of lfsr needs zeroProbability.</p>
+<p>[void: From the first glance, the maximum marginal likelihood estimates could pick out the covariances that are close to true ones(data-generating ones), however, the problem is on posterior weights: posterior weights concentrates on correct covariances but the scale(grid) is messed up. The grids only alter the scale of a covariance matrix, instead of the scale(more accurately, the relative ratio of) of elements(especially diagonal ones) in the covariance matrix, and what we really need is actually the latter case. For example, the diagonal of true covariance matrix is <span class="math inline">\((1,1,0,0)\)</span>, while the estimated one is <span class="math inline">\((0.98,0.99,0.1,0.07)\)</span>, which is seemingly very close to the true one.]</p>
+</div>
 <div id="introduction" class="section level2">
 <h2>Introduction</h2>
+<p>Check mashr with data-driven covariance matrix on Gaussian data and see if the false positives are inflated.</p>
+</div>
+<div id="canonical-covariance-matrix" class="section level2">
+<h2>Canonical covariance matrix</h2>
+<p>To begin with, we use the built-in function in mashr <code>simple_simus</code>, a function generates data from equal numbers of four different types of effects: null(variance is 0), equal among conditions(covariance matrix entries are all 1’s), present only in first condition(the first entry of covariance is 1, all others are 0), independent across conditions(identity covariance matrix). This is an example that canonical covariance matrices include the true ones.</p>
+<p>Two tasks: identify significant effect; identify significant conditions.</p>
+<pre class="r"><code>library(mashr)</code></pre>
+<pre><code>Warning: package &#39;mashr&#39; was built under R version 4.0.2</code></pre>
+<pre><code>Loading required package: ashr</code></pre>
+<pre class="r"><code>simple_sims = function (nsamp = 100, ncond = 5, err_sd = 0.01){
+    B.id = matrix(rnorm(nsamp * ncond), nrow = nsamp, ncol = ncond)
+    b = rnorm(nsamp)
+    B.all = matrix(rep(b, ncond), nrow = nsamp, ncol = ncond)
+    B.zero = matrix(0, nrow = nsamp, ncol = ncond)
+    B.one = B.zero
+    b2 = rnorm(nsamp)
+    B.one[, 1] = b2
+    B = rbind(B.zero, B.id, B.one, B.all)
+    Shat = matrix(err_sd, nrow = nrow(B), ncol = ncol(B))
+    E = matrix(rnorm(length(Shat), mean = 0, sd = Shat), nrow = nrow(B), 
+        ncol = ncol(B))
+    Bhat = B + E
+    row_ids = paste0(&quot;effect_&quot;, 1:nrow(B))
+    col_ids = paste0(&quot;condition_&quot;, 1:ncol(B))
+    rownames(B) = row_ids
+    colnames(B) = col_ids
+    rownames(Bhat) = row_ids
+    colnames(Bhat) = col_ids
+    rownames(Shat) = row_ids
+    colnames(Shat) = col_ids
+    U.true = list(U1 = matrix(0,nrow=ncond,ncol=ncond),
+                  U2=matrix(1,nrow=ncond,ncol=ncond),
+                  U3=matrix(c(1,rep(0,ncond^2-1)),nrow=ncond,ncol=ncond),
+                  U4 = diag(ncond))
+    return(list(B = B, Bhat = Bhat, Shat = Shat,U.true=U.true))
+}
+
+simple_sims2 = function (nsamp = 100, err_sd = 0.01){
+    ncond = 5
+    b1 = rnorm(nsamp)
+    B.1 = matrix(cbind(b1, b1, 0, 0, 0), nrow = nsamp, ncol = ncond)
+    b2 = rnorm(nsamp)
+    B.2 = matrix(cbind(0, 0, b2, b2, b2), nrow = nsamp, ncol = ncond)
+    
+    B.id = matrix(rnorm(nsamp * ncond), nrow = nsamp, ncol = ncond)
+    B.zero = matrix(0, nrow = nsamp, ncol = ncond)
+    
+    B = rbind(B.zero,B.id,B.1, B.2)
+    Shat = matrix(err_sd, nrow = nrow(B), ncol = ncol(B))
+    E = matrix(rnorm(length(Shat), mean = 0, sd = Shat), nrow = nrow(B), 
+        ncol = ncol(B))
+    Bhat = B + E
+    row_ids = paste0(&quot;effect_&quot;, 1:nrow(B))
+    col_ids = paste0(&quot;condition_&quot;, 1:ncol(B))
+    rownames(B) = row_ids
+    colnames(B) = col_ids
+    rownames(Bhat) = row_ids
+    colnames(Bhat) = col_ids
+    rownames(Shat) = row_ids
+    colnames(Shat) = col_ids
+    U = matrix(0,nrow=ncond,ncol=ncond)
+    U2 = U
+    U2[1:2,1:2] = 1
+    U3 = U
+    U3[3:5,3:5] = 1
+    U.true = list(U1 = matrix(0,nrow=ncond,ncol=ncond),
+                  U2=U2,
+                  U3=U3,
+                  U4 = diag(ncond))
+    return(list(B = B, Bhat = Bhat, Shat = Shat,U.true=U.true))
+}
+
+
+fdp = function(dis.idx, true.idx){
+  if(length(dis.idx)==0){
+    0
+  }else{
+    1-mean(dis.idx%in%true.idx)
+  }
+}
+
+
+auc = function(pred,true.label){
+  auc=pROC::roc(response = true.label, predictor = pred,direction = &#39;&lt;&#39;,levels = c(0,1))
+  auc$auc
+}
+
+powr = function(dis.idx, true.idx){
+  if(length(dis.idx)==0){
+    0
+  }else{
+    sum(dis.idx%in%true.idx)/length(true.idx)
+  }
+}
+
+mse = function(x,y){
+  mean((x-y)^2)
+}
+
+summary_out = function(B,out = list(m.c=m.c,m.ed=m.ed,m.c.ed=m.c.ed,m.c.ed.sparse=m.c.ed.sparse,m.true=m.true),
+                       alpha=0.05,criteria = &#39;lfsr&#39;){
+  
+  # identify genes
+  non_null_idx = which(rowSums(B)!=0)
+  non_null_idx_c = which(B!=0)
+  
+  which_null = 1*(rowSums(B)==0)
+  which_null_c = 1*(B==0)
+  
+  fdps = c()
+  aucs = c()
+  powers = c()
+  
+  fdps_c = c()
+  aucs_c = c()
+  powers_c = c()
+  
+  mses = c()
+  log_liks = c()
+  
+  for(i in 1:length(out)){
+    
+    if(criteria==&#39;lfsr&#39;){
+    fdps[i] = fdp(get_significant_results(out[[i]],thresh = alpha),non_null_idx)
+    fdps_c[i] = fdp(which(out[[i]]$result$lfsr&lt;alpha),non_null_idx_c)
+    
+    aucs[i] = auc(c(apply(out[[i]]$result$lfsr,1,min)),which_null)
+    aucs_c[i] = auc(c(out[[i]]$result$lfsr),c(which_null_c))
+    
+    powers[i] = powr(get_significant_results(out[[i]],thresh = alpha),non_null_idx)
+    powers_c[i] = powr(which(out[[i]]$result$lfsr&lt;alpha),non_null_idx_c)
+    
+    }
+    
+    
+    if(criteria==&#39;lfdr&#39;){
+    fdps[i] = fdp(get_significant_results(out[[i]],thresh = alpha),non_null_idx)
+    fdps_c[i] = fdp(which(out[[i]]$result$lfdr&lt;alpha),non_null_idx_c)
+    
+    aucs[i] = auc(c(apply(out[[i]]$result$lfdr,1,min)),which_null)
+    aucs_c[i] = auc(c(out[[i]]$result$lfdr),c(which_null_c))
+    
+    powers[i] = powr(get_significant_results(out[[i]],thresh = alpha),non_null_idx)
+    powers_c[i] = powr(which(out[[i]]$result$lfdr&lt;alpha),non_null_idx_c)
+    
+    }
+    
+    
+    mses[i] = mse(B,out[[i]]$result$PosteriorMean)
+    log_liks[i] = get_loglik(out[[i]])
+  }
+  
+  find_genes = rbind(fdps,aucs,powers)
+  rownames(find_genes) = c(&#39;fdp&#39;,&#39;auc&#39;,&#39;power&#39;)
+  colnames(find_genes) = names(out)
+  
+  find_cond = rbind(fdps_c,aucs_c,powers_c,mses,log_liks)
+  rownames(find_cond) = c(&#39;fdp&#39;,&#39;auc&#39;,&#39;power&#39;,&#39;mse&#39;,&#39;log_lik&#39;)
+  colnames(find_cond) = names(out)
+  
+  return(list(find_genes=find_genes,find_cond=find_cond,mses=mses))
+  
+}
+
+simu_study = function(simdata,thresh = 0.1){
+  data = mash_set_data(simdata$Bhat,simdata$Shat)
+  m.1by1 = mash_1by1(data)
+  strong = get_significant_results(m.1by1)
+  U.c    = cov_canonical(data)
+  U.pca  = cov_pca(data,5,strong)
+  U.ed   = cov_ed(data,U.pca,strong)
+  U.ed.sparse = lapply(U.ed,
+                       function(z){z = z/max(diag(z))
+                       idx = which(abs(z)&lt;thresh)
+                       if(length(idx)!=0){
+                         z[idx] = 0
+                       }
+                       z})
+  U.true = simdata$U.true
+  m.c    = mash(data, U.c,verbose = F)
+  m.ed   = mash(data, U.ed,verbose = F)
+  m.c.ed = mash(data, c(U.c,U.ed),verbose = F)
+  m.c.ed.sparse = mash(data, c(U.c,U.ed.sparse),verbose = F)
+  m.true = mash(data, U.true,verbose = F)
+  out = list(m.c=m.c,m.ed=m.ed,m.c.ed=m.c.ed,m.c.ed.sparse=m.c.ed.sparse,m.true=m.true)
+  out
+}</code></pre>
+<pre class="r"><code>set.seed(7)
+simdata = simple_sims(50,err_sd = 0.01)
+result = simu_study(simdata)</code></pre>
+<pre><code>Warning in calc_lik_matrix(data, Ulist, log = TRUE, algorithm.version = algorithm.version): Some mixture components result in non-finite likelihoods, either
+ due to numerical underflow/overflow, or due to invalid covariance matrices 189, 190, 191, 205, 206, 207, 208, 221, 222, 223, 224, 237, 238, 239, 240, 253, 254, 255, 256, 269, 270, 271, 272, 285, 286, 287, 288, 301, 302, 303, 304, 317, 318, 319, 320, 333, 334, 335, 336, 349, 350, 351, 352, 365, 366, 367, 368, 381, 382, 383, 384, 397, 398, 399, 400, 413, 414, 415, 416, 429, 430, 431, 432 </code></pre>
+<pre><code>Warning in mixsqp::mixsqp(A, w, pi_init, control = control): One or more
+columns of &quot;L&quot; are all zeros; solution entries associated with these columns are
+trivially zero</code></pre>
+<pre class="r"><code>out = summary_out(simdata$B,result)
+knitr::kable(out$find_genes,caption = &#39;On finding genes&#39;,digits = 3)</code></pre>
+<table>
+<caption>On finding genes</caption>
+<thead>
+<tr class="header">
+<th></th>
+<th align="right">m.c</th>
+<th align="right">m.ed</th>
+<th align="right">m.c.ed</th>
+<th align="right">m.c.ed.sparse</th>
+<th align="right">m.true</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>fdp</td>
+<td align="right">0.000</td>
+<td align="right">0.000</td>
+<td align="right">0.000</td>
+<td align="right">0.000</td>
+<td align="right">0.000</td>
+</tr>
+<tr class="even">
+<td>auc</td>
+<td align="right">0.997</td>
+<td align="right">1.000</td>
+<td align="right">1.000</td>
+<td align="right">0.997</td>
+<td align="right">0.997</td>
+</tr>
+<tr class="odd">
+<td>power</td>
+<td align="right">0.987</td>
+<td align="right">0.987</td>
+<td align="right">0.987</td>
+<td align="right">0.987</td>
+<td align="right">0.987</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>knitr::kable(out$find_cond,caption = &#39;On finding conditions&#39;,digits = 5)</code></pre>
+<table>
+<caption>On finding conditions</caption>
+<thead>
+<tr class="header">
+<th></th>
+<th align="right">m.c</th>
+<th align="right">m.ed</th>
+<th align="right">m.c.ed</th>
+<th align="right">m.c.ed.sparse</th>
+<th align="right">m.true</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>fdp</td>
+<td align="right">0.00000</td>
+<td align="right">0.05169</td>
+<td align="right">0.00000</td>
+<td align="right">0.00000</td>
+<td align="right">0.00000</td>
+</tr>
+<tr class="even">
+<td>auc</td>
+<td align="right">0.99875</td>
+<td align="right">0.98844</td>
+<td align="right">0.99986</td>
+<td align="right">0.99874</td>
+<td align="right">0.99875</td>
+</tr>
+<tr class="odd">
+<td>power</td>
+<td align="right">0.96727</td>
+<td align="right">0.96727</td>
+<td align="right">0.96727</td>
+<td align="right">0.96727</td>
+<td align="right">0.96727</td>
+</tr>
+<tr class="even">
+<td>mse</td>
+<td align="right">0.00003</td>
+<td align="right">0.00007</td>
+<td align="right">0.00003</td>
+<td align="right">0.00003</td>
+<td align="right">0.00003</td>
+</tr>
+<tr class="odd">
+<td>log_lik</td>
+<td align="right">1258.42928</td>
+<td align="right">115.58230</td>
+<td align="right">1259.23861</td>
+<td align="right">1258.87583</td>
+<td align="right">1258.42928</td>
+</tr>
+</tbody>
+</table>
+<p>Let’s increase the error standard deviation to 0.5:</p>
+<pre class="r"><code>simdata = simple_sims(50,err_sd = 0.5)
+result = simu_study(simdata)</code></pre>
+<pre><code>Warning in calc_lik_matrix(data, Ulist, log = TRUE, algorithm.version = algorithm.version): Some mixture components result in non-finite likelihoods, either
+ due to numerical underflow/overflow, or due to invalid covariance matrices 189, 190, 205, 206, 207, 221, 222, 223, 237, 238, 239, 253, 254, 255 </code></pre>
+<pre><code>Warning in mixsqp::mixsqp(A, w, pi_init, control = control): One or more
+columns of &quot;L&quot; are all zeros; solution entries associated with these columns are
+trivially zero</code></pre>
+<pre class="r"><code>out = summary_out(simdata$B,result)
+knitr::kable(out$find_genes,caption = &#39;On finding genes&#39;,digits = 3)</code></pre>
+<table>
+<caption>On finding genes</caption>
+<thead>
+<tr class="header">
+<th></th>
+<th align="right">m.c</th>
+<th align="right">m.ed</th>
+<th align="right">m.c.ed</th>
+<th align="right">m.c.ed.sparse</th>
+<th align="right">m.true</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>fdp</td>
+<td align="right">0.000</td>
+<td align="right">0.000</td>
+<td align="right">0.000</td>
+<td align="right">0.000</td>
+<td align="right">0.000</td>
+</tr>
+<tr class="even">
+<td>auc</td>
+<td align="right">0.829</td>
+<td align="right">0.816</td>
+<td align="right">0.829</td>
+<td align="right">0.827</td>
+<td align="right">0.828</td>
+</tr>
+<tr class="odd">
+<td>power</td>
+<td align="right">0.427</td>
+<td align="right">0.420</td>
+<td align="right">0.427</td>
+<td align="right">0.413</td>
+<td align="right">0.427</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>knitr::kable(out$find_cond,caption = &#39;On finding conditions&#39;,digits = 3)</code></pre>
+<table>
+<caption>On finding conditions</caption>
+<thead>
+<tr class="header">
+<th></th>
+<th align="right">m.c</th>
+<th align="right">m.ed</th>
+<th align="right">m.c.ed</th>
+<th align="right">m.c.ed.sparse</th>
+<th align="right">m.true</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>fdp</td>
+<td align="right">0.000</td>
+<td align="right">0.014</td>
+<td align="right">0.000</td>
+<td align="right">0.000</td>
+<td align="right">0.000</td>
+</tr>
+<tr class="even">
+<td>auc</td>
+<td align="right">0.878</td>
+<td align="right">0.841</td>
+<td align="right">0.877</td>
+<td align="right">0.874</td>
+<td align="right">0.878</td>
+</tr>
+<tr class="odd">
+<td>power</td>
+<td align="right">0.389</td>
+<td align="right">0.395</td>
+<td align="right">0.384</td>
+<td align="right">0.380</td>
+<td align="right">0.389</td>
+</tr>
+<tr class="even">
+<td>mse</td>
+<td align="right">0.104</td>
+<td align="right">0.114</td>
+<td align="right">0.105</td>
+<td align="right">0.123</td>
+<td align="right">0.104</td>
+</tr>
+<tr class="odd">
+<td>log_lik</td>
+<td align="right">-1156.407</td>
+<td align="right">-1158.229</td>
+<td align="right">-1150.351</td>
+<td align="right">-1149.939</td>
+<td align="right">-1156.626</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="canonical-covariance-matrix-additional-ones" class="section level2">
+<h2>Canonical covariance matrix + additional ones</h2>
+<p>Now we generate data from <code>simple_simu2</code>, in which four types of effects are : present (and identical) in first two conditions, present (and identical) in last three conditions, zero and independent covs.</p>
+<p>In this setting, the first two covariance matrices are not included in canonical covs.</p>
+<pre class="r"><code>simdata = simple_sims2(50,err_sd = 0.01)
+result = simu_study(simdata)</code></pre>
+<pre><code>Warning in calc_lik_matrix(data, Ulist, log = TRUE, algorithm.version = algorithm.version): Some mixture components result in non-finite likelihoods, either
+ due to numerical underflow/overflow, or due to invalid covariance matrices 191, 207, 223, 224, 239, 240, 255, 256, 271, 272, 287, 288, 303, 304, 319, 320, 335, 336, 351, 352, 367, 368, 383, 384, 399, 400, 415, 416, 431, 432 </code></pre>
+<pre><code>Warning in mixsqp::mixsqp(A, w, pi_init, control = control): One or more
+columns of &quot;L&quot; are all zeros; solution entries associated with these columns are
+trivially zero</code></pre>
+<pre class="r"><code>out = summary_out(simdata$B,result)
+knitr::kable(out$find_genes,caption = &#39;On finding genes&#39;,digits = 3)</code></pre>
+<table>
+<caption>On finding genes</caption>
+<thead>
+<tr class="header">
+<th></th>
+<th align="right">m.c</th>
+<th align="right">m.ed</th>
+<th align="right">m.c.ed</th>
+<th align="right">m.c.ed.sparse</th>
+<th align="right">m.true</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>fdp</td>
+<td align="right">0.000</td>
+<td align="right">0.000</td>
+<td align="right">0.000</td>
+<td align="right">0.000</td>
+<td align="right">0.000</td>
+</tr>
+<tr class="even">
+<td>auc</td>
+<td align="right">0.991</td>
+<td align="right">0.995</td>
+<td align="right">0.995</td>
+<td align="right">0.996</td>
+<td align="right">0.996</td>
+</tr>
+<tr class="odd">
+<td>power</td>
+<td align="right">0.987</td>
+<td align="right">0.987</td>
+<td align="right">0.987</td>
+<td align="right">0.987</td>
+<td align="right">0.987</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>knitr::kable(out$find_cond,caption = &#39;On finding conditions&#39;,digits = 3)</code></pre>
+<table>
+<caption>On finding conditions</caption>
+<thead>
+<tr class="header">
+<th></th>
+<th align="right">m.c</th>
+<th align="right">m.ed</th>
+<th align="right">m.c.ed</th>
+<th align="right">m.c.ed.sparse</th>
+<th align="right">m.true</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>fdp</td>
+<td align="right">0.057</td>
+<td align="right">0.102</td>
+<td align="right">0.102</td>
+<td align="right">0.043</td>
+<td align="right">0.000</td>
+</tr>
+<tr class="even">
+<td>auc</td>
+<td align="right">0.992</td>
+<td align="right">0.993</td>
+<td align="right">0.993</td>
+<td align="right">0.994</td>
+<td align="right">0.998</td>
+</tr>
+<tr class="odd">
+<td>power</td>
+<td align="right">0.984</td>
+<td align="right">0.984</td>
+<td align="right">0.984</td>
+<td align="right">0.984</td>
+<td align="right">0.984</td>
+</tr>
+<tr class="even">
+<td>mse</td>
+<td align="right">0.000</td>
+<td align="right">0.000</td>
+<td align="right">0.000</td>
+<td align="right">0.000</td>
+<td align="right">0.000</td>
+</tr>
+<tr class="odd">
+<td>log_lik</td>
+<td align="right">-47.211</td>
+<td align="right">130.961</td>
+<td align="right">140.393</td>
+<td align="right">171.087</td>
+<td align="right">1239.666</td>
+</tr>
+</tbody>
+</table>
+<p>Increase #sample for each type from 50 to 500</p>
+<pre class="r"><code>set.seed(123)
+simdata = simple_sims2(500,err_sd = 0.01)
+result = simu_study(simdata)</code></pre>
+<pre><code>Warning in calc_lik_matrix(data, Ulist, log = TRUE, algorithm.version = algorithm.version): Some mixture components result in non-finite likelihoods, either
+ due to numerical underflow/overflow, or due to invalid covariance matrices 192, 206, 207, 208, 222, 223, 224, 238, 239, 240, 254, 255, 256, 270, 271, 272, 286, 287, 288, 302, 303, 304, 318, 319, 320, 334, 335, 336, 350, 351, 352, 366, 367, 368, 382, 383, 384, 398, 399, 400, 414, 415, 416, 430, 431, 432 </code></pre>
+<pre><code>Warning in mixsqp::mixsqp(A, w, pi_init, control = control): One or more
+columns of &quot;L&quot; are all zeros; solution entries associated with these columns are
+trivially zero</code></pre>
+<pre class="r"><code>out = summary_out(simdata$B,result)
+knitr::kable(out$find_genes,caption = &#39;On finding genes&#39;,digits = 3)</code></pre>
+<table>
+<caption>On finding genes</caption>
+<thead>
+<tr class="header">
+<th></th>
+<th align="right">m.c</th>
+<th align="right">m.ed</th>
+<th align="right">m.c.ed</th>
+<th align="right">m.c.ed.sparse</th>
+<th align="right">m.true</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>fdp</td>
+<td align="right">0.000</td>
+<td align="right">0.000</td>
+<td align="right">0.000</td>
+<td align="right">0.000</td>
+<td align="right">0.000</td>
+</tr>
+<tr class="even">
+<td>auc</td>
+<td align="right">0.997</td>
+<td align="right">0.997</td>
+<td align="right">0.997</td>
+<td align="right">0.997</td>
+<td align="right">0.997</td>
+</tr>
+<tr class="odd">
+<td>power</td>
+<td align="right">0.988</td>
+<td align="right">0.989</td>
+<td align="right">0.989</td>
+<td align="right">0.989</td>
+<td align="right">0.989</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>knitr::kable(out$find_cond,caption = &#39;On finding conditions&#39;,digits = 3)</code></pre>
+<table>
+<caption>On finding conditions</caption>
+<thead>
+<tr class="header">
+<th></th>
+<th align="right">m.c</th>
+<th align="right">m.ed</th>
+<th align="right">m.c.ed</th>
+<th align="right">m.c.ed.sparse</th>
+<th align="right">m.true</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>fdp</td>
+<td align="right">0.050</td>
+<td align="right">0.206</td>
+<td align="right">0.206</td>
+<td align="right">0.005</td>
+<td align="right">0.000</td>
+</tr>
+<tr class="even">
+<td>auc</td>
+<td align="right">0.993</td>
+<td align="right">0.990</td>
+<td align="right">0.990</td>
+<td align="right">0.998</td>
+<td align="right">0.999</td>
+</tr>
+<tr class="odd">
+<td>power</td>
+<td align="right">0.985</td>
+<td align="right">0.987</td>
+<td align="right">0.987</td>
+<td align="right">0.987</td>
+<td align="right">0.987</td>
+</tr>
+<tr class="even">
+<td>mse</td>
+<td align="right">0.000</td>
+<td align="right">0.000</td>
+<td align="right">0.000</td>
+<td align="right">0.000</td>
+<td align="right">0.000</td>
+</tr>
+<tr class="odd">
+<td>log_lik</td>
+<td align="right">-186.467</td>
+<td align="right">3338.059</td>
+<td align="right">3394.346</td>
+<td align="right">7358.988</td>
+<td align="right">12596.830</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>idx = 1001:1500
+
+sum(result$m.c$result$lfdr[idx,]&lt;0.05)</code></pre>
+<pre><code>[1] 2446</code></pre>
+<pre class="r"><code>sum(result$m.c$result$lfsr[idx,]&lt;0.05)</code></pre>
+<pre><code>[1] 1153</code></pre>
+<pre class="r"><code>sum(result$m.c.ed$result$lfdr[idx,]&lt;0.05)</code></pre>
+<pre><code>[1] 2446</code></pre>
+<pre class="r"><code>sum(result$m.c.ed$result$lfsr[idx,]&lt;0.05)</code></pre>
+<pre><code>[1] 1725</code></pre>
+<pre class="r"><code>which((result$m.c$result$lfsr[idx,]&lt;0.05) &amp; (simdata$B[idx,]==0),arr.ind = TRUE)</code></pre>
+<pre><code>            row col
+effect_1013  13   3
+effect_1021  21   3
+effect_1022  22   3
+effect_1023  23   3
+effect_1029  29   3
+effect_1033  33   3
+effect_1034  34   3
+effect_1073  73   3
+effect_1078  78   3
+effect_1079  79   3
+effect_1084  84   3
+effect_1087  87   3
+effect_1088  88   3
+effect_1096  96   3
+effect_1102 102   3
+effect_1116 116   3
+effect_1124 124   3
+effect_1135 135   3
+effect_1141 141   3
+effect_1150 150   3
+effect_1153 153   3
+effect_1203 203   3
+effect_1212 212   3
+effect_1214 214   3
+effect_1220 220   3
+effect_1229 229   3
+effect_1233 233   3
+effect_1237 237   3
+effect_1246 246   3
+effect_1256 256   3
+effect_1258 258   3
+effect_1261 261   3
+effect_1269 269   3
+effect_1271 271   3
+effect_1273 273   3
+effect_1303 303   3
+effect_1310 310   3
+effect_1343 343   3
+effect_1358 358   3
+effect_1359 359   3
+effect_1365 365   3
+effect_1366 366   3
+effect_1377 377   3
+effect_1385 385   3
+effect_1394 394   3
+effect_1398 398   3
+effect_1406 406   3
+effect_1408 408   3
+effect_1412 412   3
+effect_1417 417   3
+effect_1427 427   3
+effect_1430 430   3
+effect_1432 432   3
+effect_1444 444   3
+effect_1453 453   3
+effect_1457 457   3
+effect_1463 463   3
+effect_1465 465   3
+effect_1473 473   3
+effect_1474 474   3
+effect_1478 478   3
+effect_1483 483   3
+effect_1486 486   3
+effect_1487 487   3
+effect_1007   7   4
+effect_1028  28   4
+effect_1031  31   4
+effect_1049  49   4
+effect_1051  51   4
+effect_1056  56   4
+effect_1063  63   4
+effect_1064  64   4
+effect_1066  66   4
+effect_1074  74   4
+effect_1075  75   4
+effect_1082  82   4
+effect_1110 110   4
+effect_1111 111   4
+effect_1123 123   4
+effect_1127 127   4
+effect_1140 140   4
+effect_1168 168   4
+effect_1188 188   4
+effect_1194 194   4
+effect_1199 199   4
+effect_1201 201   4
+effect_1206 206   4
+effect_1207 207   4
+effect_1218 218   4
+effect_1221 221   4
+effect_1226 226   4
+effect_1229 229   4
+effect_1246 246   4
+effect_1249 249   4
+effect_1268 268   4
+effect_1275 275   4
+effect_1279 279   4
+effect_1307 307   4
+effect_1308 308   4
+effect_1310 310   4
+effect_1317 317   4
+effect_1325 325   4
+effect_1329 329   4
+effect_1336 336   4
+effect_1352 352   4
+effect_1384 384   4
+effect_1387 387   4
+effect_1402 402   4
+effect_1404 404   4
+effect_1415 415   4
+effect_1417 417   4
+effect_1420 420   4
+effect_1421 421   4
+effect_1424 424   4
+effect_1439 439   4
+effect_1442 442   4
+effect_1448 448   4
+effect_1455 455   4
+effect_1463 463   4
+effect_1466 466   4
+effect_1477 477   4
+effect_1488 488   4
+effect_1008   8   5
+effect_1013  13   5
+effect_1014  14   5
+effect_1037  37   5
+effect_1044  44   5
+effect_1056  56   5
+effect_1060  60   5
+effect_1091  91   5
+effect_1094  94   5
+effect_1099  99   5
+effect_1114 114   5
+effect_1122 122   5
+effect_1125 125   5
+effect_1130 130   5
+effect_1140 140   5
+effect_1159 159   5
+effect_1161 161   5
+effect_1179 179   5
+effect_1182 182   5
+effect_1223 223   5
+effect_1239 239   5
+effect_1240 240   5
+effect_1246 246   5
+effect_1249 249   5
+effect_1255 255   5
+effect_1258 258   5
+effect_1260 260   5
+effect_1273 273   5
+effect_1274 274   5
+effect_1288 288   5
+effect_1304 304   5
+effect_1310 310   5
+effect_1348 348   5
+effect_1357 357   5
+effect_1375 375   5
+effect_1378 378   5
+effect_1380 380   5
+effect_1382 382   5
+effect_1392 392   5
+effect_1407 407   5
+effect_1429 429   5
+effect_1437 437   5
+effect_1440 440   5
+effect_1443 443   5
+effect_1445 445   5
+effect_1446 446   5
+effect_1447 447   5
+effect_1471 471   5
+effect_1472 472   5
+effect_1473 473   5
+effect_1478 478   5
+effect_1484 484   5</code></pre>
+<pre class="r"><code>which((result$m.c.ed$result$lfsr[idx,]&lt;0.05) &amp; (simdata$B[idx,]==0),arr.ind = TRUE)</code></pre>
+<pre><code>            row col
+effect_1001   1   3
+effect_1002   2   3
+effect_1004   4   3
+effect_1005   5   3
+effect_1007   7   3
+effect_1012  12   3
+effect_1013  13   3
+effect_1014  14   3
+effect_1015  15   3
+effect_1017  17   3
+effect_1019  19   3
+effect_1020  20   3
+effect_1021  21   3
+effect_1022  22   3
+effect_1023  23   3
+effect_1025  25   3
+effect_1028  28   3
+effect_1029  29   3
+effect_1031  31   3
+effect_1032  32   3
+effect_1033  33   3
+effect_1034  34   3
+effect_1036  36   3
+effect_1038  38   3
+effect_1039  39   3
+effect_1040  40   3
+effect_1042  42   3
+effect_1048  48   3
+effect_1050  50   3
+effect_1051  51   3
+effect_1053  53   3
+effect_1055  55   3
+effect_1059  59   3
+effect_1060  60   3
+effect_1061  61   3
+effect_1063  63   3
+effect_1066  66   3
+effect_1067  67   3
+effect_1068  68   3
+effect_1071  71   3
+effect_1073  73   3
+effect_1077  77   3
+effect_1078  78   3
+effect_1079  79   3
+effect_1080  80   3
+effect_1082  82   3
+effect_1083  83   3
+effect_1085  85   3
+effect_1086  86   3
+effect_1087  87   3
+effect_1088  88   3
+effect_1089  89   3
+effect_1093  93   3
+effect_1096  96   3
+effect_1099  99   3
+effect_1102 102   3
+effect_1103 103   3
+effect_1104 104   3
+effect_1106 106   3
+effect_1109 109   3
+effect_1112 112   3
+effect_1114 114   3
+effect_1116 116   3
+effect_1117 117   3
+effect_1118 118   3
+effect_1121 121   3
+effect_1123 123   3
+effect_1124 124   3
+effect_1127 127   3
+effect_1128 128   3
+effect_1130 130   3
+effect_1132 132   3
+effect_1134 134   3
+effect_1135 135   3
+effect_1141 141   3
+effect_1142 142   3
+effect_1146 146   3
+effect_1150 150   3
+effect_1153 153   3
+effect_1155 155   3
+effect_1156 156   3
+effect_1157 157   3
+effect_1158 158   3
+effect_1160 160   3
+effect_1165 165   3
+effect_1166 166   3
+effect_1169 169   3
+effect_1170 170   3
+effect_1171 171   3
+effect_1172 172   3
+effect_1173 173   3
+effect_1177 177   3
+effect_1178 178   3
+effect_1179 179   3
+effect_1180 180   3
+effect_1183 183   3
+effect_1185 185   3
+effect_1186 186   3
+effect_1188 188   3
+effect_1189 189   3
+effect_1190 190   3
+effect_1191 191   3
+effect_1192 192   3
+effect_1193 193   3
+effect_1203 203   3
+effect_1204 204   3
+effect_1205 205   3
+effect_1208 208   3
+effect_1210 210   3
+effect_1211 211   3
+effect_1212 212   3
+effect_1214 214   3
+effect_1217 217   3
+effect_1220 220   3
+effect_1221 221   3
+effect_1222 222   3
+effect_1225 225   3
+effect_1226 226   3
+effect_1229 229   3
+effect_1232 232   3
+effect_1233 233   3
+effect_1237 237   3
+effect_1239 239   3
+effect_1240 240   3
+effect_1242 242   3
+effect_1245 245   3
+effect_1246 246   3
+effect_1247 247   3
+effect_1250 250   3
+effect_1251 251   3
+effect_1253 253   3
+effect_1254 254   3
+effect_1256 256   3
+effect_1258 258   3
+effect_1259 259   3
+effect_1261 261   3
+effect_1262 262   3
+effect_1263 263   3
+effect_1267 267   3
+effect_1269 269   3
+effect_1270 270   3
+effect_1271 271   3
+effect_1273 273   3
+effect_1276 276   3
+effect_1277 277   3
+effect_1278 278   3
+effect_1279 279   3
+effect_1283 283   3
+effect_1284 284   3
+effect_1285 285   3
+effect_1286 286   3
+effect_1287 287   3
+effect_1289 289   3
+effect_1290 290   3
+effect_1296 296   3
+effect_1303 303   3
+effect_1306 306   3
+effect_1308 308   3
+effect_1310 310   3
+effect_1314 314   3
+effect_1315 315   3
+effect_1317 317   3
+effect_1321 321   3
+effect_1325 325   3
+effect_1327 327   3
+effect_1333 333   3
+effect_1335 335   3
+effect_1338 338   3
+effect_1340 340   3
+effect_1341 341   3
+effect_1343 343   3
+effect_1344 344   3
+effect_1345 345   3
+effect_1347 347   3
+effect_1350 350   3
+effect_1353 353   3
+effect_1354 354   3
+effect_1356 356   3
+effect_1358 358   3
+effect_1359 359   3
+effect_1361 361   3
+effect_1363 363   3
+effect_1365 365   3
+effect_1366 366   3
+effect_1367 367   3
+effect_1370 370   3
+effect_1373 373   3
+effect_1377 377   3
+effect_1378 378   3
+effect_1382 382   3
+effect_1383 383   3
+effect_1385 385   3
+effect_1389 389   3
+effect_1390 390   3
+effect_1394 394   3
+effect_1398 398   3
+effect_1400 400   3
+effect_1401 401   3
+effect_1404 404   3
+effect_1406 406   3
+effect_1407 407   3
+effect_1408 408   3
+effect_1410 410   3
+effect_1411 411   3
+effect_1412 412   3
+effect_1414 414   3
+effect_1415 415   3
+effect_1417 417   3
+effect_1418 418   3
+effect_1419 419   3
+effect_1422 422   3
+effect_1423 423   3
+effect_1426 426   3
+effect_1427 427   3
+effect_1430 430   3
+effect_1431 431   3
+effect_1432 432   3
+effect_1433 433   3
+effect_1442 442   3
+effect_1443 443   3
+effect_1444 444   3
+effect_1446 446   3
+effect_1447 447   3
+effect_1453 453   3
+effect_1454 454   3
+effect_1457 457   3
+effect_1458 458   3
+effect_1459 459   3
+effect_1460 460   3
+effect_1462 462   3
+effect_1463 463   3
+effect_1464 464   3
+effect_1465 465   3
+effect_1467 467   3
+effect_1469 469   3
+effect_1473 473   3
+effect_1474 474   3
+effect_1475 475   3
+effect_1476 476   3
+effect_1479 479   3
+effect_1480 480   3
+effect_1482 482   3
+effect_1483 483   3
+effect_1484 484   3
+effect_1486 486   3
+effect_1487 487   3
+effect_1490 490   3
+effect_1491 491   3
+effect_1497 497   3
+effect_1498 498   3
+effect_1499 499   3
+effect_1001   1   4
+effect_1002   2   4
+effect_1004   4   4
+effect_1005   5   4
+effect_1007   7   4
+effect_1012  12   4
+effect_1014  14   4
+effect_1015  15   4
+effect_1017  17   4
+effect_1019  19   4
+effect_1020  20   4
+effect_1022  22   4
+effect_1025  25   4
+effect_1028  28   4
+effect_1031  31   4
+effect_1032  32   4
+effect_1036  36   4
+effect_1038  38   4
+effect_1039  39   4
+effect_1040  40   4
+effect_1042  42   4
+effect_1048  48   4
+effect_1049  49   4
+effect_1050  50   4
+effect_1051  51   4
+effect_1053  53   4
+effect_1055  55   4
+effect_1056  56   4
+effect_1059  59   4
+effect_1060  60   4
+effect_1061  61   4
+effect_1063  63   4
+effect_1064  64   4
+effect_1066  66   4
+effect_1067  67   4
+effect_1068  68   4
+effect_1071  71   4
+effect_1074  74   4
+effect_1075  75   4
+effect_1077  77   4
+effect_1079  79   4
+effect_1080  80   4
+effect_1082  82   4
+effect_1083  83   4
+effect_1085  85   4
+effect_1086  86   4
+effect_1088  88   4
+effect_1089  89   4
+effect_1093  93   4
+effect_1099  99   4
+effect_1102 102   4
+effect_1103 103   4
+effect_1104 104   4
+effect_1106 106   4
+effect_1109 109   4
+effect_1110 110   4
+effect_1111 111   4
+effect_1112 112   4
+effect_1114 114   4
+effect_1116 116   4
+effect_1117 117   4
+effect_1118 118   4
+effect_1121 121   4
+effect_1123 123   4
+effect_1124 124   4
+effect_1127 127   4
+effect_1128 128   4
+effect_1130 130   4
+effect_1132 132   4
+effect_1134 134   4
+effect_1140 140   4
+effect_1142 142   4
+effect_1146 146   4
+effect_1153 153   4
+effect_1155 155   4
+effect_1156 156   4
+effect_1157 157   4
+effect_1158 158   4
+effect_1160 160   4
+effect_1165 165   4
+effect_1166 166   4
+effect_1168 168   4
+effect_1169 169   4
+effect_1170 170   4
+effect_1171 171   4
+effect_1172 172   4
+effect_1173 173   4
+effect_1177 177   4
+effect_1178 178   4
+effect_1179 179   4
+effect_1180 180   4
+effect_1183 183   4
+effect_1185 185   4
+effect_1186 186   4
+effect_1188 188   4
+effect_1189 189   4
+effect_1190 190   4
+effect_1191 191   4
+effect_1192 192   4
+effect_1193 193   4
+effect_1194 194   4
+effect_1199 199   4
+effect_1201 201   4
+effect_1203 203   4
+effect_1204 204   4
+effect_1205 205   4
+effect_1206 206   4
+effect_1207 207   4
+effect_1208 208   4
+effect_1210 210   4
+effect_1211 211   4
+effect_1212 212   4
+effect_1214 214   4
+effect_1217 217   4
+effect_1218 218   4
+effect_1221 221   4
+effect_1222 222   4
+effect_1225 225   4
+effect_1226 226   4
+effect_1227 227   4
+effect_1229 229   4
+effect_1232 232   4
+effect_1233 233   4
+effect_1237 237   4
+effect_1239 239   4
+effect_1240 240   4
+effect_1242 242   4
+effect_1245 245   4
+effect_1247 247   4
+effect_1249 249   4
+effect_1250 250   4
+effect_1251 251   4
+effect_1253 253   4
+effect_1254 254   4
+effect_1256 256   4
+effect_1259 259   4
+effect_1261 261   4
+effect_1262 262   4
+effect_1263 263   4
+effect_1267 267   4
+effect_1268 268   4
+effect_1269 269   4
+effect_1270 270   4
+effect_1276 276   4
+effect_1277 277   4
+effect_1278 278   4
+effect_1279 279   4
+effect_1283 283   4
+effect_1284 284   4
+effect_1285 285   4
+effect_1286 286   4
+effect_1287 287   4
+effect_1289 289   4
+effect_1290 290   4
+effect_1296 296   4
+effect_1306 306   4
+effect_1307 307   4
+effect_1308 308   4
+effect_1310 310   4
+effect_1314 314   4
+effect_1315 315   4
+effect_1317 317   4
+effect_1321 321   4
+effect_1324 324   4
+effect_1325 325   4
+effect_1327 327   4
+effect_1329 329   4
+effect_1333 333   4
+effect_1335 335   4
+effect_1336 336   4
+effect_1338 338   4
+effect_1340 340   4
+effect_1341 341   4
+effect_1344 344   4
+effect_1345 345   4
+effect_1347 347   4
+effect_1350 350   4
+effect_1352 352   4
+effect_1353 353   4
+effect_1354 354   4
+effect_1356 356   4
+effect_1358 358   4
+effect_1361 361   4
+effect_1363 363   4
+effect_1366 366   4
+effect_1367 367   4
+effect_1370 370   4
+effect_1373 373   4
+effect_1378 378   4
+effect_1382 382   4
+effect_1383 383   4
+effect_1384 384   4
+effect_1385 385   4
+effect_1387 387   4
+effect_1389 389   4
+effect_1390 390   4
+effect_1400 400   4
+effect_1401 401   4
+effect_1402 402   4
+effect_1404 404   4
+effect_1407 407   4
+effect_1410 410   4
+effect_1411 411   4
+effect_1412 412   4
+effect_1414 414   4
+effect_1415 415   4
+effect_1417 417   4
+effect_1418 418   4
+effect_1419 419   4
+effect_1421 421   4
+effect_1422 422   4
+effect_1423 423   4
+effect_1424 424   4
+effect_1426 426   4
+effect_1431 431   4
+effect_1432 432   4
+effect_1433 433   4
+effect_1439 439   4
+effect_1442 442   4
+effect_1443 443   4
+effect_1444 444   4
+effect_1446 446   4
+effect_1447 447   4
+effect_1448 448   4
+effect_1453 453   4
+effect_1454 454   4
+effect_1455 455   4
+effect_1458 458   4
+effect_1459 459   4
+effect_1460 460   4
+effect_1462 462   4
+effect_1463 463   4
+effect_1464 464   4
+effect_1466 466   4
+effect_1469 469   4
+effect_1474 474   4
+effect_1475 475   4
+effect_1476 476   4
+effect_1477 477   4
+effect_1479 479   4
+effect_1480 480   4
+effect_1482 482   4
+effect_1484 484   4
+effect_1486 486   4
+effect_1488 488   4
+effect_1490 490   4
+effect_1491 491   4
+effect_1497 497   4
+effect_1498 498   4
+effect_1499 499   4
+effect_1001   1   5
+effect_1002   2   5
+effect_1004   4   5
+effect_1005   5   5
+effect_1007   7   5
+effect_1008   8   5
+effect_1012  12   5
+effect_1013  13   5
+effect_1014  14   5
+effect_1015  15   5
+effect_1017  17   5
+effect_1019  19   5
+effect_1020  20   5
+effect_1022  22   5
+effect_1025  25   5
+effect_1028  28   5
+effect_1031  31   5
+effect_1032  32   5
+effect_1037  37   5
+effect_1038  38   5
+effect_1039  39   5
+effect_1040  40   5
+effect_1042  42   5
+effect_1044  44   5
+effect_1048  48   5
+effect_1050  50   5
+effect_1051  51   5
+effect_1053  53   5
+effect_1055  55   5
+effect_1056  56   5
+effect_1059  59   5
+effect_1060  60   5
+effect_1061  61   5
+effect_1063  63   5
+effect_1066  66   5
+effect_1067  67   5
+effect_1068  68   5
+effect_1071  71   5
+effect_1077  77   5
+effect_1079  79   5
+effect_1080  80   5
+effect_1082  82   5
+effect_1083  83   5
+effect_1085  85   5
+effect_1086  86   5
+effect_1088  88   5
+effect_1089  89   5
+effect_1091  91   5
+effect_1093  93   5
+effect_1094  94   5
+effect_1099  99   5
+effect_1102 102   5
+effect_1103 103   5
+effect_1104 104   5
+effect_1106 106   5
+effect_1109 109   5
+effect_1112 112   5
+effect_1114 114   5
+effect_1116 116   5
+effect_1117 117   5
+effect_1118 118   5
+effect_1121 121   5
+effect_1122 122   5
+effect_1123 123   5
+effect_1124 124   5
+effect_1125 125   5
+effect_1127 127   5
+effect_1128 128   5
+effect_1130 130   5
+effect_1132 132   5
+effect_1134 134   5
+effect_1140 140   5
+effect_1142 142   5
+effect_1146 146   5
+effect_1153 153   5
+effect_1155 155   5
+effect_1156 156   5
+effect_1157 157   5
+effect_1158 158   5
+effect_1159 159   5
+effect_1160 160   5
+effect_1161 161   5
+effect_1165 165   5
+effect_1166 166   5
+effect_1169 169   5
+effect_1170 170   5
+effect_1171 171   5
+effect_1172 172   5
+effect_1173 173   5
+effect_1177 177   5
+effect_1178 178   5
+effect_1179 179   5
+effect_1180 180   5
+effect_1182 182   5
+effect_1183 183   5
+effect_1185 185   5
+effect_1186 186   5
+effect_1188 188   5
+effect_1190 190   5
+effect_1191 191   5
+effect_1192 192   5
+effect_1193 193   5
+effect_1203 203   5
+effect_1204 204   5
+effect_1205 205   5
+effect_1208 208   5
+effect_1210 210   5
+effect_1211 211   5
+effect_1212 212   5
+effect_1214 214   5
+effect_1217 217   5
+effect_1221 221   5
+effect_1222 222   5
+effect_1223 223   5
+effect_1225 225   5
+effect_1226 226   5
+effect_1232 232   5
+effect_1233 233   5
+effect_1237 237   5
+effect_1239 239   5
+effect_1240 240   5
+effect_1242 242   5
+effect_1245 245   5
+effect_1246 246   5
+effect_1247 247   5
+effect_1249 249   5
+effect_1250 250   5
+effect_1251 251   5
+effect_1253 253   5
+effect_1254 254   5
+effect_1255 255   5
+effect_1256 256   5
+effect_1258 258   5
+effect_1259 259   5
+effect_1260 260   5
+effect_1261 261   5
+effect_1262 262   5
+effect_1263 263   5
+effect_1267 267   5
+effect_1269 269   5
+effect_1270 270   5
+effect_1273 273   5
+effect_1274 274   5
+effect_1276 276   5
+effect_1277 277   5
+effect_1278 278   5
+effect_1279 279   5
+effect_1283 283   5
+effect_1284 284   5
+effect_1285 285   5
+effect_1286 286   5
+effect_1287 287   5
+effect_1288 288   5
+effect_1289 289   5
+effect_1290 290   5
+effect_1296 296   5
+effect_1304 304   5
+effect_1306 306   5
+effect_1308 308   5
+effect_1310 310   5
+effect_1314 314   5
+effect_1315 315   5
+effect_1317 317   5
+effect_1321 321   5
+effect_1325 325   5
+effect_1327 327   5
+effect_1333 333   5
+effect_1335 335   5
+effect_1338 338   5
+effect_1340 340   5
+effect_1341 341   5
+effect_1344 344   5
+effect_1345 345   5
+effect_1347 347   5
+effect_1348 348   5
+effect_1350 350   5
+effect_1353 353   5
+effect_1354 354   5
+effect_1356 356   5
+effect_1358 358   5
+effect_1361 361   5
+effect_1363 363   5
+effect_1366 366   5
+effect_1367 367   5
+effect_1370 370   5
+effect_1373 373   5
+effect_1375 375   5
+effect_1378 378   5
+effect_1380 380   5
+effect_1382 382   5
+effect_1383 383   5
+effect_1385 385   5
+effect_1387 387   5
+effect_1389 389   5
+effect_1390 390   5
+effect_1392 392   5
+effect_1400 400   5
+effect_1401 401   5
+effect_1404 404   5
+effect_1407 407   5
+effect_1410 410   5
+effect_1411 411   5
+effect_1412 412   5
+effect_1414 414   5
+effect_1415 415   5
+effect_1417 417   5
+effect_1418 418   5
+effect_1419 419   5
+effect_1422 422   5
+effect_1423 423   5
+effect_1426 426   5
+effect_1431 431   5
+effect_1432 432   5
+effect_1433 433   5
+effect_1437 437   5
+effect_1440 440   5
+effect_1442 442   5
+effect_1443 443   5
+effect_1444 444   5
+effect_1445 445   5
+effect_1446 446   5
+effect_1447 447   5
+effect_1453 453   5
+effect_1454 454   5
+effect_1458 458   5
+effect_1459 459   5
+effect_1460 460   5
+effect_1462 462   5
+effect_1464 464   5
+effect_1469 469   5
+effect_1471 471   5
+effect_1473 473   5
+effect_1474 474   5
+effect_1475 475   5
+effect_1476 476   5
+effect_1479 479   5
+effect_1480 480   5
+effect_1482 482   5
+effect_1484 484   5
+effect_1486 486   5
+effect_1490 490   5
+effect_1491 491   5
+effect_1497 497   5
+effect_1498 498   5
+effect_1499 499   5</code></pre>
+<pre class="r"><code>result$m.c$result$lfsr[1005,]</code></pre>
+<pre><code> condition_1  condition_2  condition_3  condition_4  condition_5 
+2.645838e-42 6.439003e-34 4.028061e-01 4.755551e-01 2.095494e-01 </code></pre>
+<pre class="r"><code>result$m.c.ed$result$lfsr[1005,]</code></pre>
+<pre><code> condition_1  condition_2  condition_3  condition_4  condition_5 
+1.643603e-48 1.231530e-37 1.292422e-06 1.314004e-06 1.768281e-06 </code></pre>
+<pre class="r"><code>result$m.c$posterior_weights[1005,]</code></pre>
+<pre><code>           null   condition_2.9   condition_3.9 simple_het_2.10  condition_1.11 
+   2.155775e-67    9.655868e-49    2.233752e-69    1.111214e-15    1.605658e-34 
+simple_het_1.11 simple_het_2.14 simple_het_2.16 simple_het_2.17 simple_het_1.18 
+   1.001126e-06    6.136763e-01    2.431793e-01    1.248572e-01    7.967166e-03 
+simple_het_2.19 simple_het_1.20 simple_het_1.21     identity.22 simple_het_1.22 
+   9.081350e-03    6.835301e-04    4.828950e-04    8.839461e-06    6.243352e-05 </code></pre>
+<pre class="r"><code>result$m.c$fitted_g$Ulist$simple_het_1</code></pre>
+<pre><code>     [,1] [,2] [,3] [,4] [,5]
+[1,] 1.00 0.25 0.25 0.25 0.25
+[2,] 0.25 1.00 0.25 0.25 0.25
+[3,] 0.25 0.25 1.00 0.25 0.25
+[4,] 0.25 0.25 0.25 1.00 0.25
+[5,] 0.25 0.25 0.25 0.25 1.00</code></pre>
+<pre class="r"><code>result$m.c$fitted_g$Ulist$simple_het_3</code></pre>
+<pre><code>     [,1] [,2] [,3] [,4] [,5]
+[1,] 1.00 0.75 0.75 0.75 0.75
+[2,] 0.75 1.00 0.75 0.75 0.75
+[3,] 0.75 0.75 1.00 0.75 0.75
+[4,] 0.75 0.75 0.75 1.00 0.75
+[5,] 0.75 0.75 0.75 0.75 1.00</code></pre>
+<pre class="r"><code>round(result$m.c.ed$posterior_weights[1005,],2)</code></pre>
+<pre><code>          null  condition_2.9  condition_3.9 condition_1.11    ED_PCA_2.18 
+          0.00           0.00           0.00           0.00           0.53 
+   ED_PCA_1.19    ED_PCA_2.19     ED_tPCA.19     ED_tPCA.20     ED_tPCA.21 
+          0.00           0.47           0.00           0.00           0.00 
+   identity.22     ED_tPCA.22 
+          0.00           0.00 </code></pre>
+<pre class="r"><code>round(result$m.c.ed$fitted_g$Ulist$ED_PCA_2,2)</code></pre>
+<pre><code>      [,1]  [,2]  [,3] [,4]  [,5]
+[1,]  0.92  0.96 -0.05 0.02 -0.05
+[2,]  0.96  1.00 -0.05 0.02 -0.05
+[3,] -0.05 -0.05  0.00 0.00  0.00
+[4,]  0.02  0.02  0.00 0.00  0.00
+[5,] -0.05 -0.05  0.00 0.00  0.00</code></pre>
+<pre class="r"><code>result$m.c.ed$fitted_g$pi[which(result$m.c.ed$fitted_g$pi&gt;0.1)]</code></pre>
+<pre><code>       null ED_PCA_1.19  ED_tPCA.21 identity.22 
+  0.2433230   0.1319147   0.2479193   0.1066350 </code></pre>
+<pre class="r"><code>result$m.c.ed$fitted_g$grid[10]</code></pre>
+<pre><code>[1] 0.01890006</code></pre>
+<pre class="r"><code>result$m.c$result$PosteriorMean[1005,]</code></pre>
+<pre><code>  condition_1   condition_2   condition_3   condition_4   condition_5 
+ 0.1345947117  0.1199534076  0.0024374183 -0.0006117164  0.0080087875 </code></pre>
+<pre class="r"><code>result$m.c.ed$result$PosteriorMean[1005,]</code></pre>
+<pre><code> condition_1  condition_2  condition_3  condition_4  condition_5 
+ 0.125529960  0.131124889 -0.006486696  0.003275076 -0.007167359 </code></pre>
+<pre class="r"><code>result$m.c.ed.sparse$result$PosteriorMean[1005,]</code></pre>
+<pre><code>  condition_1   condition_2   condition_3   condition_4   condition_5 
+ 1.262244e-01  1.318504e-01  1.474801e-10 -1.721031e-10  7.313993e-10 </code></pre>
+<pre class="r"><code>result$m.c$result$PosteriorSD[1005,]</code></pre>
+<pre><code>condition_1 condition_2 condition_3 condition_4 condition_5 
+0.009977036 0.009954758 0.009917643 0.009920050 0.009913682 </code></pre>
+<pre class="r"><code>result$m.c.ed$result$PosteriorSD[1005,]</code></pre>
+<pre><code> condition_1  condition_2  condition_3  condition_4  condition_5 
+0.0069029194 0.0072105791 0.0003572327 0.0001808964 0.0003950297 </code></pre>
+<pre class="r"><code>result$m.c.ed.sparse$result$PosteriorSD[1005,]</code></pre>
+<pre><code> condition_1  condition_2  condition_3  condition_4  condition_5 
+6.915033e-03 7.223242e-03 3.232375e-06 3.244266e-06 3.932059e-06 </code></pre>
+</div>
+<div id="only-null-and-non-canonicalcovriance-matrix" class="section level2">
+<h2>Only null and non-canonicalcovriance matrix</h2>
+<pre class="r"><code>simple_sims3 = function (nsamp = 100, err_sd = 0.01){
+    ncond = 5
+    b1 = rnorm(nsamp)
+    B.1 = matrix(cbind(b1, b1, 0, 0, 0), nrow = nsamp, ncol = ncond)
+    b2 = rnorm(nsamp)
+    B.2 = matrix(cbind(0, 0, b2, b2, b2), nrow = nsamp, ncol = ncond)
+
+    B.zero = matrix(0, nrow = nsamp, ncol = ncond)
+    B = rbind(B.1, B.2,B.zero)
+    Shat = matrix(err_sd, nrow = nrow(B), ncol = ncol(B))
+    E = matrix(rnorm(length(Shat), mean = 0, sd = Shat), nrow = nrow(B), 
+        ncol = ncol(B))
+    Bhat = B + E
+    row_ids = paste0(&quot;effect_&quot;, 1:nrow(B))
+    col_ids = paste0(&quot;condition_&quot;, 1:ncol(B))
+    rownames(B) = row_ids
+    colnames(B) = col_ids
+    rownames(Bhat) = row_ids
+    colnames(Bhat) = col_ids
+    rownames(Shat) = row_ids
+    colnames(Shat) = col_ids
+    U = matrix(0,nrow=ncond,ncol=ncond)
+    U2 = U
+    U2[1:2,1:2] = 1
+    U3 = U
+    U3[3:5,3:5] = 1
+    U.true = list(U1 = matrix(0,nrow=ncond,ncol=ncond),
+                  U2=U2,
+                  U3=U3
+                  )
+    return(list(B = B, Bhat = Bhat, Shat = Shat,U.true=U.true))
+}</code></pre>
+<pre class="r"><code>set.seed(7)
+simdata = simple_sims3(50,err_sd = 0.01)
+
+result = simu_study(simdata)</code></pre>
+<pre><code>Warning in calc_lik_matrix(data, Ulist, log = TRUE, algorithm.version = algorithm.version): Some mixture components result in non-finite likelihoods, either
+ due to numerical underflow/overflow, or due to invalid covariance matrices 224, 240, 256, 272, 288, 304, 320, 336, 352, 368, 384, 400, 416 </code></pre>
+<pre><code>Warning in mixsqp::mixsqp(A, w, pi_init, control = control): One or more
+columns of &quot;L&quot; are all zeros; solution entries associated with these columns are
+trivially zero</code></pre>
+<pre class="r"><code>out = summary_out(simdata$B,result)
+knitr::kable(out$find_genes,caption = &#39;On finding genes&#39;,digits = 3)</code></pre>
+<table>
+<caption>On finding genes</caption>
+<thead>
+<tr class="header">
+<th></th>
+<th align="right">m.c</th>
+<th align="right">m.ed</th>
+<th align="right">m.c.ed</th>
+<th align="right">m.c.ed.sparse</th>
+<th align="right">m.true</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>fdp</td>
+<td align="right">0.000</td>
+<td align="right">0.000</td>
+<td align="right">0.000</td>
+<td align="right">0.000</td>
+<td align="right">0.000</td>
+</tr>
+<tr class="even">
+<td>auc</td>
+<td align="right">0.987</td>
+<td align="right">0.987</td>
+<td align="right">0.987</td>
+<td align="right">0.987</td>
+<td align="right">0.987</td>
+</tr>
+<tr class="odd">
+<td>power</td>
+<td align="right">0.970</td>
+<td align="right">0.970</td>
+<td align="right">0.970</td>
+<td align="right">0.970</td>
+<td align="right">0.970</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>knitr::kable(out$find_cond,caption = &#39;On finding conditions&#39;,digits = 3)</code></pre>
+<table>
+<caption>On finding conditions</caption>
+<thead>
+<tr class="header">
+<th></th>
+<th align="right">m.c</th>
+<th align="right">m.ed</th>
+<th align="right">m.c.ed</th>
+<th align="right">m.c.ed.sparse</th>
+<th align="right">m.true</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>fdp</td>
+<td align="right">0.094</td>
+<td align="right">0.301</td>
+<td align="right">0.301</td>
+<td align="right">0.000</td>
+<td align="right">0.000</td>
+</tr>
+<tr class="even">
+<td>auc</td>
+<td align="right">0.982</td>
+<td align="right">0.980</td>
+<td align="right">0.980</td>
+<td align="right">0.996</td>
+<td align="right">0.996</td>
+</tr>
+<tr class="odd">
+<td>power</td>
+<td align="right">0.968</td>
+<td align="right">0.968</td>
+<td align="right">0.968</td>
+<td align="right">0.968</td>
+<td align="right">0.968</td>
+</tr>
+<tr class="even">
+<td>mse</td>
+<td align="right">0.000</td>
+<td align="right">0.000</td>
+<td align="right">0.000</td>
+<td align="right">0.000</td>
+<td align="right">0.000</td>
+</tr>
+<tr class="odd">
+<td>log_lik</td>
+<td align="right">412.881</td>
+<td align="right">1488.932</td>
+<td align="right">1488.932</td>
+<td align="right">1751.451</td>
+<td align="right">1751.050</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code># data = mash_set_data(simdata$Bhat,simdata$Shat)
+# m.1by1 = mash_1by1(data)
+# strong = get_significant_results(m.1by1)
+# U.c    = cov_canonical(data)
+# U.pca  = cov_pca(data,5,strong)
+# U.ed   = cov_ed(data,U.pca,strong)
+# U.true = simdata$U.true
+# m.c    = mash(data, U.c)
+# m.ed   = mash(data, U.ed)
+# m.c.ed = mash(data, c(U.c,U.ed))
+# m.true = mash(data, U.true)
+# 
+# out = summary_out(simdata$B)
+# knitr::kable(out$find_genes,caption = &#39;On finding genes&#39;)
+# knitr::kable(out$find_cond,caption = &#39;On finding conditions&#39;)</code></pre>
+<pre class="r"><code>set.seed(7)
+simdata = simple_sims3(500,err_sd = 0.01)
+
+result = simu_study(simdata)</code></pre>
+<pre><code>Warning in calc_lik_matrix(data, Ulist, log = TRUE, algorithm.version = algorithm.version): Some mixture components result in non-finite likelihoods, either
+ due to numerical underflow/overflow, or due to invalid covariance matrices 206, 222, 224, 238, 240, 254, 256, 270, 272, 286, 288, 302, 304, 318, 320, 334, 336, 350, 352, 366, 368, 382, 384, 398, 400, 414, 416, 430, 432 </code></pre>
+<pre><code>Warning in mixsqp::mixsqp(A, w, pi_init, control = control): One or more
+columns of &quot;L&quot; are all zeros; solution entries associated with these columns are
+trivially zero</code></pre>
+<pre class="r"><code>out = summary_out(simdata$B,result)
+knitr::kable(out$find_genes,caption = &#39;On finding genes&#39;,digits = 3)</code></pre>
+<table>
+<caption>On finding genes</caption>
+<thead>
+<tr class="header">
+<th></th>
+<th align="right">m.c</th>
+<th align="right">m.ed</th>
+<th align="right">m.c.ed</th>
+<th align="right">m.c.ed.sparse</th>
+<th align="right">m.true</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>fdp</td>
+<td align="right">0.001</td>
+<td align="right">0.001</td>
+<td align="right">0.001</td>
+<td align="right">0.001</td>
+<td align="right">0.001</td>
+</tr>
+<tr class="even">
+<td>auc</td>
+<td align="right">0.993</td>
+<td align="right">0.995</td>
+<td align="right">0.994</td>
+<td align="right">0.995</td>
+<td align="right">0.995</td>
+</tr>
+<tr class="odd">
+<td>power</td>
+<td align="right">0.970</td>
+<td align="right">0.974</td>
+<td align="right">0.975</td>
+<td align="right">0.975</td>
+<td align="right">0.974</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>knitr::kable(out$find_cond,caption = &#39;On finding conditions&#39;,digits = 3)</code></pre>
+<table>
+<caption>On finding conditions</caption>
+<thead>
+<tr class="header">
+<th></th>
+<th align="right">m.c</th>
+<th align="right">m.ed</th>
+<th align="right">m.c.ed</th>
+<th align="right">m.c.ed.sparse</th>
+<th align="right">m.true</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>fdp</td>
+<td align="right">0.095</td>
+<td align="right">0.376</td>
+<td align="right">0.375</td>
+<td align="right">0.000</td>
+<td align="right">0.001</td>
+</tr>
+<tr class="even">
+<td>auc</td>
+<td align="right">0.984</td>
+<td align="right">0.844</td>
+<td align="right">0.854</td>
+<td align="right">0.997</td>
+<td align="right">0.997</td>
+</tr>
+<tr class="odd">
+<td>power</td>
+<td align="right">0.970</td>
+<td align="right">0.974</td>
+<td align="right">0.975</td>
+<td align="right">0.975</td>
+<td align="right">0.974</td>
+</tr>
+<tr class="even">
+<td>mse</td>
+<td align="right">0.000</td>
+<td align="right">0.000</td>
+<td align="right">0.000</td>
+<td align="right">0.000</td>
+<td align="right">0.000</td>
+</tr>
+<tr class="odd">
+<td>log_lik</td>
+<td align="right">3986.464</td>
+<td align="right">17206.768</td>
+<td align="right">17207.819</td>
+<td align="right">17232.125</td>
+<td align="right">17226.022</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>result$m.true$fitted_g$pi[which(result$m.true$fitted_g$pi&gt;0.01)]</code></pre>
+<pre><code>      null       U3.8      U2.10      U3.13      U2.21      U3.21      U2.22 
+0.31487062 0.01187410 0.01061931 0.01634612 0.03559408 0.06485666 0.29167242 
+     U3.22 
+0.25416669 </code></pre>
+<pre class="r"><code>result$m.c$fitted_g$pi[which(result$m.c$fitted_g$pi&gt;0.01)]</code></pre>
+<pre><code>           null  simple_het_2.9 simple_het_2.10 simple_het_2.12 simple_het_2.13 
+     0.32988659      0.01398703      0.01442779      0.01438730      0.01298250 
+simple_het_2.15 simple_het_2.17 simple_het_2.18 simple_het_2.19 simple_het_2.20 
+     0.04724261      0.03322214      0.07403523      0.02770715      0.13194026 
+simple_het_2.21 simple_het_2.22 simple_het_2.23 
+     0.11465099      0.14114216      0.04364049 </code></pre>
+<pre class="r"><code>result$m.c.ed$fitted_g$pi[which(result$m.c.ed$fitted_g$pi&gt;0.01)]</code></pre>
+<pre><code>       null  ED_tPCA.13 ED_PCA_1.21 ED_PCA_2.21 ED_PCA_1.22 ED_PCA_2.22 
+ 0.31447962  0.01656315  0.06764087  0.03504838  0.12660988  0.29227461 
+ ED_tPCA.22 
+ 0.12445209 </code></pre>
 <pre class="r"><code>library(MASS)
 library(mashr)
 
@@ -592,31 +2596,36 @@ sum(get_significant_results(m)%in%non_null_idx)/length(get_significant_results(m
 </p>
 <div id="workflowr-sessioninfo" class="collapse">
 <pre class="r"><code>sessionInfo()</code></pre>
-<pre><code>R version 3.5.1 (2018-07-02)
-Platform: x86_64-pc-linux-gnu (64-bit)
-Running under: Scientific Linux 7.4 (Nitrogen)
+<pre><code>R version 4.0.1 (2020-06-06)
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+Running under: Windows 10 x64 (build 18362)
 
 Matrix products: default
-BLAS/LAPACK: /software/openblas-0.2.19-el7-x86_64/lib/libopenblas_haswellp-r0.2.19.so
 
 locale:
- [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
- [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    
- [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   
- [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 
- [9] LC_ADDRESS=C               LC_TELEPHONE=C            
-[11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
+[1] LC_COLLATE=English_United States.1252 
+[2] LC_CTYPE=English_United States.1252   
+[3] LC_MONETARY=English_United States.1252
+[4] LC_NUMERIC=C                          
+[5] LC_TIME=English_United States.1252    
 
 attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
+other attached packages:
+[1] mashr_0.2.38    ashr_2.2-50     workflowr_1.6.2
+
 loaded via a namespace (and not attached):
- [1] workflowr_1.6.0 Rcpp_1.0.4.6    digest_0.6.18   later_0.7.5    
- [5] rprojroot_1.3-2 R6_2.3.0        backports_1.1.2 git2r_0.26.1   
- [9] magrittr_1.5    evaluate_0.12   stringi_1.2.4   fs_1.3.1       
-[13] promises_1.0.1  whisker_0.3-2   rmarkdown_1.10  tools_3.5.1    
-[17] stringr_1.3.1   glue_1.3.0      httpuv_1.4.5    yaml_2.2.0     
-[21] compiler_3.5.1  htmltools_0.3.6 knitr_1.20     </code></pre>
+ [1] Rcpp_1.0.4.6     compiler_4.0.1   later_1.1.0.1    git2r_0.27.1    
+ [5] plyr_1.8.6       highr_0.8        tools_4.0.1      digest_0.6.25   
+ [9] evaluate_0.14    lattice_0.20-41  rlang_0.4.6      Matrix_1.2-18   
+[13] yaml_2.2.1       mvtnorm_1.1-0    xfun_0.14        invgamma_1.1    
+[17] stringr_1.4.0    knitr_1.28       pROC_1.16.2      fs_1.4.1        
+[21] rprojroot_1.3-2  grid_4.0.1       glue_1.4.1       R6_2.4.1        
+[25] rmarkdown_2.3    mixsqp_0.3-43    irlba_2.3.3      rmeta_3.0       
+[29] magrittr_1.5     whisker_0.4      backports_1.1.7  promises_1.1.0  
+[33] htmltools_0.5.0  abind_1.4-5      assertthat_0.2.1 httpuv_1.5.4    
+[37] stringi_1.4.6    truncnorm_1.0-8  SQUAREM_2020.3  </code></pre>
 </div>
 </div>
 
@@ -650,6 +2659,49 @@ $(document).ready(function () {
 });
 
 
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
 </script>
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
