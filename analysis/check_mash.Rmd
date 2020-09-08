@@ -7,7 +7,415 @@ editor_options:
   chunk_output_type: console
 ---
 
+
+## summary
+
+1. If the true B were generated from a subset of canonical covariance matrix, then using canonical covs, canonical covs+data driven ones, and true ones give very similar results, and both lfsr and lfdr could control FDR. See the section Canonical covariance matrix, where I included four canonical ones: NULL, condition 1, identity, equal effects.
+
+2. If the true B were generated from a subset of canonical covariance matrix, and non-canonical matrices, then 1. lfdr cannot control fdr, when using only canonical matrices or using both canonical and data driven ones. 2. lfsr could control fdr, when using only canonical matrices. See section Canonical covariance matrix + additional ones, where I included NULL, identity, condition 1 and 2, condition 3 to 5. 
+
+**The method is good at identifying significant genes while have trouble identifying conditions**.   
+
+My reasoning of this phenomena: 
+
+A. Why everything is good on identifying genes(samples)?
+
+The posterior distribution is a mixture of normal distributions, for each sample mean. When identifying genes, we are working with a 2-class hypothesis: null vs non-null. It's a much easier problem than finding conditions, and as long as the posterior probability concentrates on the NULL mixture component($N(0,0)$) for those true nulls, the method should be able to identify significant genes. The posterior probability indeed concentrates on the NULL mixture component($N(0,0)$) for those true nulls since we are using maximum likelihood. 
+
+When we look at each condition, things are different. Because every element of one sample mean shares the same mixture of normal distributions, while actually they differ in being null and non-null. 
+
+B. why everything is good when data are generated with canonical covariances. 
+
+When data are generated from canonical variances, the maximum marginal likelihood estimate could identify those true canonical covariance matrices, and put little weights on those covraiances that are not involved in data generating. 
+
+C. When data are generated with canonical covariances and non-canonical ones, why lfdr results in inflated fdp while lfsr not; 
+
+lfdr needs the diagonal of posterior covariance matrix to be exactly 0 to include that weights into calculation. However, with only canonical covariances, posteriors concentrate one dense ones(simple hets ones); with data drivens, posterior weights concentrate on those close to true ones but data-drivens are not sparse(being really 0!). This would not happen with lfsr becuase it's calculation does not require the posterior covs being exactly 0.
+
+
+D. Why lfsr results in inflated fdp with data driven covs while not with only canonical ones. 
+
+The calculation of lfsr needs zeroProbability.
+
+[void: From the first glance, the maximum marginal likelihood estimates could pick out the covariances that are close to true ones(data-generating ones), however, the problem is on posterior weights: posterior weights concentrates on correct covariances but the scale(grid) is messed up. The grids only alter the scale of a covariance matrix, instead of the scale(more accurately, the relative ratio of) of elements(especially diagonal ones) in the covariance matrix, and what we really need is actually the latter case. For example, the diagonal of true covariance matrix is $(1,1,0,0)$, while the estimated one is $(0.98,0.99,0.1,0.07)$, which is seemingly very close to the true one.]     
+
+
 ## Introduction
+
+Check mashr with data-driven covariance matrix on Gaussian data and see if the false positives are inflated.
+
+## Canonical covariance matrix
+
+To begin with, we use the built-in function in mashr `simple_simus`, a function generates data from equal numbers of four different types of effects: null(variance is 0), equal among conditions(covariance matrix entries are all 1's), present only in first condition(the first entry of covariance is 1, all others are 0), independent across conditions(identity covariance matrix).  This is an example that canonical covariance matrices include the true ones.
+
+Two tasks: identify significant effect; identify significant conditions.
+
+```{r}
+library(mashr)
+
+simple_sims = function (nsamp = 100, ncond = 5, err_sd = 0.01){
+    B.id = matrix(rnorm(nsamp * ncond), nrow = nsamp, ncol = ncond)
+    b = rnorm(nsamp)
+    B.all = matrix(rep(b, ncond), nrow = nsamp, ncol = ncond)
+    B.zero = matrix(0, nrow = nsamp, ncol = ncond)
+    B.one = B.zero
+    b2 = rnorm(nsamp)
+    B.one[, 1] = b2
+    B = rbind(B.zero, B.id, B.one, B.all)
+    Shat = matrix(err_sd, nrow = nrow(B), ncol = ncol(B))
+    E = matrix(rnorm(length(Shat), mean = 0, sd = Shat), nrow = nrow(B), 
+        ncol = ncol(B))
+    Bhat = B + E
+    row_ids = paste0("effect_", 1:nrow(B))
+    col_ids = paste0("condition_", 1:ncol(B))
+    rownames(B) = row_ids
+    colnames(B) = col_ids
+    rownames(Bhat) = row_ids
+    colnames(Bhat) = col_ids
+    rownames(Shat) = row_ids
+    colnames(Shat) = col_ids
+    U.true = list(U1 = matrix(0,nrow=ncond,ncol=ncond),
+                  U2=matrix(1,nrow=ncond,ncol=ncond),
+                  U3=matrix(c(1,rep(0,ncond^2-1)),nrow=ncond,ncol=ncond),
+                  U4 = diag(ncond))
+    return(list(B = B, Bhat = Bhat, Shat = Shat,U.true=U.true))
+}
+
+simple_sims2 = function (nsamp = 100, err_sd = 0.01){
+    ncond = 5
+    b1 = rnorm(nsamp)
+    B.1 = matrix(cbind(b1, b1, 0, 0, 0), nrow = nsamp, ncol = ncond)
+    b2 = rnorm(nsamp)
+    B.2 = matrix(cbind(0, 0, b2, b2, b2), nrow = nsamp, ncol = ncond)
+    
+    B.id = matrix(rnorm(nsamp * ncond), nrow = nsamp, ncol = ncond)
+    B.zero = matrix(0, nrow = nsamp, ncol = ncond)
+    
+    B = rbind(B.zero,B.id,B.1, B.2)
+    Shat = matrix(err_sd, nrow = nrow(B), ncol = ncol(B))
+    E = matrix(rnorm(length(Shat), mean = 0, sd = Shat), nrow = nrow(B), 
+        ncol = ncol(B))
+    Bhat = B + E
+    row_ids = paste0("effect_", 1:nrow(B))
+    col_ids = paste0("condition_", 1:ncol(B))
+    rownames(B) = row_ids
+    colnames(B) = col_ids
+    rownames(Bhat) = row_ids
+    colnames(Bhat) = col_ids
+    rownames(Shat) = row_ids
+    colnames(Shat) = col_ids
+    U = matrix(0,nrow=ncond,ncol=ncond)
+    U2 = U
+    U2[1:2,1:2] = 1
+    U3 = U
+    U3[3:5,3:5] = 1
+    U.true = list(U1 = matrix(0,nrow=ncond,ncol=ncond),
+                  U2=U2,
+                  U3=U3,
+                  U4 = diag(ncond))
+    return(list(B = B, Bhat = Bhat, Shat = Shat,U.true=U.true))
+}
+
+
+fdp = function(dis.idx, true.idx){
+  if(length(dis.idx)==0){
+    0
+  }else{
+    1-mean(dis.idx%in%true.idx)
+  }
+}
+
+
+auc = function(pred,true.label){
+  auc=pROC::roc(response = true.label, predictor = pred,direction = '<',levels = c(0,1))
+  auc$auc
+}
+
+powr = function(dis.idx, true.idx){
+  if(length(dis.idx)==0){
+    0
+  }else{
+    sum(dis.idx%in%true.idx)/length(true.idx)
+  }
+}
+
+mse = function(x,y){
+  mean((x-y)^2)
+}
+
+summary_out = function(B,out = list(m.c=m.c,m.ed=m.ed,m.c.ed=m.c.ed,m.c.ed.sparse=m.c.ed.sparse,m.true=m.true),
+                       alpha=0.05,criteria = 'lfsr'){
+  
+  # identify genes
+  non_null_idx = which(rowSums(B)!=0)
+  non_null_idx_c = which(B!=0)
+  
+  which_null = 1*(rowSums(B)==0)
+  which_null_c = 1*(B==0)
+  
+  fdps = c()
+  aucs = c()
+  powers = c()
+  
+  fdps_c = c()
+  aucs_c = c()
+  powers_c = c()
+  
+  mses = c()
+  log_liks = c()
+  
+  for(i in 1:length(out)){
+    
+    if(criteria=='lfsr'){
+    fdps[i] = fdp(get_significant_results(out[[i]],thresh = alpha),non_null_idx)
+    fdps_c[i] = fdp(which(out[[i]]$result$lfsr<alpha),non_null_idx_c)
+    
+    aucs[i] = auc(c(apply(out[[i]]$result$lfsr,1,min)),which_null)
+    aucs_c[i] = auc(c(out[[i]]$result$lfsr),c(which_null_c))
+    
+    powers[i] = powr(get_significant_results(out[[i]],thresh = alpha),non_null_idx)
+    powers_c[i] = powr(which(out[[i]]$result$lfsr<alpha),non_null_idx_c)
+    
+    }
+    
+    
+    if(criteria=='lfdr'){
+    fdps[i] = fdp(get_significant_results(out[[i]],thresh = alpha),non_null_idx)
+    fdps_c[i] = fdp(which(out[[i]]$result$lfdr<alpha),non_null_idx_c)
+    
+    aucs[i] = auc(c(apply(out[[i]]$result$lfdr,1,min)),which_null)
+    aucs_c[i] = auc(c(out[[i]]$result$lfdr),c(which_null_c))
+    
+    powers[i] = powr(get_significant_results(out[[i]],thresh = alpha),non_null_idx)
+    powers_c[i] = powr(which(out[[i]]$result$lfdr<alpha),non_null_idx_c)
+    
+    }
+    
+    
+    mses[i] = mse(B,out[[i]]$result$PosteriorMean)
+    log_liks[i] = get_loglik(out[[i]])
+  }
+  
+  find_genes = rbind(fdps,aucs,powers)
+  rownames(find_genes) = c('fdp','auc','power')
+  colnames(find_genes) = names(out)
+  
+  find_cond = rbind(fdps_c,aucs_c,powers_c,mses,log_liks)
+  rownames(find_cond) = c('fdp','auc','power','mse','log_lik')
+  colnames(find_cond) = names(out)
+  
+  return(list(find_genes=find_genes,find_cond=find_cond,mses=mses))
+  
+}
+
+simu_study = function(simdata,thresh = 0.1){
+  data = mash_set_data(simdata$Bhat,simdata$Shat)
+  m.1by1 = mash_1by1(data)
+  strong = get_significant_results(m.1by1)
+  U.c    = cov_canonical(data)
+  U.pca  = cov_pca(data,5,strong)
+  U.ed   = cov_ed(data,U.pca,strong)
+  U.ed.sparse = lapply(U.ed,
+                       function(z){z = z/max(diag(z))
+                       idx = which(abs(z)<thresh)
+                       if(length(idx)!=0){
+                         z[idx] = 0
+                       }
+                       z})
+  U.true = simdata$U.true
+  m.c    = mash(data, U.c,verbose = F)
+  m.ed   = mash(data, U.ed,verbose = F)
+  m.c.ed = mash(data, c(U.c,U.ed),verbose = F)
+  m.c.ed.sparse = mash(data, c(U.c,U.ed.sparse),verbose = F)
+  m.true = mash(data, U.true,verbose = F)
+  out = list(m.c=m.c,m.ed=m.ed,m.c.ed=m.c.ed,m.c.ed.sparse=m.c.ed.sparse,m.true=m.true)
+  out
+}
+```
+
+
+```{r}
+set.seed(7)
+simdata = simple_sims(50,err_sd = 0.01)
+result = simu_study(simdata)
+out = summary_out(simdata$B,result)
+knitr::kable(out$find_genes,caption = 'On finding genes',digits = 3)
+knitr::kable(out$find_cond,caption = 'On finding conditions',digits = 5)
+```
+
+
+
+Let's increase the error standard deviation to 0.5:
+
+```{r}
+simdata = simple_sims(50,err_sd = 0.5)
+result = simu_study(simdata)
+out = summary_out(simdata$B,result)
+knitr::kable(out$find_genes,caption = 'On finding genes',digits = 3)
+knitr::kable(out$find_cond,caption = 'On finding conditions',digits = 3)
+```
+
+
+## Canonical covariance matrix + additional ones
+
+Now we generate data from `simple_simu2`, in which four types of effects are : present (and identical) in first two conditions, present (and identical) in last three conditions, zero and independent covs.
+
+In this setting, the first two covariance matrices are not included in canonical covs.  
+
+
+```{r}
+simdata = simple_sims2(50,err_sd = 0.01)
+result = simu_study(simdata)
+out = summary_out(simdata$B,result)
+knitr::kable(out$find_genes,caption = 'On finding genes',digits = 3)
+knitr::kable(out$find_cond,caption = 'On finding conditions',digits = 3)
+```
+
+
+Increase #sample for each type from 50 to 500
+
+```{r}
+set.seed(123)
+simdata = simple_sims2(500,err_sd = 0.01)
+result = simu_study(simdata)
+out = summary_out(simdata$B,result)
+knitr::kable(out$find_genes,caption = 'On finding genes',digits = 3)
+knitr::kable(out$find_cond,caption = 'On finding conditions',digits = 3)
+```
+
+
+
+```{r}
+idx = 1001:1500
+
+sum(result$m.c$result$lfdr[idx,]<0.05)
+sum(result$m.c$result$lfsr[idx,]<0.05)
+
+sum(result$m.c.ed$result$lfdr[idx,]<0.05)
+sum(result$m.c.ed$result$lfsr[idx,]<0.05)
+
+which((result$m.c$result$lfsr[idx,]<0.05) & (simdata$B[idx,]==0),arr.ind = TRUE)
+which((result$m.c.ed$result$lfsr[idx,]<0.05) & (simdata$B[idx,]==0),arr.ind = TRUE)
+
+
+result$m.c$result$lfsr[1005,]
+result$m.c.ed$result$lfsr[1005,]
+
+
+result$m.c$posterior_weights[1005,]
+result$m.c$fitted_g$Ulist$simple_het_1
+result$m.c$fitted_g$Ulist$simple_het_3
+
+round(result$m.c.ed$posterior_weights[1005,],2)
+round(result$m.c.ed$fitted_g$Ulist$ED_PCA_2,2)
+
+result$m.c.ed$fitted_g$pi[which(result$m.c.ed$fitted_g$pi>0.1)]
+result$m.c.ed$fitted_g$grid[10]
+
+result$m.c$result$PosteriorMean[1005,]
+result$m.c.ed$result$PosteriorMean[1005,]
+result$m.c.ed.sparse$result$PosteriorMean[1005,]
+
+result$m.c$result$PosteriorSD[1005,]
+result$m.c.ed$result$PosteriorSD[1005,]
+result$m.c.ed.sparse$result$PosteriorSD[1005,]
+
+```
+
+
+## Only null and non-canonicalcovriance matrix
+
+
+```{r}
+simple_sims3 = function (nsamp = 100, err_sd = 0.01){
+    ncond = 5
+    b1 = rnorm(nsamp)
+    B.1 = matrix(cbind(b1, b1, 0, 0, 0), nrow = nsamp, ncol = ncond)
+    b2 = rnorm(nsamp)
+    B.2 = matrix(cbind(0, 0, b2, b2, b2), nrow = nsamp, ncol = ncond)
+
+    B.zero = matrix(0, nrow = nsamp, ncol = ncond)
+    B = rbind(B.1, B.2,B.zero)
+    Shat = matrix(err_sd, nrow = nrow(B), ncol = ncol(B))
+    E = matrix(rnorm(length(Shat), mean = 0, sd = Shat), nrow = nrow(B), 
+        ncol = ncol(B))
+    Bhat = B + E
+    row_ids = paste0("effect_", 1:nrow(B))
+    col_ids = paste0("condition_", 1:ncol(B))
+    rownames(B) = row_ids
+    colnames(B) = col_ids
+    rownames(Bhat) = row_ids
+    colnames(Bhat) = col_ids
+    rownames(Shat) = row_ids
+    colnames(Shat) = col_ids
+    U = matrix(0,nrow=ncond,ncol=ncond)
+    U2 = U
+    U2[1:2,1:2] = 1
+    U3 = U
+    U3[3:5,3:5] = 1
+    U.true = list(U1 = matrix(0,nrow=ncond,ncol=ncond),
+                  U2=U2,
+                  U3=U3
+                  )
+    return(list(B = B, Bhat = Bhat, Shat = Shat,U.true=U.true))
+}
+```
+
+
+```{r}
+set.seed(7)
+simdata = simple_sims3(50,err_sd = 0.01)
+
+result = simu_study(simdata)
+out = summary_out(simdata$B,result)
+knitr::kable(out$find_genes,caption = 'On finding genes',digits = 3)
+knitr::kable(out$find_cond,caption = 'On finding conditions',digits = 3)
+
+# data = mash_set_data(simdata$Bhat,simdata$Shat)
+# m.1by1 = mash_1by1(data)
+# strong = get_significant_results(m.1by1)
+# U.c    = cov_canonical(data)
+# U.pca  = cov_pca(data,5,strong)
+# U.ed   = cov_ed(data,U.pca,strong)
+# U.true = simdata$U.true
+# m.c    = mash(data, U.c)
+# m.ed   = mash(data, U.ed)
+# m.c.ed = mash(data, c(U.c,U.ed))
+# m.true = mash(data, U.true)
+# 
+# out = summary_out(simdata$B)
+# knitr::kable(out$find_genes,caption = 'On finding genes')
+# knitr::kable(out$find_cond,caption = 'On finding conditions')
+```
+
+```{r}
+set.seed(7)
+simdata = simple_sims3(500,err_sd = 0.01)
+
+result = simu_study(simdata)
+out = summary_out(simdata$B,result)
+knitr::kable(out$find_genes,caption = 'On finding genes',digits = 3)
+knitr::kable(out$find_cond,caption = 'On finding conditions',digits = 3)
+```
+
+
+
+
+```{r}
+result$m.true$fitted_g$pi[which(result$m.true$fitted_g$pi>0.01)]
+result$m.c$fitted_g$pi[which(result$m.c$fitted_g$pi>0.01)]
+result$m.c.ed$fitted_g$pi[which(result$m.c.ed$fitted_g$pi>0.01)]
+```
+
+
+
+
+
+
+
+
+
+
 
 ```{r,eval=FALSE}
 library(MASS)
