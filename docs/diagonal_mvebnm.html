@@ -1,0 +1,1256 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="DongyueXie" />
+
+<meta name="date" content="2020-09-10" />
+
+<title>diagonal mv ebnm</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/master/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">dear</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="license.html">License</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/DongyueXie/dear">
+    <span class="fa fa-github"></span>
+     
+    Source code
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+<div class="btn-group pull-right">
+<button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">diagonal mv ebnm</h1>
+<h4 class="author">DongyueXie</h4>
+<h4 class="date">2020-09-10</h4>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> </a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2020-09-13
+</p>
+<p>
+<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
+</p>
+<p>
+<strong>Knit directory:</strong> <code>dear/</code> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed."> </span>
+</p>
+<p>
+This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis was created with <a
+  href="https://github.com/jdblischak/workflowr">workflowr</a> (version 1.6.2). The <em>Checks</em> tab describes the reproducibility checks that were applied when the results were created. The <em>Past versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date </a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguptodate" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great! Since the R Markdown file has been committed to the Git repository, you know the exact version of the code that produced these results.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the global environment can affect the analysis in your R Markdown file in unknown ways. For reproduciblity it’s best to always run the code in an empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20200403code"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Seed:</strong> <code>set.seed(20200403)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20200403code" class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20200403)</code> was run prior to running the code in the R Markdown file. Setting a seed ensures that any results that rely on randomness, e.g. subsampling or permutations, are reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Session information:</strong> recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be confident that you successfully produced the results during this run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomDongyueXiedeartree23a17f0ec6cba2cd692e449a74f890b7f6fb2e31targetblank23a17f0a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/DongyueXie/dear/tree/23a17f0ec6cba2cd692e449a74f890b7f6fb2e31" target="_blank">23a17f0</a> </a>
+</p>
+</div>
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomDongyueXiedeartree23a17f0ec6cba2cd692e449a74f890b7f6fb2e31targetblank23a17f0a" class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version <a href="https://github.com/DongyueXie/dear/tree/23a17f0ec6cba2cd692e449a74f890b7f6fb2e31" target="_blank">23a17f0</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    .Rhistory
+    Ignored:    .Rproj.user/
+
+Untracked files:
+    Untracked:  analysis/mash_diagonal.Rmd
+    Untracked:  analysis/mash_mean.Rmd
+    Untracked:  data/bulk_cytokin_SI.RData
+    Untracked:  output/PLNfit_bulk_cytokin_SI.RData
+    Untracked:  output/PLNfit_bulk_cytokin_SI_1_30.RData
+    Untracked:  output/pln_simu_denseSigma_plnFit.RData
+    Untracked:  output/pln_simu_diagSigma01.RData
+    Untracked:  output/pln_simu_diagSigma_plnFit.RData
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not included in this status report because it is ok for generated content to have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+
+<p>
+These are the previous versions of the repository in which changes were made to the R Markdown (<code>analysis/diagonal_mvebnm.Rmd</code>) and HTML (<code>docs/diagonal_mvebnm.html</code>) files. If you’ve configured a remote Git repository (see <code>?wflow_git_remote</code>), click on the hyperlinks in the table below to view the files as they were in that past version.
+</p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/DongyueXie/dear/blob/23a17f0ec6cba2cd692e449a74f890b7f6fb2e31/analysis/diagonal_mvebnm.Rmd" target="_blank">23a17f0</a>
+</td>
+<td>
+DongyueXie
+</td>
+<td>
+2020-09-13
+</td>
+<td>
+wflow_publish(“analysis/diagonal_mvebnm.Rmd”)
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<div id="introduction" class="section level2">
+<h2>Introduction</h2>
+<p>In my previous <a href="check_mash.html">example</a>, I found that using data driven covariance matrices from ED in prior results in high fdp, mainly due to small lfsr/lfdr. One reason is that there’s uncertainty in estimated covaraince matrices but we did not take it into consideration. Matthew suggested adding a diagonal term into model, see if it could deal with the issue.</p>
+<p>The model is <span class="math display">\[x_i\sim \sum_k\pi_k N(0,U_k+S_i),\]</span> where <span class="math inline">\(S_i\)</span> is known, and the simplest way to add diagonal term is to add the same one to every mixture component, <span class="math display">\[x_i\sim \sum_k\pi_kN(0,U_k+S_i+\sigma^2 I).\]</span></p>
+<p>The <span class="math inline">\(\sigma^2\)</span> can be estimated by MLE but we suspect it will be estimated as 0 often. Before we derive the model, we first do a quick check suggested by Matthew. We first obtain estimates of <span class="math inline">\(\pi_k,U_k\)</span> from ED(without diagonal term) and fix them, then add <span class="math inline">\(\sigma^2I\)</span>, calculate log likelihood, and plot log-lik vs <span class="math inline">\(\sigma^2\)</span>. The log likelihood is <span class="math display">\[\log L(X) = \sum_i\log(\sum_k\pi_k N(x_i;0,U_k+S_i+\sigma^2 I)).\]</span></p>
+<p>(should diagonal term be added to only data-driven ones or also canonical ones?)</p>
+<pre class="r"><code>library(mashr)</code></pre>
+<pre><code>Warning: package &#39;mashr&#39; was built under R version 4.0.2</code></pre>
+<pre><code>Loading required package: ashr</code></pre>
+<pre class="r"><code>library(mvtnorm)
+
+simple_sims2 = function (nsamp = 100, err_sd = 0.01){
+    ncond = 5
+    b1 = rnorm(nsamp)
+    B.1 = matrix(cbind(b1, b1, 0, 0, 0), nrow = nsamp, ncol = ncond)
+    b2 = rnorm(nsamp)
+    B.2 = matrix(cbind(0, 0, b2, b2, b2), nrow = nsamp, ncol = ncond)
+    
+    B.id = matrix(rnorm(nsamp * ncond), nrow = nsamp, ncol = ncond)
+    B.zero = matrix(0, nrow = nsamp, ncol = ncond)
+    
+    B = rbind(B.zero,B.id,B.1, B.2)
+    Shat = matrix(err_sd, nrow = nrow(B), ncol = ncol(B))
+    E = matrix(rnorm(length(Shat), mean = 0, sd = Shat), nrow = nrow(B), 
+        ncol = ncol(B))
+    Bhat = B + E
+    row_ids = paste0(&quot;effect_&quot;, 1:nrow(B))
+    col_ids = paste0(&quot;condition_&quot;, 1:ncol(B))
+    rownames(B) = row_ids
+    colnames(B) = col_ids
+    rownames(Bhat) = row_ids
+    colnames(Bhat) = col_ids
+    rownames(Shat) = row_ids
+    colnames(Shat) = col_ids
+    U = matrix(0,nrow=ncond,ncol=ncond)
+    U2 = U
+    U2[1:2,1:2] = 1
+    U3 = U
+    U3[3:5,3:5] = 1
+    U.true = list(U1 = matrix(0,nrow=ncond,ncol=ncond),
+                  U2=U2,
+                  U3=U3,
+                  U4 = diag(ncond))
+    return(list(B = B, Bhat = Bhat, Shat = Shat,U.true=U.true))
+}
+
+
+fdp = function(dis.idx, true.idx){
+  if(length(dis.idx)==0){
+    0
+  }else{
+    1-mean(dis.idx%in%true.idx)
+  }
+}
+
+
+auc = function(pred,true.label){
+  auc=pROC::roc(response = true.label, predictor = pred,direction = &#39;&lt;&#39;,levels = c(0,1))
+  auc$auc
+}
+
+powr = function(dis.idx, true.idx){
+  if(length(dis.idx)==0){
+    0
+  }else{
+    sum(dis.idx%in%true.idx)/length(true.idx)
+  }
+}
+
+mse = function(x,y){
+  mean((x-y)^2)
+}
+
+simu_study = function(simdata,thresh = 0.1){
+  data = mash_set_data(simdata$Bhat,simdata$Shat)
+  m.1by1 = mash_1by1(data)
+  strong = get_significant_results(m.1by1)
+  U.c    = cov_canonical(data)
+  U.pca  = cov_pca(data,5,strong)
+  U.ed   = cov_ed(data,U.pca,strong)
+  U.ed.sparse = lapply(U.ed,
+                       function(z){z = z/max(diag(z))
+                       idx = which(abs(z)&lt;thresh)
+                       if(length(idx)!=0){
+                         z[idx] = 0
+                       }
+                       z})
+  U.true = simdata$U.true
+  m.c    = mash(data, U.c,verbose = F)
+  m.ed   = mash(data, U.ed,verbose = F)
+  m.c.ed = mash(data, c(U.c,U.ed),verbose = F)
+  m.c.ed.sparse = mash(data, c(U.c,U.ed.sparse),verbose = F)
+  m.true = mash(data, U.true,verbose = F)
+  out = list(m.c=m.c,m.ed=m.ed,m.c.ed=m.c.ed,m.c.ed.sparse=m.c.ed.sparse,m.true=m.true)
+  out
+}
+
+n_conditions = function(data){ncol(data$Bhat)}
+
+n_effects = function(data){nrow(data$Bhat)}
+
+bovy_wrapper = function(data, Ulist_init, subset=NULL, ...){
+  if(is.null(subset)){subset = 1:n_effects(data)}
+  K = length(Ulist_init)
+  R = n_conditions(data)
+  pi_init = rep(1/K, K) # initial mix proportions
+  D = ncol(data$V)
+  if(all(data$V==diag(D))){
+    ed.res = extreme_deconvolution(data$Bhat[subset,],
+                                   data$Shat[subset,]^2,
+                                   xamp = pi_init,
+                                   xmean = matrix(0,nrow=K,ncol=R),
+                                   xcovar = Ulist_init,
+                                   fixmean = TRUE,
+                                   ...)
+  }else{
+    if(!is.null(data$L)){
+      ycovar = lapply(subset, function(i) data$L %*% (data$Shat_orig[i,] * t(data$V * data$Shat_orig[i,])) %*% t(data$L) )
+    }else{
+      ycovar = lapply(subset, function(i) data$Shat[i,] * t(data$V * data$Shat[i,]) )
+    }
+    ed.res = extreme_deconvolution(data$Bhat[subset,],
+                                   ycovar,
+                                   xamp = pi_init,
+                                   xmean = matrix(0,nrow=K,ncol=R),
+                                   xcovar = Ulist_init,
+                                   fixmean = TRUE,
+                                   ...)
+  }
+  return(list(pi = ed.res$xamp, Ulist = ed.res$xcovar, av_loglik = ed.res$avgloglikedata))
+}
+
+calc_loglikx = function(data,subset,pihat,Ulist,sigma){
+  
+  n = length(subset)
+  loglik = 0
+  for(i in subset){
+    loglik = loglik + mixture_loglikx(data$Bhat[i,],data$Shat[i,],pihat,Ulist,sigma)
+  }
+  loglik
+}
+
+mixture_loglikx = function(x,shat,pihat,Ulist,sigma){
+  
+  K = length(pihat)
+  p = length(x)
+  lik = 0
+  for(k in 1:K){
+    #browser()
+    lik = lik + pihat[k]*dmvnorm(x,sigma = Ulist[[k]]+diag(shat^2)+sigma^2*diag(p))
+  }
+  log(lik)
+}</code></pre>
+</div>
+<div id="two-mixture-components-directly-apply-ed" class="section level2">
+<h2>Two mixture components, directly apply ED</h2>
+<p>Now we generate data from a mixture of 2 MVN with the following covariance matrices: present (and identical) in first two conditions, present (and identical) in last three conditions, each with 500 samples(so <span class="math inline">\(\pi_1=\pi_2=0.5\)</span>), and <span class="math inline">\(s_i=0.01\)</span>.</p>
+<pre class="r"><code>cov1 = c(1,1,0,0,0)%*%t(c(1,1,0,0,0))
+cov2 = c(0,0,1,1,1)%*%t(c(0,0,1,1,1))
+print(cov1)</code></pre>
+<pre><code>     [,1] [,2] [,3] [,4] [,5]
+[1,]    1    1    0    0    0
+[2,]    1    1    0    0    0
+[3,]    0    0    0    0    0
+[4,]    0    0    0    0    0
+[5,]    0    0    0    0    0</code></pre>
+<pre class="r"><code>print(cov2)</code></pre>
+<pre><code>     [,1] [,2] [,3] [,4] [,5]
+[1,]    0    0    0    0    0
+[2,]    0    0    0    0    0
+[3,]    0    0    1    1    1
+[4,]    0    0    1    1    1
+[5,]    0    0    1    1    1</code></pre>
+<pre class="r"><code>simple_sims0 = function(nsamp = 100, err_sd = 0.01){
+    ncond = 5
+    b1 = rnorm(nsamp)
+    B.1 = matrix(cbind(b1, b1, 0, 0, 0), nrow = nsamp, ncol = ncond)
+    b2 = rnorm(nsamp)
+    B.2 = matrix(cbind(0, 0, b2, b2, b2), nrow = nsamp, ncol = ncond)
+    
+    #B.id = matrix(rnorm(nsamp * ncond), nrow = nsamp, ncol = ncond)
+    #B.zero = matrix(0, nrow = nsamp, ncol = ncond)
+    
+    B = rbind(B.1, B.2)
+    Shat = matrix(err_sd, nrow = nrow(B), ncol = ncol(B))
+    E = matrix(rnorm(length(Shat), mean = 0, sd = Shat), nrow = nrow(B), ncol = ncol(B))
+    Bhat = B + E
+    row_ids = paste0(&quot;effect_&quot;, 1:nrow(B))
+    col_ids = paste0(&quot;condition_&quot;, 1:ncol(B))
+    rownames(B) = row_ids
+    colnames(B) = col_ids
+    rownames(Bhat) = row_ids
+    colnames(Bhat) = col_ids
+    rownames(Shat) = row_ids
+    colnames(Shat) = col_ids
+    U = matrix(0,nrow=ncond,ncol=ncond)
+    U2 = U
+    U2[1:2,1:2] = 1
+    U3 = U
+    U3[3:5,3:5] = 1
+    U.true = list(#U1 = matrix(0,nrow=ncond,ncol=ncond),
+                  U2=U2,
+                  U3=U3)
+                  #U4 = diag(ncond))
+    return(list(B = B, Bhat = Bhat, Shat = Shat,U.true=U.true))
+}
+
+set.seed(12345)
+simdata = simple_sims0(500,err_sd = 0.01)
+data = mash_set_data(simdata$Bhat,simdata$Shat)
+#m.1by1 = mash_1by1(data)
+#strong = get_significant_results(m.1by1)
+strong = 1:nrow(simdata$B)
+U.c    = cov_canonical(data)
+U.pca  = cov_pca(data,5,strong)
+ed.out = bovy_wrapper(data,U.pca,strong)
+
+l = 100
+sigma_seq = seq(0,0.4,length.out = l)
+llik = c()
+for(i in 1:l){
+  #print(i)
+  llik[i] = calc_loglikx(data,strong,ed.out$pi,ed.out$Ulist,sigma_seq[i])
+}
+plot(sigma_seq,llik,type=&#39;l&#39;,xlab = &#39;sigma&#39;,ylab=&#39;log likelihood&#39;)
+abline(v = sigma_seq[which.max(llik)],lty=2)
+text(x = sigma_seq[which.max(llik)]+0.022,y = min(llik), labels=paste(&#39;sigma=&#39;,round(sigma_seq[which.max(llik)],3),sep = &#39;&#39;))</code></pre>
+<p><img src="figure/diagonal_mvebnm.Rmd/unnamed-chunk-3-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>sigma_seq[which.min(abs(llik[1]/2-llik))]</code></pre>
+<pre><code>[1] 0.05656566</code></pre>
+<p>Log likelihood peaks at <span class="math inline">\(\sigma=0\)</span>. In this example, <span class="math inline">\(l(\sigma=0;X)\approx 2\times l(\sigma=0.0566;X)\)</span>.</p>
+<p>Now let’s increase <span class="math inline">\(s_i\)</span> to <span class="math inline">\(0.1\)</span>.</p>
+<pre class="r"><code>simdata = simple_sims0(500,err_sd = 0.1)
+data = mash_set_data(simdata$Bhat,simdata$Shat)
+#m.1by1 = mash_1by1(data)
+#strong = get_significant_results(m.1by1)
+strong = 1:nrow(simdata$B)
+U.c    = cov_canonical(data)
+U.pca  = cov_pca(data,5,strong)
+ed.out = bovy_wrapper(data,U.pca,strong)
+
+l = 100
+sigma_seq = seq(0,0.4,length.out = l)
+llik = c()
+for(i in 1:l){
+  #print(i)
+  llik[i] = calc_loglikx(data,strong,ed.out$pi,ed.out$Ulist,sigma_seq[i])
+}
+plot(sigma_seq,llik,type=&#39;l&#39;,xlab = &#39;sigma&#39;,ylab=&#39;log likelihood&#39;)
+abline(v = sigma_seq[which.max(llik)],lty=2)
+text(x = sigma_seq[which.max(llik)]+0.022,y = min(llik), labels=paste(&#39;sigma=&#39;,round(sigma_seq[which.max(llik)],3),sep = &#39;&#39;))</code></pre>
+<p><img src="figure/diagonal_mvebnm.Rmd/unnamed-chunk-5-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>sigma_seq[which.min(abs(llik[1]/2-llik))]</code></pre>
+<pre><code>[1] 0.1131313</code></pre>
+<p>Log likelihood peaks at <span class="math inline">\(\sigma=0\)</span>. In this example, <span class="math inline">\(l(\sigma=0;X)\approx 2\times l(\sigma=0.113;X)\)</span>.</p>
+</div>
+<div id="four-mixture-components-ash-1by1-then-ed" class="section level2">
+<h2>Four mixture components, ash-1by1, then ED</h2>
+<p>Now we generate data from a mixture of 4 MVN with the following covariance matrices: pointmass, identity, present (and identical) in first two conditions, present (and identical) in last three conditions, each with 500 samples(so <span class="math inline">\(\pi_1=\pi_2=\pi_3=\pi_4=0.25\)</span>), and <span class="math inline">\(s_i=0.01\)</span>.</p>
+<p>We first run ash 1by1 to identify samples are have strong signals(ideally total 500*3=1500 samples), then run ED on these “strong” samples.</p>
+<pre class="r"><code>set.seed(12345)
+simdata = simple_sims2(500,err_sd = 0.01)
+#result = simu_study(simdata)
+data = mash_set_data(simdata$Bhat,simdata$Shat)
+m.1by1 = mash_1by1(data)
+strong = get_significant_results(m.1by1)
+U.c    = cov_canonical(data)
+U.pca  = cov_pca(data,5,strong)
+ed.out = bovy_wrapper(data,U.pca,strong)
+
+
+
+#U.ed   = cov_ed(data,U.pca,strong)
+#out = summary_out(simdata$B,result)
+#knitr::kable(out$find_genes,caption = &#39;On finding genes&#39;,digits = 3)
+#knitr::kable(out$find_cond,caption = &#39;On finding conditions&#39;,digits = 3)
+
+l = 100
+sigma_seq = seq(0,0.4,length.out = l)
+llik = c()
+for(i in 1:l){
+  print(i)
+  llik[i] = calc_loglikx(data,strong,ed.out$pi,ed.out$Ulist,sigma_seq[i])
+}</code></pre>
+<pre><code>[1] 1
+[1] 2
+[1] 3
+[1] 4
+[1] 5
+[1] 6
+[1] 7
+[1] 8
+[1] 9
+[1] 10
+[1] 11
+[1] 12
+[1] 13
+[1] 14
+[1] 15
+[1] 16
+[1] 17
+[1] 18
+[1] 19
+[1] 20
+[1] 21
+[1] 22
+[1] 23
+[1] 24
+[1] 25
+[1] 26
+[1] 27
+[1] 28
+[1] 29
+[1] 30
+[1] 31
+[1] 32
+[1] 33
+[1] 34
+[1] 35
+[1] 36
+[1] 37
+[1] 38
+[1] 39
+[1] 40
+[1] 41
+[1] 42
+[1] 43
+[1] 44
+[1] 45
+[1] 46
+[1] 47
+[1] 48
+[1] 49
+[1] 50
+[1] 51
+[1] 52
+[1] 53
+[1] 54
+[1] 55
+[1] 56
+[1] 57
+[1] 58
+[1] 59
+[1] 60
+[1] 61
+[1] 62
+[1] 63
+[1] 64
+[1] 65
+[1] 66
+[1] 67
+[1] 68
+[1] 69
+[1] 70
+[1] 71
+[1] 72
+[1] 73
+[1] 74
+[1] 75
+[1] 76
+[1] 77
+[1] 78
+[1] 79
+[1] 80
+[1] 81
+[1] 82
+[1] 83
+[1] 84
+[1] 85
+[1] 86
+[1] 87
+[1] 88
+[1] 89
+[1] 90
+[1] 91
+[1] 92
+[1] 93
+[1] 94
+[1] 95
+[1] 96
+[1] 97
+[1] 98
+[1] 99
+[1] 100</code></pre>
+<pre class="r"><code>plot(sigma_seq,llik,type=&#39;l&#39;,xlab = &#39;sigma&#39;,ylab=&#39;log likelihood&#39;)
+abline(v = sigma_seq[which.max(llik)],lty=2)
+text(x = sigma_seq[which.max(llik)]+0.022,y = min(llik), labels=paste(&#39;sigma=&#39;,round(sigma_seq[which.max(llik)],3),sep = &#39;&#39;))</code></pre>
+<p><img src="figure/diagonal_mvebnm.Rmd/unnamed-chunk-7-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Now let’s increase <span class="math inline">\(s_i\)</span> to <span class="math inline">\(0.1\)</span>.</p>
+<pre class="r"><code>simdata = simple_sims2(500,err_sd = 0.1)
+#result = simu_study(simdata)
+data = mash_set_data(simdata$Bhat,simdata$Shat)
+m.1by1 = mash_1by1(data)
+strong = get_significant_results(m.1by1)
+U.c    = cov_canonical(data)
+U.pca  = cov_pca(data,5,strong)
+ed.out = bovy_wrapper(data,U.pca,strong)
+
+
+
+#U.ed   = cov_ed(data,U.pca,strong)
+#out = summary_out(simdata$B,result)
+#knitr::kable(out$find_genes,caption = &#39;On finding genes&#39;,digits = 3)
+#knitr::kable(out$find_cond,caption = &#39;On finding conditions&#39;,digits = 3)
+
+l = 100
+sigma_seq = seq(0,0.4,length.out = l)
+llik = c()
+for(i in 1:l){
+  print(i)
+  llik[i] = calc_loglikx(data,strong,ed.out$pi,ed.out$Ulist,sigma_seq[i])
+}</code></pre>
+<pre><code>[1] 1
+[1] 2
+[1] 3
+[1] 4
+[1] 5
+[1] 6
+[1] 7
+[1] 8
+[1] 9
+[1] 10
+[1] 11
+[1] 12
+[1] 13
+[1] 14
+[1] 15
+[1] 16
+[1] 17
+[1] 18
+[1] 19
+[1] 20
+[1] 21
+[1] 22
+[1] 23
+[1] 24
+[1] 25
+[1] 26
+[1] 27
+[1] 28
+[1] 29
+[1] 30
+[1] 31
+[1] 32
+[1] 33
+[1] 34
+[1] 35
+[1] 36
+[1] 37
+[1] 38
+[1] 39
+[1] 40
+[1] 41
+[1] 42
+[1] 43
+[1] 44
+[1] 45
+[1] 46
+[1] 47
+[1] 48
+[1] 49
+[1] 50
+[1] 51
+[1] 52
+[1] 53
+[1] 54
+[1] 55
+[1] 56
+[1] 57
+[1] 58
+[1] 59
+[1] 60
+[1] 61
+[1] 62
+[1] 63
+[1] 64
+[1] 65
+[1] 66
+[1] 67
+[1] 68
+[1] 69
+[1] 70
+[1] 71
+[1] 72
+[1] 73
+[1] 74
+[1] 75
+[1] 76
+[1] 77
+[1] 78
+[1] 79
+[1] 80
+[1] 81
+[1] 82
+[1] 83
+[1] 84
+[1] 85
+[1] 86
+[1] 87
+[1] 88
+[1] 89
+[1] 90
+[1] 91
+[1] 92
+[1] 93
+[1] 94
+[1] 95
+[1] 96
+[1] 97
+[1] 98
+[1] 99
+[1] 100</code></pre>
+<pre class="r"><code>plot(sigma_seq,llik,type=&#39;l&#39;,xlab = &#39;sigma&#39;,ylab=&#39;log likelihood&#39;)
+abline(v = sigma_seq[which.max(llik)],lty=2)
+text(x = sigma_seq[which.max(llik)]+0.022,y = min(llik), labels=paste(&#39;sigma=&#39;,round(sigma_seq[which.max(llik)],3),sep = &#39;&#39;))</code></pre>
+<p><img src="figure/diagonal_mvebnm.Rmd/unnamed-chunk-8-1.png" width="672" style="display: block; margin: auto;" /></p>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 4.0.1 (2020-06-06)
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+Running under: Windows 10 x64 (build 18362)
+
+Matrix products: default
+
+locale:
+[1] LC_COLLATE=English_United States.1252 
+[2] LC_CTYPE=English_United States.1252   
+[3] LC_MONETARY=English_United States.1252
+[4] LC_NUMERIC=C                          
+[5] LC_TIME=English_United States.1252    
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+[1] mvtnorm_1.1-0   mashr_0.2.38    ashr_2.2-50     workflowr_1.6.2
+
+loaded via a namespace (and not attached):
+ [1] Rcpp_1.0.4.6     knitr_1.28       whisker_0.4      magrittr_1.5    
+ [5] SQUAREM_2020.3   lattice_0.20-41  R6_2.4.1         rlang_0.4.6     
+ [9] plyr_1.8.6       stringr_1.4.0    tools_4.0.1      grid_4.0.1      
+[13] xfun_0.14        rmeta_3.0        irlba_2.3.3      invgamma_1.1    
+[17] git2r_0.27.1     htmltools_0.5.0  assertthat_0.2.1 abind_1.4-5     
+[21] yaml_2.2.1       digest_0.6.25    rprojroot_1.3-2  mixsqp_0.3-43   
+[25] Matrix_1.2-18    later_1.1.0.1    promises_1.1.0   fs_1.4.1        
+[29] glue_1.4.1       evaluate_0.14    rmarkdown_2.3    stringi_1.4.6   
+[33] compiler_4.0.1   backports_1.1.7  truncnorm_1.0-8  httpuv_1.5.4    </code></pre>
+</div>
+</div>
+
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+http://docs.mathjax.org/en/latest/configuration.html.  This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
