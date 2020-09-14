@@ -1,5 +1,5 @@
 ---
-title: "diagonal mv ebnm"
+title: "Add diagonal term to ED and check log likelihood"
 author: "DongyueXie"
 date: "2020-09-10"
 output:
@@ -8,6 +8,9 @@ output:
 editor_options:
   chunk_output_type: console
 ---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(warning = F,message = F)
+```
 
 ## Introduction
 
@@ -18,98 +21,10 @@ The model is $$x_i\sim \sum_k\pi_k N(0,U_k+S_i),$$ where $S_i$ is known, and the
 The $\sigma^2$ can be estimated by MLE but we suspect it will be estimated as 0 often. Before we derive the model, we first do a quick check suggested by Matthew. We first obtain estimates of $\pi_k,U_k$ from ED(without diagonal term) and fix them, then add $\sigma^2I$, calculate log likelihood, and plot log-lik vs $\sigma^2$. The log likelihood is $$\log L(X) = \sum_i\log(\sum_k\pi_k N(x_i;0,U_k+S_i+\sigma^2 I)).$$
 
 
-(should diagonal term be added to only data-driven ones or also canonical ones?)
-
 
 ```{r}
 library(mashr)
 library(mvtnorm)
-
-simple_sims2 = function (nsamp = 100, err_sd = 0.01){
-    ncond = 5
-    b1 = rnorm(nsamp)
-    B.1 = matrix(cbind(b1, b1, 0, 0, 0), nrow = nsamp, ncol = ncond)
-    b2 = rnorm(nsamp)
-    B.2 = matrix(cbind(0, 0, b2, b2, b2), nrow = nsamp, ncol = ncond)
-    
-    B.id = matrix(rnorm(nsamp * ncond), nrow = nsamp, ncol = ncond)
-    B.zero = matrix(0, nrow = nsamp, ncol = ncond)
-    
-    B = rbind(B.zero,B.id,B.1, B.2)
-    Shat = matrix(err_sd, nrow = nrow(B), ncol = ncol(B))
-    E = matrix(rnorm(length(Shat), mean = 0, sd = Shat), nrow = nrow(B), 
-        ncol = ncol(B))
-    Bhat = B + E
-    row_ids = paste0("effect_", 1:nrow(B))
-    col_ids = paste0("condition_", 1:ncol(B))
-    rownames(B) = row_ids
-    colnames(B) = col_ids
-    rownames(Bhat) = row_ids
-    colnames(Bhat) = col_ids
-    rownames(Shat) = row_ids
-    colnames(Shat) = col_ids
-    U = matrix(0,nrow=ncond,ncol=ncond)
-    U2 = U
-    U2[1:2,1:2] = 1
-    U3 = U
-    U3[3:5,3:5] = 1
-    U.true = list(U1 = matrix(0,nrow=ncond,ncol=ncond),
-                  U2=U2,
-                  U3=U3,
-                  U4 = diag(ncond))
-    return(list(B = B, Bhat = Bhat, Shat = Shat,U.true=U.true))
-}
-
-
-fdp = function(dis.idx, true.idx){
-  if(length(dis.idx)==0){
-    0
-  }else{
-    1-mean(dis.idx%in%true.idx)
-  }
-}
-
-
-auc = function(pred,true.label){
-  auc=pROC::roc(response = true.label, predictor = pred,direction = '<',levels = c(0,1))
-  auc$auc
-}
-
-powr = function(dis.idx, true.idx){
-  if(length(dis.idx)==0){
-    0
-  }else{
-    sum(dis.idx%in%true.idx)/length(true.idx)
-  }
-}
-
-mse = function(x,y){
-  mean((x-y)^2)
-}
-
-simu_study = function(simdata,thresh = 0.1){
-  data = mash_set_data(simdata$Bhat,simdata$Shat)
-  m.1by1 = mash_1by1(data)
-  strong = get_significant_results(m.1by1)
-  U.c    = cov_canonical(data)
-  U.pca  = cov_pca(data,5,strong)
-  U.ed   = cov_ed(data,U.pca,strong)
-  U.ed.sparse = lapply(U.ed,
-                       function(z){z = z/max(diag(z))
-                       idx = which(abs(z)<thresh)
-                       if(length(idx)!=0){
-                         z[idx] = 0
-                       }
-                       z})
-  U.true = simdata$U.true
-  m.c    = mash(data, U.c,verbose = F)
-  m.ed   = mash(data, U.ed,verbose = F)
-  m.c.ed = mash(data, c(U.c,U.ed),verbose = F)
-  m.c.ed.sparse = mash(data, c(U.c,U.ed.sparse),verbose = F)
-  m.true = mash(data, U.true,verbose = F)
-  out = list(m.c=m.c,m.ed=m.ed,m.c.ed=m.c.ed,m.c.ed.sparse=m.c.ed.sparse,m.true=m.true)
-  out
-}
 
 n_conditions = function(data){ncol(data$Bhat)}
 
@@ -169,9 +84,11 @@ mixture_loglikx = function(x,shat,pihat,Ulist,sigma){
 }
 ```
 
-## Two mixture components, directly apply ED
+## Two mixture components
 
 Now we generate data from a mixture of 2 MVN with the following covariance matrices: present (and identical) in first two conditions, present (and identical) in last three conditions, each with 500 samples(so $\pi_1=\pi_2=0.5$), and $s_i=0.01$. 
+
+Two covariance matrices are:
 
 ```{r}
 cov1 = c(1,1,0,0,0)%*%t(c(1,1,0,0,0))
@@ -224,7 +141,23 @@ strong = 1:nrow(simdata$B)
 U.c    = cov_canonical(data)
 U.pca  = cov_pca(data,5,strong)
 ed.out = bovy_wrapper(data,U.pca,strong)
+```
 
+Let's look at ED estimates.
+
+Estimated mixing proportions: 
+
+```{r}
+round(ed.out$pi,2)
+```
+
+Estimated covariance matrices:
+
+```{r}
+lapply(ed.out$Ulist,round,digits=3)
+```
+
+```{r}
 l = 100
 sigma_seq = seq(0,0.4,length.out = l)
 llik = c()
@@ -234,7 +167,7 @@ for(i in 1:l){
 }
 plot(sigma_seq,llik,type='l',xlab = 'sigma',ylab='log likelihood')
 abline(v = sigma_seq[which.max(llik)],lty=2)
-text(x = sigma_seq[which.max(llik)]+0.022,y = min(llik), labels=paste('sigma=',round(sigma_seq[which.max(llik)],3),sep = ''))
+text(x = sigma_seq[which.max(llik)]+0.03,y = min(llik), labels=paste('sigma=',round(sigma_seq[which.max(llik)],3),sep = ''))
 ```
 
 ```{r}
@@ -243,7 +176,7 @@ sigma_seq[which.min(abs(llik[1]/2-llik))]
 
 Log likelihood peaks at $\sigma=0$. In this example, $l(\sigma=0;X)\approx 2\times l(\sigma=0.0566;X)$.
 
-Now let's increase $s_i$ to $0.1$.
+Now let's increase the standard error $s_i$ to $0.1$.
 
 ```{r}
 simdata = simple_sims0(500,err_sd = 0.1)
@@ -254,7 +187,22 @@ strong = 1:nrow(simdata$B)
 U.c    = cov_canonical(data)
 U.pca  = cov_pca(data,5,strong)
 ed.out = bovy_wrapper(data,U.pca,strong)
+```
 
+
+Estimated mixing proportions: 
+
+```{r}
+round(ed.out$pi,2)
+```
+
+Estimated covariance matrices:
+
+```{r}
+lapply(ed.out$Ulist,round,digits=3)
+```
+
+```{r}
 l = 100
 sigma_seq = seq(0,0.4,length.out = l)
 llik = c()
@@ -273,72 +221,255 @@ sigma_seq[which.min(abs(llik[1]/2-llik))]
 
 Log likelihood peaks at $\sigma=0$. In this example, $l(\sigma=0;X)\approx 2\times l(\sigma=0.113;X)$.
 
+## Three mixture components
 
-## Four mixture components, ash-1by1, then ED 
+Let's add one more covariance matrix, a rank-2 matrix.
 
+```{r}
+cov3 = c(1,1,1,0,0)%*%t(c(1,1,1,0,0))
+cov4 = c(1,1,1,1,0)%*%t(c(1,1,1,1,0))
+print(cov3+cov4)
+```
 
-Now we generate data from a mixture of 4 MVN with the following covariance matrices: pointmass, identity, present (and identical) in first two conditions, present (and identical) in last three conditions, each with 500 samples(so $\pi_1=\pi_2=\pi_3=\pi_4=0.25$), and $s_i=0.01$.
+```{r}
+simple_sims3 = function(nsamp = 100, err_sd = 0.01){
+    ncond = 5
+    b1 = rnorm(nsamp)
+    B.1 = matrix(cbind(b1, b1, 0, 0, 0), nrow = nsamp, ncol = ncond)
+    b2 = rnorm(nsamp)
+    B.2 = matrix(cbind(0, 0, b2, b2, b2), nrow = nsamp, ncol = ncond)
+    
+    U4 = c(1,1,1,0,0)%*%t(c(1,1,1,0,0))+c(1,1,1,1,0)%*%t(c(1,1,1,1,0))
+    B.3 = rmvnorm(nsamp,sigma = U4)
+    
+    #B.id = matrix(rnorm(nsamp * ncond), nrow = nsamp, ncol = ncond)
+    #B.zero = matrix(0, nrow = nsamp, ncol = ncond)
+    
+    B = rbind(B.1, B.2,B.3)
+    Shat = matrix(err_sd, nrow = nrow(B), ncol = ncol(B))
+    E = matrix(rnorm(length(Shat), mean = 0, sd = Shat), nrow = nrow(B), ncol = ncol(B))
+    Bhat = B + E
+    row_ids = paste0("effect_", 1:nrow(B))
+    col_ids = paste0("condition_", 1:ncol(B))
+    rownames(B) = row_ids
+    colnames(B) = col_ids
+    rownames(Bhat) = row_ids
+    colnames(Bhat) = col_ids
+    rownames(Shat) = row_ids
+    colnames(Shat) = col_ids
+    U = matrix(0,nrow=ncond,ncol=ncond)
+    U2 = U
+    U2[1:2,1:2] = 1
+    U3 = U
+    U3[3:5,3:5] = 1
+    U4 = 
+    U.true = list(#U1 = matrix(0,nrow=ncond,ncol=ncond),
+                  U2=U2,
+                  U3=U3,
+                  U4 = U4)
+    return(list(B = B, Bhat = Bhat, Shat = Shat,U.true=U.true))
+}
 
-We first run ash 1by1 to identify samples are have strong signals(ideally total 500*3=1500 samples),  then run ED on these "strong" samples.
+set.seed(12345)
+simdata = simple_sims3(500,err_sd = 0.01)
+data = mash_set_data(simdata$Bhat,simdata$Shat)
+#m.1by1 = mash_1by1(data)
+#strong = get_significant_results(m.1by1)
+strong = 1:nrow(simdata$B)
+U.c    = cov_canonical(data)
+U.pca  = cov_pca(data,5,strong)
+ed.out = bovy_wrapper(data,U.pca,strong)
+```
+
+Let's look at ED estimates.
+
+Estimated mixing proportions: 
+
+```{r}
+round(ed.out$pi,2)
+```
+
+Estimated covariance matrices:
+
+```{r}
+lapply(ed.out$Ulist,round,digits=3)
+```
+
+```{r}
+l = 100
+sigma_seq = seq(0,0.4,length.out = l)
+llik = c()
+for(i in 1:l){
+  #print(i)
+  llik[i] = calc_loglikx(data,strong,ed.out$pi,ed.out$Ulist,sigma_seq[i])
+}
+plot(sigma_seq,llik,type='l',xlab = 'sigma',ylab='log likelihood')
+abline(v = sigma_seq[which.max(llik)],lty=2)
+text(x = sigma_seq[which.max(llik)]+0.03,y = min(llik), labels=paste('sigma=',round(sigma_seq[which.max(llik)],3),sep = ''))
+```
+
+Now let's increase the standard error $s_i$ to $0.5$.
+
+```{r}
+
+simdata = simple_sims3(500,err_sd = 0.5)
+data = mash_set_data(simdata$Bhat,simdata$Shat)
+#m.1by1 = mash_1by1(data)
+#strong = get_significant_results(m.1by1)
+strong = 1:nrow(simdata$B)
+U.c    = cov_canonical(data)
+U.pca  = cov_pca(data,5,strong)
+ed.out = bovy_wrapper(data,U.pca,strong)
+```
+
+Let's look at ED estimates.
+
+Estimated mixing proportions: 
+
+```{r}
+round(ed.out$pi,2)
+```
+
+Estimated covariance matrices:
+
+```{r}
+lapply(ed.out$Ulist,round,digits=3)
+```
+
+```{r}
+l = 100
+sigma_seq = seq(0,0.4,length.out = l)
+llik = c()
+for(i in 1:l){
+  #print(i)
+  llik[i] = calc_loglikx(data,strong,ed.out$pi,ed.out$Ulist,sigma_seq[i])
+}
+plot(sigma_seq,llik,type='l',xlab = 'sigma',ylab='log likelihood')
+abline(v = sigma_seq[which.max(llik)],lty=2)
+text(x = sigma_seq[which.max(llik)]+0.03,y = min(llik), labels=paste('sigma=',round(sigma_seq[which.max(llik)],3),sep = ''))
+```
+
+## void
+
+Now we generate data from a mixture of 3 MVN with the following covariance matrices: identity, present (and identical) in first two conditions, present (and identical) in last three conditions, each with 500 samples(so $\pi_1=\pi_2=\pi_3=1/3$), and $s_i=0.01$.
+
+```{r}
+simple_sims3 = function(nsamp = 100, err_sd = 0.01){
+    ncond = 5
+    b1 = rnorm(nsamp)
+    B.1 = matrix(cbind(b1, b1, 0, 0, 0), nrow = nsamp, ncol = ncond)
+    b2 = rnorm(nsamp)
+    B.2 = matrix(cbind(0, 0, b2, b2, b2), nrow = nsamp, ncol = ncond)
+    
+    B.id = matrix(rnorm(nsamp * ncond), nrow = nsamp, ncol = ncond)
+    #B.zero = matrix(0, nrow = nsamp, ncol = ncond)
+    
+    B = rbind(B.id,B.1, B.2)
+    Shat = matrix(err_sd, nrow = nrow(B), ncol = ncol(B))
+    E = matrix(rnorm(length(Shat), mean = 0, sd = Shat), nrow = nrow(B), ncol = ncol(B))
+    Bhat = B + E
+    row_ids = paste0("effect_", 1:nrow(B))
+    col_ids = paste0("condition_", 1:ncol(B))
+    rownames(B) = row_ids
+    colnames(B) = col_ids
+    rownames(Bhat) = row_ids
+    colnames(Bhat) = col_ids
+    rownames(Shat) = row_ids
+    colnames(Shat) = col_ids
+    U = matrix(0,nrow=ncond,ncol=ncond)
+    U2 = U
+    U2[1:2,1:2] = 1
+    U3 = U
+    U3[3:5,3:5] = 1
+    U.true = list(#U1 = matrix(0,nrow=ncond,ncol=ncond),
+                  U2=U2,
+                  U3=U3,
+                  U4 = diag(ncond))
+    return(list(B = B, Bhat = Bhat, Shat = Shat,U.true=U.true))
+}
+```
 
 ```{r}
 set.seed(12345)
-simdata = simple_sims2(500,err_sd = 0.01)
-#result = simu_study(simdata)
+simdata = simple_sims3(50,err_sd = 0.01)
 data = mash_set_data(simdata$Bhat,simdata$Shat)
-m.1by1 = mash_1by1(data)
-strong = get_significant_results(m.1by1)
+#m.1by1 = mash_1by1(data)
+#strong = get_significant_results(m.1by1)
+strong = 1:nrow(simdata$B)
 U.c    = cov_canonical(data)
 U.pca  = cov_pca(data,5,strong)
 ed.out = bovy_wrapper(data,U.pca,strong)
-
-
-
-#U.ed   = cov_ed(data,U.pca,strong)
-#out = summary_out(simdata$B,result)
-#knitr::kable(out$find_genes,caption = 'On finding genes',digits = 3)
-#knitr::kable(out$find_cond,caption = 'On finding conditions',digits = 3)
-
-l = 100
-sigma_seq = seq(0,0.4,length.out = l)
-llik = c()
-for(i in 1:l){
-  print(i)
-  llik[i] = calc_loglikx(data,strong,ed.out$pi,ed.out$Ulist,sigma_seq[i])
-}
-plot(sigma_seq,llik,type='l',xlab = 'sigma',ylab='log likelihood')
-abline(v = sigma_seq[which.max(llik)],lty=2)
-text(x = sigma_seq[which.max(llik)]+0.022,y = min(llik), labels=paste('sigma=',round(sigma_seq[which.max(llik)],3),sep = ''))
 ```
 
 
-Now let's increase $s_i$ to $0.1$.
+Estimated mixing proportions: 
 
 ```{r}
-simdata = simple_sims2(500,err_sd = 0.1)
-#result = simu_study(simdata)
-data = mash_set_data(simdata$Bhat,simdata$Shat)
-m.1by1 = mash_1by1(data)
-strong = get_significant_results(m.1by1)
-U.c    = cov_canonical(data)
-U.pca  = cov_pca(data,5,strong)
-ed.out = bovy_wrapper(data,U.pca,strong)
+round(ed.out$pi,2)
+```
+
+Estimated covariance matrices:
+
+```{r}
+lapply(ed.out$Ulist,round,digits=3)
+```
 
 
-
-#U.ed   = cov_ed(data,U.pca,strong)
-#out = summary_out(simdata$B,result)
-#knitr::kable(out$find_genes,caption = 'On finding genes',digits = 3)
-#knitr::kable(out$find_cond,caption = 'On finding conditions',digits = 3)
-
+```{r}
 l = 100
 sigma_seq = seq(0,0.4,length.out = l)
 llik = c()
 for(i in 1:l){
-  print(i)
+  #print(i)
   llik[i] = calc_loglikx(data,strong,ed.out$pi,ed.out$Ulist,sigma_seq[i])
 }
 plot(sigma_seq,llik,type='l',xlab = 'sigma',ylab='log likelihood')
 abline(v = sigma_seq[which.max(llik)],lty=2)
-text(x = sigma_seq[which.max(llik)]+0.022,y = min(llik), labels=paste('sigma=',round(sigma_seq[which.max(llik)],3),sep = ''))
+text(x = sigma_seq[which.max(llik)]+0.03,y = min(llik), labels=paste('sigma=',round(sigma_seq[which.max(llik)],3),sep = ''))
 ```
+
+
+Now increase the standard error $s_i$ to $0.1$.
+
+```{r}
+simdata = simple_sims3(50,err_sd = 0.1)
+data = mash_set_data(simdata$Bhat,simdata$Shat)
+#m.1by1 = mash_1by1(data)
+#strong = get_significant_results(m.1by1)
+strong = 1:nrow(simdata$B)
+U.c    = cov_canonical(data)
+U.pca  = cov_pca(data,5,strong)
+ed.out = bovy_wrapper(data,U.pca,strong)
+```
+
+
+Estimated mixing proportions: 
+
+```{r}
+round(ed.out$pi,2)
+```
+
+Estimated covariance matrices:
+
+```{r}
+lapply(ed.out$Ulist,round,digits=3)
+```
+
+
+```{r}
+l = 100
+sigma_seq = seq(0,0.4,length.out = l)
+llik = c()
+for(i in 1:l){
+  #print(i)
+  llik[i] = calc_loglikx(data,strong,ed.out$pi,ed.out$Ulist,sigma_seq[i])
+}
+plot(sigma_seq,llik,type='l',xlab = 'sigma',ylab='log likelihood')
+abline(v = sigma_seq[which.max(llik)],lty=2)
+text(x = sigma_seq[which.max(llik)]+0.03,y = min(llik), labels=paste('sigma=',round(sigma_seq[which.max(llik)],3),sep = ''))
+```
+
+
+Now likelihood peaks at $\sigma\neq 0$. The reason might be that ED does not output identity matrix, which is in the prior, and adding diagonal term accommodate this. Maybe this is not a very good example.
+
+
