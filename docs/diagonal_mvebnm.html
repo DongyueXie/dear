@@ -13,7 +13,7 @@
 
 <meta name="date" content="2020-09-10" />
 
-<title>diagonal mv ebnm</title>
+<title>Add diagonal term to ED and check log likelihood</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -398,7 +398,7 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">diagonal mv ebnm</h1>
+<h1 class="title toc-ignore">Add diagonal term to ED and check log likelihood</h1>
 <h4 class="author">DongyueXie</h4>
 <h4 class="date">2020-09-10</h4>
 
@@ -516,16 +516,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomDongyueXiedeartree23a17f0ec6cba2cd692e449a74f890b7f6fb2e31targetblank23a17f0a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/DongyueXie/dear/tree/23a17f0ec6cba2cd692e449a74f890b7f6fb2e31" target="_blank">23a17f0</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomDongyueXiedeartreefb53b0a8927551646b2848dae79a27c0c459cdc9targetblankfb53b0aa"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/DongyueXie/dear/tree/fb53b0a8927551646b2848dae79a27c0c459cdc9" target="_blank">fb53b0a</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomDongyueXiedeartree23a17f0ec6cba2cd692e449a74f890b7f6fb2e31targetblank23a17f0a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomDongyueXiedeartreefb53b0a8927551646b2848dae79a27c0c459cdc9targetblankfb53b0aa" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/DongyueXie/dear/tree/23a17f0ec6cba2cd692e449a74f890b7f6fb2e31" target="_blank">23a17f0</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/DongyueXie/dear/tree/fb53b0a8927551646b2848dae79a27c0c459cdc9" target="_blank">fb53b0a</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -587,6 +587,40 @@ Message
 Rmd
 </td>
 <td>
+<a href="https://github.com/DongyueXie/dear/blob/fb53b0a8927551646b2848dae79a27c0c459cdc9/analysis/diagonal_mvebnm.Rmd" target="_blank">fb53b0a</a>
+</td>
+<td>
+DongyueXie
+</td>
+<td>
+2020-09-13
+</td>
+<td>
+wflow_publish(“analysis/diagonal_mvebnm.Rmd”)
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/DongyueXie/dear/e2ac82e89187dc0e5f22aa4298475336a29ad361/docs/diagonal_mvebnm.html" target="_blank">e2ac82e</a>
+</td>
+<td>
+DongyueXie
+</td>
+<td>
+2020-09-13
+</td>
+<td>
+Build site.
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
 <a href="https://github.com/DongyueXie/dear/blob/23a17f0ec6cba2cd692e449a74f890b7f6fb2e31/analysis/diagonal_mvebnm.Rmd" target="_blank">23a17f0</a>
 </td>
 <td>
@@ -611,97 +645,8 @@ wflow_publish(“analysis/diagonal_mvebnm.Rmd”)
 <p>In my previous <a href="check_mash.html">example</a>, I found that using data driven covariance matrices from ED in prior results in high fdp, mainly due to small lfsr/lfdr. One reason is that there’s uncertainty in estimated covaraince matrices but we did not take it into consideration. Matthew suggested adding a diagonal term into model, see if it could deal with the issue.</p>
 <p>The model is <span class="math display">\[x_i\sim \sum_k\pi_k N(0,U_k+S_i),\]</span> where <span class="math inline">\(S_i\)</span> is known, and the simplest way to add diagonal term is to add the same one to every mixture component, <span class="math display">\[x_i\sim \sum_k\pi_kN(0,U_k+S_i+\sigma^2 I).\]</span></p>
 <p>The <span class="math inline">\(\sigma^2\)</span> can be estimated by MLE but we suspect it will be estimated as 0 often. Before we derive the model, we first do a quick check suggested by Matthew. We first obtain estimates of <span class="math inline">\(\pi_k,U_k\)</span> from ED(without diagonal term) and fix them, then add <span class="math inline">\(\sigma^2I\)</span>, calculate log likelihood, and plot log-lik vs <span class="math inline">\(\sigma^2\)</span>. The log likelihood is <span class="math display">\[\log L(X) = \sum_i\log(\sum_k\pi_k N(x_i;0,U_k+S_i+\sigma^2 I)).\]</span></p>
-<p>(should diagonal term be added to only data-driven ones or also canonical ones?)</p>
-<pre class="r"><code>library(mashr)</code></pre>
-<pre><code>Warning: package &#39;mashr&#39; was built under R version 4.0.2</code></pre>
-<pre><code>Loading required package: ashr</code></pre>
-<pre class="r"><code>library(mvtnorm)
-
-simple_sims2 = function (nsamp = 100, err_sd = 0.01){
-    ncond = 5
-    b1 = rnorm(nsamp)
-    B.1 = matrix(cbind(b1, b1, 0, 0, 0), nrow = nsamp, ncol = ncond)
-    b2 = rnorm(nsamp)
-    B.2 = matrix(cbind(0, 0, b2, b2, b2), nrow = nsamp, ncol = ncond)
-    
-    B.id = matrix(rnorm(nsamp * ncond), nrow = nsamp, ncol = ncond)
-    B.zero = matrix(0, nrow = nsamp, ncol = ncond)
-    
-    B = rbind(B.zero,B.id,B.1, B.2)
-    Shat = matrix(err_sd, nrow = nrow(B), ncol = ncol(B))
-    E = matrix(rnorm(length(Shat), mean = 0, sd = Shat), nrow = nrow(B), 
-        ncol = ncol(B))
-    Bhat = B + E
-    row_ids = paste0(&quot;effect_&quot;, 1:nrow(B))
-    col_ids = paste0(&quot;condition_&quot;, 1:ncol(B))
-    rownames(B) = row_ids
-    colnames(B) = col_ids
-    rownames(Bhat) = row_ids
-    colnames(Bhat) = col_ids
-    rownames(Shat) = row_ids
-    colnames(Shat) = col_ids
-    U = matrix(0,nrow=ncond,ncol=ncond)
-    U2 = U
-    U2[1:2,1:2] = 1
-    U3 = U
-    U3[3:5,3:5] = 1
-    U.true = list(U1 = matrix(0,nrow=ncond,ncol=ncond),
-                  U2=U2,
-                  U3=U3,
-                  U4 = diag(ncond))
-    return(list(B = B, Bhat = Bhat, Shat = Shat,U.true=U.true))
-}
-
-
-fdp = function(dis.idx, true.idx){
-  if(length(dis.idx)==0){
-    0
-  }else{
-    1-mean(dis.idx%in%true.idx)
-  }
-}
-
-
-auc = function(pred,true.label){
-  auc=pROC::roc(response = true.label, predictor = pred,direction = &#39;&lt;&#39;,levels = c(0,1))
-  auc$auc
-}
-
-powr = function(dis.idx, true.idx){
-  if(length(dis.idx)==0){
-    0
-  }else{
-    sum(dis.idx%in%true.idx)/length(true.idx)
-  }
-}
-
-mse = function(x,y){
-  mean((x-y)^2)
-}
-
-simu_study = function(simdata,thresh = 0.1){
-  data = mash_set_data(simdata$Bhat,simdata$Shat)
-  m.1by1 = mash_1by1(data)
-  strong = get_significant_results(m.1by1)
-  U.c    = cov_canonical(data)
-  U.pca  = cov_pca(data,5,strong)
-  U.ed   = cov_ed(data,U.pca,strong)
-  U.ed.sparse = lapply(U.ed,
-                       function(z){z = z/max(diag(z))
-                       idx = which(abs(z)&lt;thresh)
-                       if(length(idx)!=0){
-                         z[idx] = 0
-                       }
-                       z})
-  U.true = simdata$U.true
-  m.c    = mash(data, U.c,verbose = F)
-  m.ed   = mash(data, U.ed,verbose = F)
-  m.c.ed = mash(data, c(U.c,U.ed),verbose = F)
-  m.c.ed.sparse = mash(data, c(U.c,U.ed.sparse),verbose = F)
-  m.true = mash(data, U.true,verbose = F)
-  out = list(m.c=m.c,m.ed=m.ed,m.c.ed=m.c.ed,m.c.ed.sparse=m.c.ed.sparse,m.true=m.true)
-  out
-}
+<pre class="r"><code>library(mashr)
+library(mvtnorm)
 
 n_conditions = function(data){ncol(data$Bhat)}
 
@@ -760,9 +705,10 @@ mixture_loglikx = function(x,shat,pihat,Ulist,sigma){
   log(lik)
 }</code></pre>
 </div>
-<div id="two-mixture-components-directly-apply-ed" class="section level2">
-<h2>Two mixture components, directly apply ED</h2>
+<div id="two-mixture-components" class="section level2">
+<h2>Two mixture components</h2>
 <p>Now we generate data from a mixture of 2 MVN with the following covariance matrices: present (and identical) in first two conditions, present (and identical) in last three conditions, each with 500 samples(so <span class="math inline">\(\pi_1=\pi_2=0.5\)</span>), and <span class="math inline">\(s_i=0.01\)</span>.</p>
+<p>Two covariance matrices are:</p>
 <pre class="r"><code>cov1 = c(1,1,0,0,0)%*%t(c(1,1,0,0,0))
 cov2 = c(0,0,1,1,1)%*%t(c(0,0,1,1,1))
 print(cov1)</code></pre>
@@ -821,9 +767,61 @@ data = mash_set_data(simdata$Bhat,simdata$Shat)
 strong = 1:nrow(simdata$B)
 U.c    = cov_canonical(data)
 U.pca  = cov_pca(data,5,strong)
-ed.out = bovy_wrapper(data,U.pca,strong)
+ed.out = bovy_wrapper(data,U.pca,strong)</code></pre>
+<p>Let’s look at ED estimates.</p>
+<p>Estimated mixing proportions:</p>
+<pre class="r"><code>round(ed.out$pi,2)</code></pre>
+<pre><code>[1] 0.5 0.5 0.0 0.0 0.0 0.0</code></pre>
+<p>Estimated covariance matrices:</p>
+<pre class="r"><code>lapply(ed.out$Ulist,round,digits=3)</code></pre>
+<pre><code>$PCA_1
+     [,1] [,2]  [,3]  [,4]  [,5]
+[1,]    0    0 0.000 0.000 0.000
+[2,]    0    0 0.000 0.000 0.000
+[3,]    0    0 1.007 1.008 1.007
+[4,]    0    0 1.008 1.008 1.008
+[5,]    0    0 1.007 1.008 1.008
 
-l = 100
+$PCA_2
+      [,1]  [,2] [,3] [,4]  [,5]
+[1,] 0.987 0.986    0    0 0.001
+[2,] 0.986 0.985    0    0 0.001
+[3,] 0.000 0.000    0    0 0.000
+[4,] 0.000 0.000    0    0 0.000
+[5,] 0.001 0.001    0    0 0.000
+
+$PCA_3
+     [,1] [,2] [,3] [,4] [,5]
+[1,]    0    0    0    0    0
+[2,]    0    0    0    0    0
+[3,]    0    0    0    0    0
+[4,]    0    0    0    0    0
+[5,]    0    0    0    0    0
+
+$PCA_4
+     [,1] [,2] [,3] [,4] [,5]
+[1,]    0    0    0    0    0
+[2,]    0    0    0    0    0
+[3,]    0    0    0    0    0
+[4,]    0    0    0    0    0
+[5,]    0    0    0    0    0
+
+$PCA_5
+     [,1] [,2] [,3] [,4] [,5]
+[1,]    0    0    0    0    0
+[2,]    0    0    0    0    0
+[3,]    0    0    0    0    0
+[4,]    0    0    0    0    0
+[5,]    0    0    0    0    0
+
+$tPCA
+       [,1]   [,2]   [,3]   [,4]   [,5]
+[1,]  0.000  0.000 -0.028 -0.028 -0.028
+[2,]  0.000  0.000 -0.014 -0.014 -0.014
+[3,] -0.028 -0.014  2.061  2.065  2.051
+[4,] -0.028 -0.014  2.065  2.069  2.055
+[5,] -0.028 -0.014  2.051  2.055  2.041</code></pre>
+<pre class="r"><code>l = 100
 sigma_seq = seq(0,0.4,length.out = l)
 llik = c()
 for(i in 1:l){
@@ -832,12 +830,12 @@ for(i in 1:l){
 }
 plot(sigma_seq,llik,type=&#39;l&#39;,xlab = &#39;sigma&#39;,ylab=&#39;log likelihood&#39;)
 abline(v = sigma_seq[which.max(llik)],lty=2)
-text(x = sigma_seq[which.max(llik)]+0.022,y = min(llik), labels=paste(&#39;sigma=&#39;,round(sigma_seq[which.max(llik)],3),sep = &#39;&#39;))</code></pre>
-<p><img src="figure/diagonal_mvebnm.Rmd/unnamed-chunk-3-1.png" width="672" style="display: block; margin: auto;" /></p>
+text(x = sigma_seq[which.max(llik)]+0.03,y = min(llik), labels=paste(&#39;sigma=&#39;,round(sigma_seq[which.max(llik)],3),sep = &#39;&#39;))</code></pre>
+<p><img src="figure/diagonal_mvebnm.Rmd/unnamed-chunk-6-1.png" width="672" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>sigma_seq[which.min(abs(llik[1]/2-llik))]</code></pre>
 <pre><code>[1] 0.05656566</code></pre>
 <p>Log likelihood peaks at <span class="math inline">\(\sigma=0\)</span>. In this example, <span class="math inline">\(l(\sigma=0;X)\approx 2\times l(\sigma=0.0566;X)\)</span>.</p>
-<p>Now let’s increase <span class="math inline">\(s_i\)</span> to <span class="math inline">\(0.1\)</span>.</p>
+<p>Now let’s increase the standard error <span class="math inline">\(s_i\)</span> to <span class="math inline">\(0.1\)</span>.</p>
 <pre class="r"><code>simdata = simple_sims0(500,err_sd = 0.1)
 data = mash_set_data(simdata$Bhat,simdata$Shat)
 #m.1by1 = mash_1by1(data)
@@ -845,9 +843,60 @@ data = mash_set_data(simdata$Bhat,simdata$Shat)
 strong = 1:nrow(simdata$B)
 U.c    = cov_canonical(data)
 U.pca  = cov_pca(data,5,strong)
-ed.out = bovy_wrapper(data,U.pca,strong)
+ed.out = bovy_wrapper(data,U.pca,strong)</code></pre>
+<p>Estimated mixing proportions:</p>
+<pre class="r"><code>round(ed.out$pi,2)</code></pre>
+<pre><code>[1] 0.08 0.50 0.00 0.00 0.00 0.41</code></pre>
+<p>Estimated covariance matrices:</p>
+<pre class="r"><code>lapply(ed.out$Ulist,round,digits=3)</code></pre>
+<pre><code>$PCA_1
+      [,1]  [,2]  [,3]  [,4]  [,5]
+[1,] 0.001 0.001 0.029 0.029 0.029
+[2,] 0.001 0.001 0.024 0.024 0.024
+[3,] 0.029 0.024 0.865 0.868 0.865
+[4,] 0.029 0.024 0.868 0.871 0.868
+[5,] 0.029 0.024 0.865 0.868 0.866
 
-l = 100
+$PCA_2
+       [,1]   [,2]   [,3]   [,4]   [,5]
+[1,]  1.075  1.078 -0.022 -0.024 -0.019
+[2,]  1.078  1.082 -0.022 -0.024 -0.019
+[3,] -0.022 -0.022  0.000  0.000  0.000
+[4,] -0.024 -0.024  0.000  0.001  0.000
+[5,] -0.019 -0.019  0.000  0.000  0.000
+
+$PCA_3
+       [,1]   [,2] [,3] [,4] [,5]
+[1,]  0.008 -0.008    0    0    0
+[2,] -0.008  0.008    0    0    0
+[3,]  0.000  0.000    0    0    0
+[4,]  0.000  0.000    0    0    0
+[5,]  0.000  0.000    0    0    0
+
+$PCA_4
+     [,1] [,2]   [,3]   [,4] [,5]
+[1,]    0    0  0.000  0.000    0
+[2,]    0    0  0.000  0.000    0
+[3,]    0    0  0.004 -0.004    0
+[4,]    0    0 -0.004  0.004    0
+[5,]    0    0  0.000  0.000    0
+
+$PCA_5
+     [,1] [,2] [,3] [,4] [,5]
+[1,]    0    0    0    0    0
+[2,]    0    0    0    0    0
+[3,]    0    0    0    0    0
+[4,]    0    0    0    0    0
+[5,]    0    0    0    0    0
+
+$tPCA
+      [,1]   [,2]   [,3]   [,4]   [,5]
+[1,] 0.001  0.000  0.003  0.003  0.003
+[2,] 0.000  0.001 -0.003 -0.003 -0.003
+[3,] 0.003 -0.003  1.076  1.081  1.079
+[4,] 0.003 -0.003  1.081  1.086  1.083
+[5,] 0.003 -0.003  1.079  1.083  1.082</code></pre>
+<pre class="r"><code>l = 100
 sigma_seq = seq(0,0.4,length.out = l)
 llik = c()
 for(i in 1:l){
@@ -857,271 +906,389 @@ for(i in 1:l){
 plot(sigma_seq,llik,type=&#39;l&#39;,xlab = &#39;sigma&#39;,ylab=&#39;log likelihood&#39;)
 abline(v = sigma_seq[which.max(llik)],lty=2)
 text(x = sigma_seq[which.max(llik)]+0.022,y = min(llik), labels=paste(&#39;sigma=&#39;,round(sigma_seq[which.max(llik)],3),sep = &#39;&#39;))</code></pre>
-<p><img src="figure/diagonal_mvebnm.Rmd/unnamed-chunk-5-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="figure/diagonal_mvebnm.Rmd/unnamed-chunk-11-1.png" width="672" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>sigma_seq[which.min(abs(llik[1]/2-llik))]</code></pre>
 <pre><code>[1] 0.1131313</code></pre>
 <p>Log likelihood peaks at <span class="math inline">\(\sigma=0\)</span>. In this example, <span class="math inline">\(l(\sigma=0;X)\approx 2\times l(\sigma=0.113;X)\)</span>.</p>
 </div>
-<div id="four-mixture-components-ash-1by1-then-ed" class="section level2">
-<h2>Four mixture components, ash-1by1, then ED</h2>
-<p>Now we generate data from a mixture of 4 MVN with the following covariance matrices: pointmass, identity, present (and identical) in first two conditions, present (and identical) in last three conditions, each with 500 samples(so <span class="math inline">\(\pi_1=\pi_2=\pi_3=\pi_4=0.25\)</span>), and <span class="math inline">\(s_i=0.01\)</span>.</p>
-<p>We first run ash 1by1 to identify samples are have strong signals(ideally total 500*3=1500 samples), then run ED on these “strong” samples.</p>
+<div id="three-mixture-components" class="section level2">
+<h2>Three mixture components</h2>
+<p>Let’s add one more covariance matrix, a rank-2 matrix.</p>
+<pre class="r"><code>cov3 = c(1,1,1,0,0)%*%t(c(1,1,1,0,0))
+cov4 = c(1,1,1,1,0)%*%t(c(1,1,1,1,0))
+print(cov3+cov4)</code></pre>
+<pre><code>     [,1] [,2] [,3] [,4] [,5]
+[1,]    2    2    2    1    0
+[2,]    2    2    2    1    0
+[3,]    2    2    2    1    0
+[4,]    1    1    1    1    0
+[5,]    0    0    0    0    0</code></pre>
+<pre class="r"><code>simple_sims3 = function(nsamp = 100, err_sd = 0.01){
+    ncond = 5
+    b1 = rnorm(nsamp)
+    B.1 = matrix(cbind(b1, b1, 0, 0, 0), nrow = nsamp, ncol = ncond)
+    b2 = rnorm(nsamp)
+    B.2 = matrix(cbind(0, 0, b2, b2, b2), nrow = nsamp, ncol = ncond)
+    
+    U4 = c(1,1,1,0,0)%*%t(c(1,1,1,0,0))+c(1,1,1,1,0)%*%t(c(1,1,1,1,0))
+    B.3 = rmvnorm(nsamp,sigma = U4)
+    
+    #B.id = matrix(rnorm(nsamp * ncond), nrow = nsamp, ncol = ncond)
+    #B.zero = matrix(0, nrow = nsamp, ncol = ncond)
+    
+    B = rbind(B.1, B.2,B.3)
+    Shat = matrix(err_sd, nrow = nrow(B), ncol = ncol(B))
+    E = matrix(rnorm(length(Shat), mean = 0, sd = Shat), nrow = nrow(B), ncol = ncol(B))
+    Bhat = B + E
+    row_ids = paste0(&quot;effect_&quot;, 1:nrow(B))
+    col_ids = paste0(&quot;condition_&quot;, 1:ncol(B))
+    rownames(B) = row_ids
+    colnames(B) = col_ids
+    rownames(Bhat) = row_ids
+    colnames(Bhat) = col_ids
+    rownames(Shat) = row_ids
+    colnames(Shat) = col_ids
+    U = matrix(0,nrow=ncond,ncol=ncond)
+    U2 = U
+    U2[1:2,1:2] = 1
+    U3 = U
+    U3[3:5,3:5] = 1
+    U4 = 
+    U.true = list(#U1 = matrix(0,nrow=ncond,ncol=ncond),
+                  U2=U2,
+                  U3=U3,
+                  U4 = U4)
+    return(list(B = B, Bhat = Bhat, Shat = Shat,U.true=U.true))
+}
+
+set.seed(12345)
+simdata = simple_sims3(500,err_sd = 0.01)
+data = mash_set_data(simdata$Bhat,simdata$Shat)
+#m.1by1 = mash_1by1(data)
+#strong = get_significant_results(m.1by1)
+strong = 1:nrow(simdata$B)
+U.c    = cov_canonical(data)
+U.pca  = cov_pca(data,5,strong)
+ed.out = bovy_wrapper(data,U.pca,strong)</code></pre>
+<p>Let’s look at ED estimates.</p>
+<p>Estimated mixing proportions:</p>
+<pre class="r"><code>round(ed.out$pi,2)</code></pre>
+<pre><code>[1] 0.01 0.01 0.00 0.00 0.00 0.98</code></pre>
+<p>Estimated covariance matrices:</p>
+<pre class="r"><code>lapply(ed.out$Ulist,round,digits=3)</code></pre>
+<pre><code>$PCA_1
+     [,1] [,2] [,3] [,4] [,5]
+[1,]    0    0    0    0    0
+[2,]    0    0    0    0    0
+[3,]    0    0    0    0    0
+[4,]    0    0    0    0    0
+[5,]    0    0    0    0    0
+
+$PCA_2
+     [,1] [,2] [,3] [,4] [,5]
+[1,]    0    0    0    0    0
+[2,]    0    0    0    0    0
+[3,]    0    0    0    0    0
+[4,]    0    0    0    0    0
+[5,]    0    0    0    0    0
+
+$PCA_3
+     [,1] [,2] [,3] [,4] [,5]
+[1,]    0    0    0    0    0
+[2,]    0    0    0    0    0
+[3,]    0    0    0    0    0
+[4,]    0    0    0    0    0
+[5,]    0    0    0    0    0
+
+$PCA_4
+     [,1] [,2] [,3] [,4] [,5]
+[1,]    0    0    0    0    0
+[2,]    0    0    0    0    0
+[3,]    0    0    0    0    0
+[4,]    0    0    0    0    0
+[5,]    0    0    0    0    0
+
+$PCA_5
+     [,1] [,2] [,3] [,4] [,5]
+[1,]    0    0    0    0    0
+[2,]    0    0    0    0    0
+[3,]    0    0    0    0    0
+[4,]    0    0    0    0    0
+[5,]    0    0    0    0    0
+
+$tPCA
+      [,1]  [,2]  [,3]  [,4]  [,5]
+[1,] 0.935 0.935 0.599 0.293 0.000
+[2,] 0.935 0.935 0.599 0.293 0.000
+[3,] 0.599 0.599 0.943 0.637 0.345
+[4,] 0.293 0.293 0.637 0.655 0.345
+[5,] 0.000 0.000 0.345 0.345 0.345</code></pre>
+<pre class="r"><code>l = 100
+sigma_seq = seq(0,0.4,length.out = l)
+llik = c()
+for(i in 1:l){
+  #print(i)
+  llik[i] = calc_loglikx(data,strong,ed.out$pi,ed.out$Ulist,sigma_seq[i])
+}
+plot(sigma_seq,llik,type=&#39;l&#39;,xlab = &#39;sigma&#39;,ylab=&#39;log likelihood&#39;)
+abline(v = sigma_seq[which.max(llik)],lty=2)
+text(x = sigma_seq[which.max(llik)]+0.03,y = min(llik), labels=paste(&#39;sigma=&#39;,round(sigma_seq[which.max(llik)],3),sep = &#39;&#39;))</code></pre>
+<p><img src="figure/diagonal_mvebnm.Rmd/unnamed-chunk-17-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Now let’s increase the standard error <span class="math inline">\(s_i\)</span> to <span class="math inline">\(0.5\)</span>.</p>
+<pre class="r"><code>simdata = simple_sims3(500,err_sd = 0.5)
+data = mash_set_data(simdata$Bhat,simdata$Shat)
+#m.1by1 = mash_1by1(data)
+#strong = get_significant_results(m.1by1)
+strong = 1:nrow(simdata$B)
+U.c    = cov_canonical(data)
+U.pca  = cov_pca(data,5,strong)
+ed.out = bovy_wrapper(data,U.pca,strong)</code></pre>
+<p>Let’s look at ED estimates.</p>
+<p>Estimated mixing proportions:</p>
+<pre class="r"><code>round(ed.out$pi,2)</code></pre>
+<pre><code>[1] 0.26 0.14 0.00 0.00 0.00 0.59</code></pre>
+<p>Estimated covariance matrices:</p>
+<pre class="r"><code>lapply(ed.out$Ulist,round,digits=3)</code></pre>
+<pre><code>$PCA_1
+      [,1]  [,2]  [,3]  [,4]  [,5]
+[1,] 0.178 0.173 0.169 0.106 0.032
+[2,] 0.173 0.169 0.164 0.103 0.031
+[3,] 0.169 0.164 0.160 0.100 0.030
+[4,] 0.106 0.103 0.100 0.062 0.019
+[5,] 0.032 0.031 0.030 0.019 0.006
+
+$PCA_2
+       [,1]   [,2]   [,3]   [,4]   [,5]
+[1,]  0.056  0.061 -0.056 -0.082 -0.080
+[2,]  0.061  0.066 -0.060 -0.089 -0.086
+[3,] -0.056 -0.060  0.055  0.081  0.079
+[4,] -0.082 -0.089  0.081  0.120  0.116
+[5,] -0.080 -0.086  0.079  0.116  0.113
+
+$PCA_3
+       [,1]   [,2]   [,3]   [,4]   [,5]
+[1,]  0.005  0.004 -0.032  0.042 -0.014
+[2,]  0.004  0.003 -0.026  0.033 -0.011
+[3,] -0.032 -0.026  0.219 -0.282  0.094
+[4,]  0.042  0.033 -0.282  0.362 -0.121
+[5,] -0.014 -0.011  0.094 -0.121  0.040
+
+$PCA_4
+       [,1]   [,2]   [,3]   [,4]   [,5]
+[1,]  0.000  0.000 -0.001  0.000  0.001
+[2,]  0.000  0.000 -0.001  0.000  0.001
+[3,] -0.001 -0.001  0.002  0.001 -0.003
+[4,]  0.000  0.000  0.001  0.000 -0.001
+[5,]  0.001  0.001 -0.003 -0.001  0.005
+
+$PCA_5
+       [,1]   [,2] [,3] [,4] [,5]
+[1,]  0.009 -0.009    0    0    0
+[2,] -0.009  0.009    0    0    0
+[3,]  0.000  0.000    0    0    0
+[4,]  0.000  0.000    0    0    0
+[5,]  0.000  0.000    0    0    0
+
+$tPCA
+      [,1]   [,2]  [,3]  [,4]   [,5]
+[1,] 1.567  1.529 1.130 0.575  0.001
+[2,] 1.529  1.508 1.080 0.541 -0.015
+[3,] 1.130  1.080 1.535 0.961  0.436
+[4,] 0.575  0.541 0.961 0.966  0.439
+[5,] 0.001 -0.015 0.436 0.439  0.491</code></pre>
+<pre class="r"><code>l = 100
+sigma_seq = seq(0,0.4,length.out = l)
+llik = c()
+for(i in 1:l){
+  #print(i)
+  llik[i] = calc_loglikx(data,strong,ed.out$pi,ed.out$Ulist,sigma_seq[i])
+}
+plot(sigma_seq,llik,type=&#39;l&#39;,xlab = &#39;sigma&#39;,ylab=&#39;log likelihood&#39;)
+abline(v = sigma_seq[which.max(llik)],lty=2)
+text(x = sigma_seq[which.max(llik)]+0.03,y = min(llik), labels=paste(&#39;sigma=&#39;,round(sigma_seq[which.max(llik)],3),sep = &#39;&#39;))</code></pre>
+<p><img src="figure/diagonal_mvebnm.Rmd/unnamed-chunk-21-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="void" class="section level2">
+<h2>void</h2>
+<p>Now we generate data from a mixture of 3 MVN with the following covariance matrices: identity, present (and identical) in first two conditions, present (and identical) in last three conditions, each with 500 samples(so <span class="math inline">\(\pi_1=\pi_2=\pi_3=1/3\)</span>), and <span class="math inline">\(s_i=0.01\)</span>.</p>
+<pre class="r"><code>simple_sims3 = function(nsamp = 100, err_sd = 0.01){
+    ncond = 5
+    b1 = rnorm(nsamp)
+    B.1 = matrix(cbind(b1, b1, 0, 0, 0), nrow = nsamp, ncol = ncond)
+    b2 = rnorm(nsamp)
+    B.2 = matrix(cbind(0, 0, b2, b2, b2), nrow = nsamp, ncol = ncond)
+    
+    B.id = matrix(rnorm(nsamp * ncond), nrow = nsamp, ncol = ncond)
+    #B.zero = matrix(0, nrow = nsamp, ncol = ncond)
+    
+    B = rbind(B.id,B.1, B.2)
+    Shat = matrix(err_sd, nrow = nrow(B), ncol = ncol(B))
+    E = matrix(rnorm(length(Shat), mean = 0, sd = Shat), nrow = nrow(B), ncol = ncol(B))
+    Bhat = B + E
+    row_ids = paste0(&quot;effect_&quot;, 1:nrow(B))
+    col_ids = paste0(&quot;condition_&quot;, 1:ncol(B))
+    rownames(B) = row_ids
+    colnames(B) = col_ids
+    rownames(Bhat) = row_ids
+    colnames(Bhat) = col_ids
+    rownames(Shat) = row_ids
+    colnames(Shat) = col_ids
+    U = matrix(0,nrow=ncond,ncol=ncond)
+    U2 = U
+    U2[1:2,1:2] = 1
+    U3 = U
+    U3[3:5,3:5] = 1
+    U.true = list(#U1 = matrix(0,nrow=ncond,ncol=ncond),
+                  U2=U2,
+                  U3=U3,
+                  U4 = diag(ncond))
+    return(list(B = B, Bhat = Bhat, Shat = Shat,U.true=U.true))
+}</code></pre>
 <pre class="r"><code>set.seed(12345)
-simdata = simple_sims2(500,err_sd = 0.01)
-#result = simu_study(simdata)
+simdata = simple_sims3(50,err_sd = 0.01)
 data = mash_set_data(simdata$Bhat,simdata$Shat)
-m.1by1 = mash_1by1(data)
-strong = get_significant_results(m.1by1)
+#m.1by1 = mash_1by1(data)
+#strong = get_significant_results(m.1by1)
+strong = 1:nrow(simdata$B)
 U.c    = cov_canonical(data)
 U.pca  = cov_pca(data,5,strong)
-ed.out = bovy_wrapper(data,U.pca,strong)
+ed.out = bovy_wrapper(data,U.pca,strong)</code></pre>
+<p>Estimated mixing proportions:</p>
+<pre class="r"><code>round(ed.out$pi,2)</code></pre>
+<pre><code>[1] 0.05 0.03 0.00 0.00 0.00 0.93</code></pre>
+<p>Estimated covariance matrices:</p>
+<pre class="r"><code>lapply(ed.out$Ulist,round,digits=3)</code></pre>
+<pre><code>$PCA_1
+       [,1]   [,2]   [,3]   [,4]   [,5]
+[1,]  0.001  0.000 -0.006 -0.006 -0.006
+[2,]  0.000  0.000 -0.004 -0.004 -0.004
+[3,] -0.006 -0.004  0.057  0.058  0.060
+[4,] -0.006 -0.004  0.058  0.059  0.061
+[5,] -0.006 -0.004  0.060  0.061  0.062
 
+$PCA_2
+       [,1]   [,2]   [,3] [,4]  [,5]
+[1,]  0.014  0.012 -0.001    0 0.004
+[2,]  0.012  0.010 -0.001    0 0.003
+[3,] -0.001 -0.001  0.000    0 0.000
+[4,]  0.000  0.000  0.000    0 0.000
+[5,]  0.004  0.003  0.000    0 0.001
 
+$PCA_3
+     [,1] [,2] [,3] [,4] [,5]
+[1,]    0    0    0    0    0
+[2,]    0    0    0    0    0
+[3,]    0    0    0    0    0
+[4,]    0    0    0    0    0
+[5,]    0    0    0    0    0
 
-#U.ed   = cov_ed(data,U.pca,strong)
-#out = summary_out(simdata$B,result)
-#knitr::kable(out$find_genes,caption = &#39;On finding genes&#39;,digits = 3)
-#knitr::kable(out$find_cond,caption = &#39;On finding conditions&#39;,digits = 3)
+$PCA_4
+     [,1] [,2] [,3] [,4] [,5]
+[1,]    0    0    0    0    0
+[2,]    0    0    0    0    0
+[3,]    0    0    0    0    0
+[4,]    0    0    0    0    0
+[5,]    0    0    0    0    0
 
-l = 100
+$PCA_5
+     [,1] [,2] [,3] [,4] [,5]
+[1,]    0    0    0    0    0
+[2,]    0    0    0    0    0
+[3,]    0    0    0    0    0
+[4,]    0    0    0    0    0
+[5,]    0    0    0    0    0
+
+$tPCA
+       [,1]   [,2]   [,3]   [,4]  [,5]
+[1,]  0.881  0.422 -0.062 -0.087 0.089
+[2,]  0.422  0.721 -0.050 -0.023 0.046
+[3,] -0.062 -0.050  0.842  0.464 0.370
+[4,] -0.087 -0.023  0.464  0.760 0.473
+[5,]  0.089  0.046  0.370  0.473 0.904</code></pre>
+<pre class="r"><code>l = 100
 sigma_seq = seq(0,0.4,length.out = l)
 llik = c()
 for(i in 1:l){
-  print(i)
+  #print(i)
   llik[i] = calc_loglikx(data,strong,ed.out$pi,ed.out$Ulist,sigma_seq[i])
-}</code></pre>
-<pre><code>[1] 1
-[1] 2
-[1] 3
-[1] 4
-[1] 5
-[1] 6
-[1] 7
-[1] 8
-[1] 9
-[1] 10
-[1] 11
-[1] 12
-[1] 13
-[1] 14
-[1] 15
-[1] 16
-[1] 17
-[1] 18
-[1] 19
-[1] 20
-[1] 21
-[1] 22
-[1] 23
-[1] 24
-[1] 25
-[1] 26
-[1] 27
-[1] 28
-[1] 29
-[1] 30
-[1] 31
-[1] 32
-[1] 33
-[1] 34
-[1] 35
-[1] 36
-[1] 37
-[1] 38
-[1] 39
-[1] 40
-[1] 41
-[1] 42
-[1] 43
-[1] 44
-[1] 45
-[1] 46
-[1] 47
-[1] 48
-[1] 49
-[1] 50
-[1] 51
-[1] 52
-[1] 53
-[1] 54
-[1] 55
-[1] 56
-[1] 57
-[1] 58
-[1] 59
-[1] 60
-[1] 61
-[1] 62
-[1] 63
-[1] 64
-[1] 65
-[1] 66
-[1] 67
-[1] 68
-[1] 69
-[1] 70
-[1] 71
-[1] 72
-[1] 73
-[1] 74
-[1] 75
-[1] 76
-[1] 77
-[1] 78
-[1] 79
-[1] 80
-[1] 81
-[1] 82
-[1] 83
-[1] 84
-[1] 85
-[1] 86
-[1] 87
-[1] 88
-[1] 89
-[1] 90
-[1] 91
-[1] 92
-[1] 93
-[1] 94
-[1] 95
-[1] 96
-[1] 97
-[1] 98
-[1] 99
-[1] 100</code></pre>
-<pre class="r"><code>plot(sigma_seq,llik,type=&#39;l&#39;,xlab = &#39;sigma&#39;,ylab=&#39;log likelihood&#39;)
+}
+plot(sigma_seq,llik,type=&#39;l&#39;,xlab = &#39;sigma&#39;,ylab=&#39;log likelihood&#39;)
 abline(v = sigma_seq[which.max(llik)],lty=2)
-text(x = sigma_seq[which.max(llik)]+0.022,y = min(llik), labels=paste(&#39;sigma=&#39;,round(sigma_seq[which.max(llik)],3),sep = &#39;&#39;))</code></pre>
-<p><img src="figure/diagonal_mvebnm.Rmd/unnamed-chunk-7-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p>Now let’s increase <span class="math inline">\(s_i\)</span> to <span class="math inline">\(0.1\)</span>.</p>
-<pre class="r"><code>simdata = simple_sims2(500,err_sd = 0.1)
-#result = simu_study(simdata)
+text(x = sigma_seq[which.max(llik)]+0.03,y = min(llik), labels=paste(&#39;sigma=&#39;,round(sigma_seq[which.max(llik)],3),sep = &#39;&#39;))</code></pre>
+<p><img src="figure/diagonal_mvebnm.Rmd/unnamed-chunk-26-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Now increase the standard error <span class="math inline">\(s_i\)</span> to <span class="math inline">\(0.1\)</span>.</p>
+<pre class="r"><code>simdata = simple_sims3(50,err_sd = 0.1)
 data = mash_set_data(simdata$Bhat,simdata$Shat)
-m.1by1 = mash_1by1(data)
-strong = get_significant_results(m.1by1)
+#m.1by1 = mash_1by1(data)
+#strong = get_significant_results(m.1by1)
+strong = 1:nrow(simdata$B)
 U.c    = cov_canonical(data)
 U.pca  = cov_pca(data,5,strong)
-ed.out = bovy_wrapper(data,U.pca,strong)
+ed.out = bovy_wrapper(data,U.pca,strong)</code></pre>
+<p>Estimated mixing proportions:</p>
+<pre class="r"><code>round(ed.out$pi,2)</code></pre>
+<pre><code>[1] 0.08 0.10 0.00 0.00 0.00 0.82</code></pre>
+<p>Estimated covariance matrices:</p>
+<pre class="r"><code>lapply(ed.out$Ulist,round,digits=3)</code></pre>
+<pre><code>$PCA_1
+      [,1]  [,2]  [,3]  [,4]  [,5]
+[1,] 0.020 0.025 0.014 0.014 0.013
+[2,] 0.025 0.030 0.017 0.017 0.016
+[3,] 0.014 0.017 0.010 0.010 0.009
+[4,] 0.014 0.017 0.010 0.010 0.009
+[5,] 0.013 0.016 0.009 0.009 0.008
 
+$PCA_2
+       [,1]   [,2]   [,3]   [,4]   [,5]
+[1,]  0.009  0.009 -0.011 -0.010 -0.009
+[2,]  0.009  0.010 -0.011 -0.011 -0.010
+[3,] -0.011 -0.011  0.013  0.012  0.011
+[4,] -0.010 -0.011  0.012  0.011  0.010
+[5,] -0.009 -0.010  0.011  0.010  0.009
 
+$PCA_3
+       [,1]   [,2]   [,3]   [,4]   [,5]
+[1,]  0.003 -0.003  0.003  0.002 -0.005
+[2,] -0.003  0.002 -0.002 -0.002  0.004
+[3,]  0.003 -0.002  0.002  0.002 -0.004
+[4,]  0.002 -0.002  0.002  0.001 -0.003
+[5,] -0.005  0.004 -0.004 -0.003  0.007
 
-#U.ed   = cov_ed(data,U.pca,strong)
-#out = summary_out(simdata$B,result)
-#knitr::kable(out$find_genes,caption = &#39;On finding genes&#39;,digits = 3)
-#knitr::kable(out$find_cond,caption = &#39;On finding conditions&#39;,digits = 3)
+$PCA_4
+     [,1] [,2] [,3] [,4] [,5]
+[1,]    0    0    0    0    0
+[2,]    0    0    0    0    0
+[3,]    0    0    0    0    0
+[4,]    0    0    0    0    0
+[5,]    0    0    0    0    0
 
-l = 100
+$PCA_5
+     [,1] [,2] [,3] [,4] [,5]
+[1,]    0    0    0    0    0
+[2,]    0    0    0    0    0
+[3,]    0    0    0    0    0
+[4,]    0    0    0    0    0
+[5,]    0    0    0    0    0
+
+$tPCA
+       [,1]   [,2]   [,3]  [,4]   [,5]
+[1,]  0.844  0.549  0.019 0.006 -0.040
+[2,]  0.549  0.997 -0.014 0.034  0.067
+[3,]  0.019 -0.014  0.736 0.444  0.343
+[4,]  0.006  0.034  0.444 0.695  0.325
+[5,] -0.040  0.067  0.343 0.325  0.706</code></pre>
+<pre class="r"><code>l = 100
 sigma_seq = seq(0,0.4,length.out = l)
 llik = c()
 for(i in 1:l){
-  print(i)
+  #print(i)
   llik[i] = calc_loglikx(data,strong,ed.out$pi,ed.out$Ulist,sigma_seq[i])
-}</code></pre>
-<pre><code>[1] 1
-[1] 2
-[1] 3
-[1] 4
-[1] 5
-[1] 6
-[1] 7
-[1] 8
-[1] 9
-[1] 10
-[1] 11
-[1] 12
-[1] 13
-[1] 14
-[1] 15
-[1] 16
-[1] 17
-[1] 18
-[1] 19
-[1] 20
-[1] 21
-[1] 22
-[1] 23
-[1] 24
-[1] 25
-[1] 26
-[1] 27
-[1] 28
-[1] 29
-[1] 30
-[1] 31
-[1] 32
-[1] 33
-[1] 34
-[1] 35
-[1] 36
-[1] 37
-[1] 38
-[1] 39
-[1] 40
-[1] 41
-[1] 42
-[1] 43
-[1] 44
-[1] 45
-[1] 46
-[1] 47
-[1] 48
-[1] 49
-[1] 50
-[1] 51
-[1] 52
-[1] 53
-[1] 54
-[1] 55
-[1] 56
-[1] 57
-[1] 58
-[1] 59
-[1] 60
-[1] 61
-[1] 62
-[1] 63
-[1] 64
-[1] 65
-[1] 66
-[1] 67
-[1] 68
-[1] 69
-[1] 70
-[1] 71
-[1] 72
-[1] 73
-[1] 74
-[1] 75
-[1] 76
-[1] 77
-[1] 78
-[1] 79
-[1] 80
-[1] 81
-[1] 82
-[1] 83
-[1] 84
-[1] 85
-[1] 86
-[1] 87
-[1] 88
-[1] 89
-[1] 90
-[1] 91
-[1] 92
-[1] 93
-[1] 94
-[1] 95
-[1] 96
-[1] 97
-[1] 98
-[1] 99
-[1] 100</code></pre>
-<pre class="r"><code>plot(sigma_seq,llik,type=&#39;l&#39;,xlab = &#39;sigma&#39;,ylab=&#39;log likelihood&#39;)
+}
+plot(sigma_seq,llik,type=&#39;l&#39;,xlab = &#39;sigma&#39;,ylab=&#39;log likelihood&#39;)
 abline(v = sigma_seq[which.max(llik)],lty=2)
-text(x = sigma_seq[which.max(llik)]+0.022,y = min(llik), labels=paste(&#39;sigma=&#39;,round(sigma_seq[which.max(llik)],3),sep = &#39;&#39;))</code></pre>
-<p><img src="figure/diagonal_mvebnm.Rmd/unnamed-chunk-8-1.png" width="672" style="display: block; margin: auto;" /></p>
+text(x = sigma_seq[which.max(llik)]+0.03,y = min(llik), labels=paste(&#39;sigma=&#39;,round(sigma_seq[which.max(llik)],3),sep = &#39;&#39;))</code></pre>
+<p><img src="figure/diagonal_mvebnm.Rmd/unnamed-chunk-30-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Now likelihood peaks at <span class="math inline">\(\sigma\neq 0\)</span>. The reason might be that ED does not output identity matrix, which is in the prior, and adding diagonal term accommodate this. Maybe this is not a very good example.</p>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
