@@ -1,0 +1,29 @@
+---
+title: "mash mean model"
+author: "DongyueXie"
+date: "2020-07-21"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+---
+
+## Introduction
+
+Assume \[\mathbf{x}_i\sim N_p(\boldsymbol{\mu}_i,\Sigma_i)\], where $\Sigma_i$ is known, for $i=1,2,...,n$.
+We put a normal mixture prior on $\boldsymbol{\mu}_i$: \[\boldsymbol{\mu}_i\sim \sum_k\pi_k N(m_i\boldsymbol{1}_p,U_k)\], where $U_k$ are given, $m_i\boldsymbol{1}_p$ is the mean of normal priors. 
+
+The goal is to estimate $\pi_k$ and $m_i$ by maximizing the marginal likelihood 
+\[\mathbf{x}_i\sim\sum_k\pi_kN(m_i\boldsymbol{1}_p,U_k+\Sigma_i)\]
+
+\textbf{EM algorithm} Introduce $Z_i$ indicating the mixture component of sample $i$, $p(Z_i=k)=\pi_k$.
+
+The complete likelihood is \[p(X,Z|\boldsymbol{\pi},\boldsymbol{m}) = \prod_i\prod_k\{\pi_k N(\boldsymbol{x}_i|m_i\boldsymbol{1}_p,U_k+\Sigma_i)\}^{I(Z_i=k)}\]
+
+The expected log complete likelihood is \[E_{Z|X}\log p(X,Z|\boldsymbol{\pi},\boldsymbol{m}) = \sum_i\sum_k\{E_{Z|X}I(Z_i=k)\times (\log(\pi_k)+\log(N(\boldsymbol{x}_i|m_i\boldsymbol{1}_p,U_k+\Sigma_i)))\}\]
+
+E-step:  \[\gamma_{z_i}(k):=p(Z_i=k|\boldsymbol{x}_i,m_i) = \frac{\pi_k N(\boldsymbol{x}_i|m_i\boldsymbol{1}_p,U_k+\Sigma_i)}{\sum_{k=1}^K \pi_k N(\boldsymbol{x}_i|m_i\boldsymbol{1}_p,U_k+\Sigma_i)}\]
+
+M-step:  \[m_i = \frac{\sum_k \gamma_{z_i}(k) \boldsymbol{x}_i^T(\Sigma_i+U_k)^{-1}\boldsymbol{1}_p}{\sum_k \gamma_{z_i}(k)\boldsymbol{1}_p^T(\Sigma_i+U_k)^{-1}\boldsymbol{1}_p}\]
+
+ \[\pi_k = \frac{\sum_i \gamma_{z_i}(k)}{n}\]
+ 
