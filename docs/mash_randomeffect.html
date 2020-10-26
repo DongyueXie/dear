@@ -1,0 +1,1404 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Dongyue Xie" />
+
+<meta name="date" content="2020-10-01" />
+
+<title>mash random effect</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
+<script src="site_libs/anchor-sections-1.0/anchor-sections.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/master/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">dear</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="license.html">License</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/DongyueXie/dear">
+    <span class="fa fa-github"></span>
+     
+    Source code
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+<div class="btn-group pull-right">
+<button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">mash random effect</h1>
+<h4 class="author">Dongyue Xie</h4>
+<h4 class="date">2020-10-01</h4>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> </a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2020-10-26
+</p>
+<p>
+<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
+</p>
+<p>
+<strong>Knit directory:</strong> <code>dear/</code> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed."> </span>
+</p>
+<p>
+This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis was created with <a
+  href="https://github.com/jdblischak/workflowr">workflowr</a> (version 1.6.2). The <em>Checks</em> tab describes the reproducibility checks that were applied when the results were created. The <em>Past versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date </a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguptodate" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great! Since the R Markdown file has been committed to the Git repository, you know the exact version of the code that produced these results.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the global environment can affect the analysis in your R Markdown file in unknown ways. For reproduciblity it’s best to always run the code in an empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20200403code"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Seed:</strong> <code>set.seed(20200403)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20200403code" class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20200403)</code> was run prior to running the code in the R Markdown file. Setting a seed ensures that any results that rely on randomness, e.g. subsampling or permutations, are reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Session information:</strong> recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be confident that you successfully produced the results during this run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomDongyueXiedeartreefdd8c28f3ba0e47e6311e48e1f3f332045412525targetblankfdd8c28a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/DongyueXie/dear/tree/fdd8c28f3ba0e47e6311e48e1f3f332045412525" target="_blank">fdd8c28</a> </a>
+</p>
+</div>
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomDongyueXiedeartreefdd8c28f3ba0e47e6311e48e1f3f332045412525targetblankfdd8c28a" class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version <a href="https://github.com/DongyueXie/dear/tree/fdd8c28f3ba0e47e6311e48e1f3f332045412525" target="_blank">fdd8c28</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    .Rhistory
+    Ignored:    .Rproj.user/
+
+Untracked files:
+    Untracked:  code/myED.R
+    Untracked:  data/bulk_cytokin_SI.RData
+    Untracked:  output/PLNfit_bulk_cytokin_SI.RData
+    Untracked:  output/PLNfit_bulk_cytokin_SI_1_30.RData
+    Untracked:  output/pln_simu_denseSigma_plnFit.RData
+    Untracked:  output/pln_simu_diagSigma01.RData
+    Untracked:  output/pln_simu_diagSigma_plnFit.RData
+
+Unstaged changes:
+    Modified:   analysis/index.Rmd
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not included in this status report because it is ok for generated content to have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+
+<p>
+These are the previous versions of the repository in which changes were made to the R Markdown (<code>analysis/mash_randomeffect.Rmd</code>) and HTML (<code>docs/mash_randomeffect.html</code>) files. If you’ve configured a remote Git repository (see <code>?wflow_git_remote</code>), click on the hyperlinks in the table below to view the files as they were in that past version.
+</p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/DongyueXie/dear/blob/fdd8c28f3ba0e47e6311e48e1f3f332045412525/analysis/mash_randomeffect.Rmd" target="_blank">fdd8c28</a>
+</td>
+<td>
+DongyueXie
+</td>
+<td>
+2020-10-26
+</td>
+<td>
+wflow_publish(“analysis/mash_randomeffect.Rmd”)
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<pre class="r"><code>library(mashr)
+library(mvtnorm)
+source(&#39;code/myED.R&#39;)
+
+n_conditions = function(data){ncol(data$Bhat)}
+
+n_effects = function(data){nrow(data$Bhat)}
+
+bovy_wrapper = function(data, Ulist_init, subset=NULL, ...){
+  if(is.null(subset)){subset = 1:n_effects(data)}
+  K = length(Ulist_init)
+  R = n_conditions(data)
+  pi_init = rep(1/K, K) # initial mix proportions
+  D = ncol(data$V)
+  if(all(data$V==diag(D))){
+    ed.res = extreme_deconvolution(data$Bhat[subset,],
+                                   data$Shat[subset,]^2,
+                                   xamp = pi_init,
+                                   xmean = matrix(0,nrow=K,ncol=R),
+                                   xcovar = Ulist_init,
+                                   fixmean = TRUE,
+                                   ...)
+  }else{
+    if(!is.null(data$L)){
+      ycovar = lapply(subset, function(i) data$L %*% (data$Shat_orig[i,] * t(data$V * data$Shat_orig[i,])) %*% t(data$L) )
+    }else{
+      ycovar = lapply(subset, function(i) data$Shat[i,] * t(data$V * data$Shat[i,]) )
+    }
+    ed.res = extreme_deconvolution(data$Bhat[subset,],
+                                   ycovar,
+                                   xamp = pi_init,
+                                   xmean = matrix(0,nrow=K,ncol=R),
+                                   xcovar = Ulist_init,
+                                   fixmean = TRUE,
+                                   ...)
+  }
+  return(list(pi = ed.res$xamp, Ulist = ed.res$xcovar, av_loglik = ed.res$avgloglikedata))
+}
+
+calc_loglikx = function(data,subset,pihat,Ulist,sigma){
+  
+  n = length(subset)
+  loglik = 0
+  for(i in subset){
+    loglik = loglik + mixture_loglikx(data$Bhat[i,],data$Shat[i,],pihat,Ulist,sigma)
+  }
+  loglik
+}
+
+mixture_loglikx = function(x,shat,pihat,Ulist,sigma){
+  
+  K = length(pihat)
+  p = length(x)
+  lik = 0
+  for(k in 1:K){
+    #browser()
+    lik = lik + pihat[k]*dmvnorm(x,sigma = Ulist[[k]]+diag(shat^2)+sigma^2*diag(p))
+  }
+  log(lik)
+}
+
+
+
+fdp = function(dis.idx, true.idx){
+  if(length(dis.idx)==0){
+    0
+  }else{
+    1-mean(dis.idx%in%true.idx)
+  }
+}
+
+
+auc = function(pred,true.label){
+  auc=pROC::roc(response = true.label, predictor = pred,direction = &#39;&lt;&#39;,levels = c(0,1))
+  auc$auc
+}
+
+powr = function(dis.idx, true.idx){
+  if(length(dis.idx)==0){
+    0
+  }else{
+    sum(dis.idx%in%true.idx)/length(true.idx)
+  }
+}
+
+mse = function(x,y){
+  mean((x-y)^2)
+}
+
+summary_out = function(B,out = list(m.c=m.c,m.ed=m.ed,m.c.ed=m.c.ed,m.true=m.true),
+                       alpha=0.05,criteria = &#39;lfsr&#39;){
+  
+  # identify genes
+  non_null_idx = which(rowSums(B)!=0)
+  non_null_idx_c = which(B!=0)
+  
+  which_null = 1*(rowSums(B)==0)
+  which_null_c = 1*(B==0)
+  
+  fdps = c()
+  #aucs = c()
+  powers = c()
+  
+  fdps_c = c()
+  #aucs_c = c()
+  powers_c = c()
+  
+  mses = c()
+  log_liks = c()
+  
+  for(i in 1:length(out)){
+    
+    if(criteria==&#39;lfsr&#39;){
+    fdps[i] = fdp(get_significant_results(out[[i]],thresh = alpha),non_null_idx)
+    fdps_c[i] = fdp(which(out[[i]]$result$lfsr&lt;alpha),non_null_idx_c)
+    
+    #aucs[i] = auc(c(apply(out[[i]]$result$lfsr,1,min)),which_null)
+    #aucs_c[i] = auc(c(out[[i]]$result$lfsr),c(which_null_c))
+    
+    powers[i] = powr(get_significant_results(out[[i]],thresh = alpha),non_null_idx)
+    powers_c[i] = powr(which(out[[i]]$result$lfsr&lt;alpha),non_null_idx_c)
+    
+    }
+    
+    
+    if(criteria==&#39;lfdr&#39;){
+    fdps[i] = fdp(get_significant_results(out[[i]],thresh = alpha),non_null_idx)
+    fdps_c[i] = fdp(which(out[[i]]$result$lfdr&lt;alpha),non_null_idx_c)
+    
+    #aucs[i] = auc(c(apply(out[[i]]$result$lfdr,1,min)),which_null)
+    #aucs_c[i] = auc(c(out[[i]]$result$lfdr),c(which_null_c))
+    
+    powers[i] = powr(get_significant_results(out[[i]],thresh = alpha),non_null_idx)
+    powers_c[i] = powr(which(out[[i]]$result$lfdr&lt;alpha),non_null_idx_c)
+    
+    }
+    
+    
+    mses[i] = mse(B,out[[i]]$result$PosteriorMean)
+    log_liks[i] = get_loglik(out[[i]])
+  }
+  
+  find_genes = rbind(fdps,powers)
+  rownames(find_genes) = c(&#39;fdp&#39;,&#39;power&#39;)
+  colnames(find_genes) = names(out)
+  
+  find_cond = rbind(fdps_c,powers_c,mses,log_liks)
+  rownames(find_cond) = c(&#39;fdp&#39;,&#39;power&#39;,&#39;mse&#39;,&#39;log_lik&#39;)
+  colnames(find_cond) = names(out)
+  
+  return(list(find_genes=find_genes,find_cond=find_cond,mses=mses))
+  
+}
+
+simu_study = function(simdata,subset){
+  data = mash_set_data(simdata$Bhat,simdata$Shat)
+  #m.1by1 = mash_1by1(data)
+  #strong = get_significant_results(m.1by1)
+  strong = subset
+  U.c    = cov_canonical(data)
+  U.pca  = cov_pca(data,5,strong)
+  U.ed   = cov_ed(data,U.pca,strong)
+  
+  U.true = simdata$U.true
+  m.c    = mash(data, U.c,verbose = F)
+  m.ed   = mash(data, U.ed,verbose = F)
+  m.c.ed = mash(data, c(U.c,U.ed),verbose = F)
+  #m.c.ed.sparse = mash(data, c(U.c,U.ed.sparse),verbose = F)
+  m.true = mash(data, U.true,verbose = F)
+  out = list(m.true=m.true,m.c=m.c,m.ed=m.ed,m.c.ed=m.c.ed)
+  out
+}</code></pre>
+<div id="examples" class="section level2">
+<h2>Examples</h2>
+<p>Since mash includes data-driven covariance matrices in prior, the uncertainty in estimation results in “non-robustness” of subsequent estimates of lfsr. Here is an illustration of the <a href="mash_diagonal.html">problem</a> and pne possible solution.</p>
+<p>We generate <span class="math inline">\(X\)</span> from a mixture of 2 multivariate normal distributions, <span class="math inline">\(x_i\sim \sum_k\pi_k N(0,U_k+S_i)\)</span>, with the following covariance matrices: present (and identical) in first two conditions, present (and identical) in last three conditions, each with 500 samples(so <span class="math inline">\(\pi_1=\pi_2=0.5\)</span>), and <span class="math inline">\(S_i=diag(0.1,...,0.1)\)</span>.</p>
+<p>Two covariance matrices are:</p>
+<pre class="r"><code>cov1 = c(1,1,0,0,0)%*%t(c(1,1,0,0,0))
+cov2 = c(0,0,1,1,1)%*%t(c(0,0,1,1,1))
+print(cov1)</code></pre>
+<pre><code>     [,1] [,2] [,3] [,4] [,5]
+[1,]    1    1    0    0    0
+[2,]    1    1    0    0    0
+[3,]    0    0    0    0    0
+[4,]    0    0    0    0    0
+[5,]    0    0    0    0    0</code></pre>
+<pre class="r"><code>print(cov2)</code></pre>
+<pre><code>     [,1] [,2] [,3] [,4] [,5]
+[1,]    0    0    0    0    0
+[2,]    0    0    0    0    0
+[3,]    0    0    1    1    1
+[4,]    0    0    1    1    1
+[5,]    0    0    1    1    1</code></pre>
+<pre class="r"><code>simple_sims0 = function(nsamp = 100, err_sd = 0.01){
+    ncond = 5
+    b1 = rnorm(nsamp)
+    B.1 = matrix(cbind(b1, b1, 0, 0, 0), nrow = nsamp, ncol = ncond)
+    b2 = rnorm(nsamp)
+    B.2 = matrix(cbind(0, 0, b2, b2, b2), nrow = nsamp, ncol = ncond)
+    
+    #B.id = matrix(rnorm(nsamp * ncond), nrow = nsamp, ncol = ncond)
+    #B.zero = matrix(0, nrow = nsamp, ncol = ncond)
+    
+    B = rbind(B.1, B.2)
+    Shat = matrix(err_sd, nrow = nrow(B), ncol = ncol(B))
+    E = matrix(rnorm(length(Shat), mean = 0, sd = Shat), nrow = nrow(B), ncol = ncol(B))
+    Bhat = B + E
+    row_ids = paste0(&quot;effect_&quot;, 1:nrow(B))
+    col_ids = paste0(&quot;condition_&quot;, 1:ncol(B))
+    rownames(B) = row_ids
+    colnames(B) = col_ids
+    rownames(Bhat) = row_ids
+    colnames(Bhat) = col_ids
+    rownames(Shat) = row_ids
+    colnames(Shat) = col_ids
+    U = matrix(0,nrow=ncond,ncol=ncond)
+    U2 = U
+    U2[1:2,1:2] = 1
+    U3 = U
+    U3[3:5,3:5] = 1
+    U.true = list(#U1 = matrix(0,nrow=ncond,ncol=ncond),
+                  U2=U2,
+                  U3=U3)
+                  #U4 = diag(ncond))
+    return(list(B = B, Bhat = Bhat, Shat = Shat,U.true=U.true))
+}</code></pre>
+<p>We compare the following methods, which are different in using</p>
+<ol start="0" style="list-style-type: decimal">
+<li>True covariances (m.true);</li>
+<li>canonical covariances (m.c);</li>
+<li>covariances from ED (m.ed);</li>
+<li>canonical + ED covariances (m.c.ed);</li>
+<li>canonical + universal random effect ED covariances (as <span class="math inline">\(U_k+\sigma^2I\)</span>, m.c.myed.universal);</li>
+<li>canonical + universal random effect ED covariances (as <span class="math inline">\(S_i+\sigma^2I\)</span>, m.c.myed.universal2);</li>
+<li>canonical + mixture-specific random effect ED covariances (m.c.myed.mixture);</li>
+<li>canonical + sample-specific random effect ED covariances (m.c.myed.sample).</li>
+</ol>
+<pre class="r"><code>set.seed(12345)
+simdata = simple_sims0(500,err_sd = 0.1)
+
+data = mash_set_data(simdata$Bhat,simdata$Shat)
+#m.1by1 = mash_1by1(data)
+#strong = get_significant_results(m.1by1)
+strong = 1:nrow(simdata$B)
+U.c    = cov_canonical(data)
+U.pca  = cov_pca(data,5,strong)
+ed.out = bovy_wrapper(data,U.pca,strong)
+
+myed.universal = myED_wrapper(data,U.pca,0.1,maxiter=100,printevery = 1)</code></pre>
+<pre><code>[1] &quot;running iteration 1, loglik -2655.724411)&quot;
+[1] &quot;running iteration 2, loglik -865.856316)&quot;
+[1] &quot;running iteration 3, loglik 47.498536)&quot;
+[1] &quot;running iteration 4, loglik 472.711254)&quot;
+[1] &quot;running iteration 5, loglik 677.343688)&quot;
+[1] &quot;running iteration 6, loglik 789.724713)&quot;
+[1] &quot;running iteration 7, loglik 858.879392)&quot;
+[1] &quot;running iteration 8, loglik 905.094607)&quot;
+[1] &quot;running iteration 9, loglik 937.871828)&quot;
+[1] &quot;running iteration 10, loglik 962.181715)&quot;
+[1] &quot;running iteration 11, loglik 980.850604)&quot;
+[1] &quot;running iteration 12, loglik 995.592198)&quot;
+[1] &quot;running iteration 13, loglik 1007.500256)&quot;
+[1] &quot;running iteration 14, loglik 1017.302767)&quot;
+[1] &quot;running iteration 15, loglik 1025.501502)&quot;
+[1] &quot;running iteration 16, loglik 1032.452684)&quot;
+[1] &quot;running iteration 17, loglik 1038.415689)&quot;
+[1] &quot;running iteration 18, loglik 1043.583556)&quot;
+[1] &quot;running iteration 19, loglik 1048.102732)&quot;
+[1] &quot;running iteration 20, loglik 1052.086201)&quot;
+[1] &quot;running iteration 21, loglik 1055.622450)&quot;
+[1] &quot;running iteration 22, loglik 1058.781707)&quot;
+[1] &quot;running iteration 23, loglik 1061.620383)&quot;
+[1] &quot;running iteration 24, loglik 1064.184286)&quot;
+[1] &quot;running iteration 25, loglik 1066.510977)&quot;
+[1] &quot;running iteration 26, loglik 1068.631539)&quot;
+[1] &quot;running iteration 27, loglik 1070.571900)&quot;
+[1] &quot;running iteration 28, loglik 1072.353852)&quot;
+[1] &quot;running iteration 29, loglik 1073.995843)&quot;
+[1] &quot;running iteration 30, loglik 1075.513585)&quot;
+[1] &quot;running iteration 31, loglik 1076.920542)&quot;
+[1] &quot;running iteration 32, loglik 1078.228319)&quot;
+[1] &quot;running iteration 33, loglik 1079.446963)&quot;
+[1] &quot;running iteration 34, loglik 1080.585220)&quot;
+[1] &quot;running iteration 35, loglik 1081.650737)&quot;
+[1] &quot;running iteration 36, loglik 1082.650226)&quot;
+[1] &quot;running iteration 37, loglik 1083.589604)&quot;
+[1] &quot;running iteration 38, loglik 1084.474106)&quot;
+[1] &quot;running iteration 39, loglik 1085.308380)&quot;
+[1] &quot;running iteration 40, loglik 1086.096566)&quot;
+[1] &quot;running iteration 41, loglik 1086.842365)&quot;
+[1] &quot;running iteration 42, loglik 1087.549093)&quot;
+[1] &quot;running iteration 43, loglik 1088.219732)&quot;
+[1] &quot;running iteration 44, loglik 1088.856969)&quot;
+[1] &quot;running iteration 45, loglik 1089.463231)&quot;
+[1] &quot;running iteration 46, loglik 1090.040719)&quot;
+[1] &quot;running iteration 47, loglik 1090.591429)&quot;
+[1] &quot;running iteration 48, loglik 1091.117178)&quot;
+[1] &quot;running iteration 49, loglik 1091.619624)&quot;
+[1] &quot;running iteration 50, loglik 1092.100280)&quot;
+[1] &quot;running iteration 51, loglik 1092.560533)&quot;
+[1] &quot;running iteration 52, loglik 1093.001656)&quot;
+[1] &quot;running iteration 53, loglik 1093.424815)&quot;
+[1] &quot;running iteration 54, loglik 1093.831087)&quot;
+[1] &quot;running iteration 55, loglik 1094.221464)&quot;
+[1] &quot;running iteration 56, loglik 1094.596861)&quot;
+[1] &quot;running iteration 57, loglik 1094.958126)&quot;
+[1] &quot;running iteration 58, loglik 1095.306043)&quot;
+[1] &quot;running iteration 59, loglik 1095.641340)&quot;
+[1] &quot;running iteration 60, loglik 1095.964692)&quot;
+[1] &quot;running iteration 61, loglik 1096.276730)&quot;
+[1] &quot;running iteration 62, loglik 1096.578038)&quot;
+[1] &quot;running iteration 63, loglik 1096.869162)&quot;
+[1] &quot;running iteration 64, loglik 1097.150612)&quot;
+[1] &quot;running iteration 65, loglik 1097.422865)&quot;
+[1] &quot;running iteration 66, loglik 1097.686367)&quot;
+[1] &quot;running iteration 67, loglik 1097.941534)&quot;
+[1] &quot;running iteration 68, loglik 1098.188760)&quot;
+[1] &quot;running iteration 69, loglik 1098.428412)&quot;
+[1] &quot;running iteration 70, loglik 1098.660835)&quot;
+[1] &quot;running iteration 71, loglik 1098.886356)&quot;
+[1] &quot;running iteration 72, loglik 1099.105279)&quot;
+[1] &quot;running iteration 73, loglik 1099.317894)&quot;
+[1] &quot;running iteration 74, loglik 1099.524473)&quot;
+[1] &quot;running iteration 75, loglik 1099.725274)&quot;
+[1] &quot;running iteration 76, loglik 1099.920538)&quot;
+[1] &quot;running iteration 77, loglik 1100.110498)&quot;
+[1] &quot;running iteration 78, loglik 1100.295369)&quot;
+[1] &quot;running iteration 79, loglik 1100.475359)&quot;
+[1] &quot;running iteration 80, loglik 1100.650662)&quot;
+[1] &quot;running iteration 81, loglik 1100.821466)&quot;
+[1] &quot;running iteration 82, loglik 1100.987947)&quot;
+[1] &quot;running iteration 83, loglik 1101.150274)&quot;
+[1] &quot;running iteration 84, loglik 1101.308606)&quot;
+[1] &quot;running iteration 85, loglik 1101.463100)&quot;
+[1] &quot;running iteration 86, loglik 1101.613903)&quot;
+[1] &quot;running iteration 87, loglik 1101.761158)&quot;
+[1] &quot;running iteration 88, loglik 1101.905004)&quot;
+[1] &quot;running iteration 89, loglik 1102.045577)&quot;
+[1] &quot;running iteration 90, loglik 1102.183012)&quot;
+[1] &quot;running iteration 91, loglik 1102.317443)&quot;
+[1] &quot;running iteration 92, loglik 1102.449003)&quot;
+[1] &quot;running iteration 93, loglik 1102.577834)&quot;
+[1] &quot;running iteration 94, loglik 1102.704084)&quot;
+[1] &quot;running iteration 95, loglik 1102.827912)&quot;
+[1] &quot;running iteration 96, loglik 1102.949502)&quot;
+[1] &quot;running iteration 97, loglik 1103.069069)&quot;
+[1] &quot;running iteration 98, loglik 1103.186876)&quot;
+[1] &quot;running iteration 99, loglik 1103.303261)&quot;
+[1] &quot;running iteration 100, loglik 1103.418679)&quot;</code></pre>
+<pre class="r"><code>U.myed.universal  = myMash_data(myed.universal,data)$Ulist
+m.c.myed.universal = mash(data, c(U.c,U.myed.universal),verbose = F)
+myed.universal$sigma2</code></pre>
+<pre><code>[1] 0.0008249469</code></pre>
+<pre class="r"><code>U.myed.universal2 = myed.universal$Ulist
+data.myed.universal2 = data
+data.myed.universal2$Shat = sqrt(data.myed.universal2$Shat^2 + myed.universal$sigma2)
+m.c.myed.universal2 = mash(data.myed.universal2, c(U.c,U.myed.universal2),verbose = F)
+
+myed.mixture = myED_wrapper(data,U.pca,rep(0.1,length(U.pca)),maxiter=100,printevery = 1)</code></pre>
+<pre><code>[1] &quot;running iteration 1, loglik -2655.724411)&quot;
+[1] &quot;running iteration 2, loglik -727.589953)&quot;
+[1] &quot;running iteration 3, loglik 186.606918)&quot;
+[1] &quot;running iteration 4, loglik 555.419369)&quot;
+[1] &quot;running iteration 5, loglik 725.818096)&quot;
+[1] &quot;running iteration 6, loglik 820.448435)&quot;
+[1] &quot;running iteration 7, loglik 879.798347)&quot;
+[1] &quot;running iteration 8, loglik 920.133027)&quot;
+[1] &quot;running iteration 9, loglik 949.145437)&quot;
+[1] &quot;running iteration 10, loglik 970.917746)&quot;
+[1] &quot;running iteration 11, loglik 987.803720)&quot;
+[1] &quot;running iteration 12, loglik 1001.249154)&quot;
+[1] &quot;running iteration 13, loglik 1012.187721)&quot;
+[1] &quot;running iteration 14, loglik 1021.247437)&quot;
+[1] &quot;running iteration 15, loglik 1028.865252)&quot;
+[1] &quot;running iteration 16, loglik 1035.353982)&quot;
+[1] &quot;running iteration 17, loglik 1040.943110)&quot;
+[1] &quot;running iteration 18, loglik 1045.804581)&quot;
+[1] &quot;running iteration 19, loglik 1050.069628)&quot;
+[1] &quot;running iteration 20, loglik 1053.840054)&quot;
+[1] &quot;running iteration 21, loglik 1057.195984)&quot;
+[1] &quot;running iteration 22, loglik 1060.201297)&quot;
+[1] &quot;running iteration 23, loglik 1062.907517)&quot;
+[1] &quot;running iteration 24, loglik 1065.356640)&quot;
+[1] &quot;running iteration 25, loglik 1067.583224)&quot;
+[1] &quot;running iteration 26, loglik 1069.615955)&quot;
+[1] &quot;running iteration 27, loglik 1071.478834)&quot;
+[1] &quot;running iteration 28, loglik 1073.192090)&quot;
+[1] &quot;running iteration 29, loglik 1074.772891)&quot;
+[1] &quot;running iteration 30, loglik 1076.235892)&quot;
+[1] &quot;running iteration 31, loglik 1077.593683)&quot;
+[1] &quot;running iteration 32, loglik 1078.857132)&quot;
+[1] &quot;running iteration 33, loglik 1080.035674)&quot;
+[1] &quot;running iteration 34, loglik 1081.137532)&quot;
+[1] &quot;running iteration 35, loglik 1082.169909)&quot;
+[1] &quot;running iteration 36, loglik 1083.139139)&quot;
+[1] &quot;running iteration 37, loglik 1084.050813)&quot;
+[1] &quot;running iteration 38, loglik 1084.909886)&quot;
+[1] &quot;running iteration 39, loglik 1085.720763)&quot;
+[1] &quot;running iteration 40, loglik 1086.487372)&quot;
+[1] &quot;running iteration 41, loglik 1087.213230)&quot;
+[1] &quot;running iteration 42, loglik 1087.901491)&quot;
+[1] &quot;running iteration 43, loglik 1088.554994)&quot;
+[1] &quot;running iteration 44, loglik 1089.176302)&quot;
+[1] &quot;running iteration 45, loglik 1089.767730)&quot;
+[1] &quot;running iteration 46, loglik 1090.331381)&quot;
+[1] &quot;running iteration 47, loglik 1090.869163)&quot;
+[1] &quot;running iteration 48, loglik 1091.382816)&quot;
+[1] &quot;running iteration 49, loglik 1091.873927)&quot;
+[1] &quot;running iteration 50, loglik 1092.343947)&quot;
+[1] &quot;running iteration 51, loglik 1092.794206)&quot;
+[1] &quot;running iteration 52, loglik 1093.225925)&quot;
+[1] &quot;running iteration 53, loglik 1093.640227)&quot;
+[1] &quot;running iteration 54, loglik 1094.038146)&quot;
+[1] &quot;running iteration 55, loglik 1094.420636)&quot;
+[1] &quot;running iteration 56, loglik 1094.788579)&quot;
+[1] &quot;running iteration 57, loglik 1095.142789)&quot;
+[1] &quot;running iteration 58, loglik 1095.484025)&quot;
+[1] &quot;running iteration 59, loglik 1095.812987)&quot;
+[1] &quot;running iteration 60, loglik 1096.130327)&quot;
+[1] &quot;running iteration 61, loglik 1096.436653)&quot;
+[1] &quot;running iteration 62, loglik 1096.732530)&quot;
+[1] &quot;running iteration 63, loglik 1097.018486)&quot;
+[1] &quot;running iteration 64, loglik 1097.295013)&quot;
+[1] &quot;running iteration 65, loglik 1097.562571)&quot;
+[1] &quot;running iteration 66, loglik 1097.821592)&quot;
+[1] &quot;running iteration 67, loglik 1098.072480)&quot;
+[1] &quot;running iteration 68, loglik 1098.315614)&quot;
+[1] &quot;running iteration 69, loglik 1098.551350)&quot;
+[1] &quot;running iteration 70, loglik 1098.780021)&quot;
+[1] &quot;running iteration 71, loglik 1099.001943)&quot;
+[1] &quot;running iteration 72, loglik 1099.217411)&quot;
+[1] &quot;running iteration 73, loglik 1099.426706)&quot;
+[1] &quot;running iteration 74, loglik 1099.630089)&quot;
+[1] &quot;running iteration 75, loglik 1099.827810)&quot;
+[1] &quot;running iteration 76, loglik 1100.020103)&quot;
+[1] &quot;running iteration 77, loglik 1100.207190)&quot;
+[1] &quot;running iteration 78, loglik 1100.389281)&quot;
+[1] &quot;running iteration 79, loglik 1100.566576)&quot;
+[1] &quot;running iteration 80, loglik 1100.739263)&quot;
+[1] &quot;running iteration 81, loglik 1100.907519)&quot;
+[1] &quot;running iteration 82, loglik 1101.071516)&quot;
+[1] &quot;running iteration 83, loglik 1101.231414)&quot;
+[1] &quot;running iteration 84, loglik 1101.387366)&quot;
+[1] &quot;running iteration 85, loglik 1101.539518)&quot;
+[1] &quot;running iteration 86, loglik 1101.688007)&quot;
+[1] &quot;running iteration 87, loglik 1101.832967)&quot;
+[1] &quot;running iteration 88, loglik 1101.974522)&quot;
+[1] &quot;running iteration 89, loglik 1102.112792)&quot;
+[1] &quot;running iteration 90, loglik 1102.247891)&quot;
+[1] &quot;running iteration 91, loglik 1102.379928)&quot;
+[1] &quot;running iteration 92, loglik 1102.509007)&quot;
+[1] &quot;running iteration 93, loglik 1102.635228)&quot;
+[1] &quot;running iteration 94, loglik 1102.758684)&quot;
+[1] &quot;running iteration 95, loglik 1102.879468)&quot;
+[1] &quot;running iteration 96, loglik 1102.997666)&quot;
+[1] &quot;running iteration 97, loglik 1103.113360)&quot;
+[1] &quot;running iteration 98, loglik 1103.226631)&quot;
+[1] &quot;running iteration 99, loglik 1103.337554)&quot;
+[1] &quot;running iteration 100, loglik 1103.446203)&quot;</code></pre>
+<pre class="r"><code>U.myed.mixture  = myMash_data(myed.mixture,data)$Ulist
+m.c.myed.mixture = mash(data, c(U.c,U.myed.mixture),verbose = F)
+myed.mixture$sigma2</code></pre>
+<pre><code>[1] 0.0008333841 0.0008118946 0.0008637158 0.0008887293 0.0008703730
+[6] 0.0008416655</code></pre>
+<pre class="r"><code>myed.sample = myED_wrapper(data,U.pca,rep(0.1,nrow(data$Bhat)),maxiter=100,printevery = 1)</code></pre>
+<pre><code>[1] &quot;running iteration 1, loglik -2655.724411)&quot;
+[1] &quot;running iteration 2, loglik -815.166423)&quot;
+[1] &quot;running iteration 3, loglik 99.891562)&quot;
+[1] &quot;running iteration 4, loglik 543.664709)&quot;
+[1] &quot;running iteration 5, loglik 765.215363)&quot;
+[1] &quot;running iteration 6, loglik 888.862367)&quot;
+[1] &quot;running iteration 7, loglik 965.446367)&quot;
+[1] &quot;running iteration 8, loglik 1016.805586)&quot;
+[1] &quot;running iteration 9, loglik 1053.338674)&quot;
+[1] &quot;running iteration 10, loglik 1080.518148)&quot;
+[1] &quot;running iteration 11, loglik 1101.461135)&quot;
+[1] &quot;running iteration 12, loglik 1118.058143)&quot;
+[1] &quot;running iteration 13, loglik 1131.515612)&quot;
+[1] &quot;running iteration 14, loglik 1142.636470)&quot;
+[1] &quot;running iteration 15, loglik 1151.974225)&quot;
+[1] &quot;running iteration 16, loglik 1159.922004)&quot;
+[1] &quot;running iteration 17, loglik 1166.766259)&quot;
+[1] &quot;running iteration 18, loglik 1172.720389)&quot;
+[1] &quot;running iteration 19, loglik 1177.946480)&quot;
+[1] &quot;running iteration 20, loglik 1182.569760)&quot;
+[1] &quot;running iteration 21, loglik 1186.688452)&quot;
+[1] &quot;running iteration 22, loglik 1190.380644)&quot;
+[1] &quot;running iteration 23, loglik 1193.709174)&quot;
+[1] &quot;running iteration 24, loglik 1196.725159)&quot;
+[1] &quot;running iteration 25, loglik 1199.470602)&quot;
+[1] &quot;running iteration 26, loglik 1201.980322)&quot;
+[1] &quot;running iteration 27, loglik 1204.283426)&quot;
+[1] &quot;running iteration 28, loglik 1206.404429)&quot;
+[1] &quot;running iteration 29, loglik 1208.364123)&quot;
+[1] &quot;running iteration 30, loglik 1210.180256)&quot;
+[1] &quot;running iteration 31, loglik 1211.868069)&quot;
+[1] &quot;running iteration 32, loglik 1213.440719)&quot;
+[1] &quot;running iteration 33, loglik 1214.909629)&quot;
+[1] &quot;running iteration 34, loglik 1216.284758)&quot;
+[1] &quot;running iteration 35, loglik 1217.574831)&quot;
+[1] &quot;running iteration 36, loglik 1218.787523)&quot;
+[1] &quot;running iteration 37, loglik 1219.929615)&quot;
+[1] &quot;running iteration 38, loglik 1221.007115)&quot;
+[1] &quot;running iteration 39, loglik 1222.025369)&quot;
+[1] &quot;running iteration 40, loglik 1222.989150)&quot;
+[1] &quot;running iteration 41, loglik 1223.902729)&quot;
+[1] &quot;running iteration 42, loglik 1224.769943)&quot;
+[1] &quot;running iteration 43, loglik 1225.594248)&quot;
+[1] &quot;running iteration 44, loglik 1226.378763)&quot;
+[1] &quot;running iteration 45, loglik 1227.126312)&quot;
+[1] &quot;running iteration 46, loglik 1227.839458)&quot;
+[1] &quot;running iteration 47, loglik 1228.520531)&quot;
+[1] &quot;running iteration 48, loglik 1229.171657)&quot;
+[1] &quot;running iteration 49, loglik 1229.794776)&quot;
+[1] &quot;running iteration 50, loglik 1230.391663)&quot;
+[1] &quot;running iteration 51, loglik 1230.963950)&quot;
+[1] &quot;running iteration 52, loglik 1231.513131)&quot;
+[1] &quot;running iteration 53, loglik 1232.040584)&quot;
+[1] &quot;running iteration 54, loglik 1232.547580)&quot;
+[1] &quot;running iteration 55, loglik 1233.035290)&quot;
+[1] &quot;running iteration 56, loglik 1233.504801)&quot;
+[1] &quot;running iteration 57, loglik 1233.957116)&quot;
+[1] &quot;running iteration 58, loglik 1234.393167)&quot;
+[1] &quot;running iteration 59, loglik 1234.813821)&quot;
+[1] &quot;running iteration 60, loglik 1235.219882)&quot;
+[1] &quot;running iteration 61, loglik 1235.612101)&quot;
+[1] &quot;running iteration 62, loglik 1235.991176)&quot;
+[1] &quot;running iteration 63, loglik 1236.357762)&quot;
+[1] &quot;running iteration 64, loglik 1236.712467)&quot;
+[1] &quot;running iteration 65, loglik 1237.055863)&quot;
+[1] &quot;running iteration 66, loglik 1237.388486)&quot;
+[1] &quot;running iteration 67, loglik 1237.710836)&quot;
+[1] &quot;running iteration 68, loglik 1238.023386)&quot;
+[1] &quot;running iteration 69, loglik 1238.326577)&quot;
+[1] &quot;running iteration 70, loglik 1238.620825)&quot;
+[1] &quot;running iteration 71, loglik 1238.906523)&quot;
+[1] &quot;running iteration 72, loglik 1239.184039)&quot;
+[1] &quot;running iteration 73, loglik 1239.453723)&quot;
+[1] &quot;running iteration 74, loglik 1239.715902)&quot;
+[1] &quot;running iteration 75, loglik 1239.970887)&quot;
+[1] &quot;running iteration 76, loglik 1240.218972)&quot;
+[1] &quot;running iteration 77, loglik 1240.460435)&quot;
+[1] &quot;running iteration 78, loglik 1240.695538)&quot;
+[1] &quot;running iteration 79, loglik 1240.924531)&quot;
+[1] &quot;running iteration 80, loglik 1241.147650)&quot;
+[1] &quot;running iteration 81, loglik 1241.365119)&quot;
+[1] &quot;running iteration 82, loglik 1241.577152)&quot;
+[1] &quot;running iteration 83, loglik 1241.783950)&quot;
+[1] &quot;running iteration 84, loglik 1241.985707)&quot;
+[1] &quot;running iteration 85, loglik 1242.182605)&quot;
+[1] &quot;running iteration 86, loglik 1242.374819)&quot;
+[1] &quot;running iteration 87, loglik 1242.562514)&quot;
+[1] &quot;running iteration 88, loglik 1242.745850)&quot;
+[1] &quot;running iteration 89, loglik 1242.924976)&quot;
+[1] &quot;running iteration 90, loglik 1243.100038)&quot;
+[1] &quot;running iteration 91, loglik 1243.271172)&quot;
+[1] &quot;running iteration 92, loglik 1243.438510)&quot;
+[1] &quot;running iteration 93, loglik 1243.602177)&quot;
+[1] &quot;running iteration 94, loglik 1243.762294)&quot;
+[1] &quot;running iteration 95, loglik 1243.918975)&quot;
+[1] &quot;running iteration 96, loglik 1244.072331)&quot;
+[1] &quot;running iteration 97, loglik 1244.222467)&quot;
+[1] &quot;running iteration 98, loglik 1244.369483)&quot;
+[1] &quot;running iteration 99, loglik 1244.513477)&quot;
+[1] &quot;running iteration 100, loglik 1244.654540)&quot;</code></pre>
+<pre class="r"><code>U.myed.sample  = myMash_data(myed.sample,data)
+m.c.myed.sample = mash(U.myed.sample$data, c(U.c,U.myed.sample$U.myed.sample),verbose = F)
+summary(myed.sample$sigma2)</code></pre>
+<pre><code>     Min.   1st Qu.    Median      Mean   3rd Qu.      Max. 
+0.0001300 0.0002409 0.0005343 0.0026987 0.0032205 0.0350959 </code></pre>
+<pre class="r"><code>result = simu_study(simdata,1:nrow(simdata$B))
+result$m.c.myed.universal = m.c.myed.universal
+result$m.c.myed.universal2 = m.c.myed.universal2
+result$m.c.myed.mixture = m.c.myed.mixture
+result$m.c.myed.sample = m.c.myed.sample
+out = summary_out(simdata$B,result)
+knitr::kable(out$find_cond,caption = &#39;On finding conditions&#39;,digits = 5)</code></pre>
+<table>
+<caption>On finding conditions</caption>
+<colgroup>
+<col width="6%" />
+<col width="8%" />
+<col width="9%" />
+<col width="8%" />
+<col width="8%" />
+<col width="15%" />
+<col width="16%" />
+<col width="13%" />
+<col width="12%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="right">m.true</th>
+<th align="right">m.c</th>
+<th align="right">m.ed</th>
+<th align="right">m.c.ed</th>
+<th align="right">m.c.myed.universal</th>
+<th align="right">m.c.myed.universal2</th>
+<th align="right">m.c.myed.mixture</th>
+<th align="right">m.c.myed.sample</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">fdp</td>
+<td align="right">0.00186</td>
+<td align="right">0.08686</td>
+<td align="right">0.49838</td>
+<td align="right">0.49838</td>
+<td align="right">0.00185</td>
+<td align="right">0.46723</td>
+<td align="right">0.00185</td>
+<td align="right">0.04476</td>
+</tr>
+<tr class="even">
+<td align="left">power</td>
+<td align="right">0.85880</td>
+<td align="right">0.82000</td>
+<td align="right">0.86960</td>
+<td align="right">0.86960</td>
+<td align="right">0.86560</td>
+<td align="right">0.86480</td>
+<td align="right">0.86560</td>
+<td align="right">0.80240</td>
+</tr>
+<tr class="odd">
+<td align="left">mse</td>
+<td align="right">0.00218</td>
+<td align="right">0.00867</td>
+<td align="right">0.00223</td>
+<td align="right">0.00223</td>
+<td align="right">0.00226</td>
+<td align="right">0.00221</td>
+<td align="right">0.00225</td>
+<td align="right">0.00856</td>
+</tr>
+<tr class="even">
+<td align="left">log_lik</td>
+<td align="right">1103.28838</td>
+<td align="right">-3795.92910</td>
+<td align="right">1108.14843</td>
+<td align="right">1108.14843</td>
+<td align="right">1096.94093</td>
+<td align="right">1096.95135</td>
+<td align="right">1095.89826</td>
+<td align="right">-3776.91494</td>
+</tr>
+</tbody>
+</table>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 4.0.3 (2020-10-10)
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+Running under: Windows 10 x64 (build 19041)
+
+Matrix products: default
+
+locale:
+[1] LC_COLLATE=English_United States.1252 
+[2] LC_CTYPE=English_United States.1252   
+[3] LC_MONETARY=English_United States.1252
+[4] LC_NUMERIC=C                          
+[5] LC_TIME=English_United States.1252    
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+[1] mvtnorm_1.1-1   mashr_0.2.38    ashr_2.2-47     workflowr_1.6.2
+
+loaded via a namespace (and not attached):
+ [1] Rcpp_1.0.5       knitr_1.30       whisker_0.4      magrittr_1.5    
+ [5] SQUAREM_2020.5   lattice_0.20-41  R6_2.4.1         rlang_0.4.8     
+ [9] highr_0.8        plyr_1.8.6       stringr_1.4.0    tools_4.0.3     
+[13] grid_4.0.3       xfun_0.18        rmeta_3.0        irlba_2.3.3     
+[17] invgamma_1.1     git2r_0.27.1     htmltools_0.5.0  assertthat_0.2.1
+[21] abind_1.4-5      yaml_2.2.1       digest_0.6.27    rprojroot_1.3-2 
+[25] mixsqp_0.3-43    Matrix_1.2-18    later_1.1.0.1    promises_1.1.1  
+[29] fs_1.5.0         glue_1.4.2       evaluate_0.14    rmarkdown_2.5   
+[33] stringi_1.5.3    compiler_4.0.3   backports_1.1.10 truncnorm_1.0-8 
+[37] httpuv_1.5.4    </code></pre>
+</div>
+</div>
+
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+http://docs.mathjax.org/en/latest/configuration.html.  This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
