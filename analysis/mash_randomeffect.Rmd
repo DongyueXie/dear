@@ -267,9 +267,10 @@ U.c    = cov_canonical(data)
 U.pca  = cov_pca(data,5,strong)
 ed.out = bovy_wrapper(data,U.pca,strong)
 
-myed.universal = myED_wrapper(data,U.pca,0.1,maxiter=100,printevery = 1)
+myed.universal = myED_wrapper(data,U.pca,0.1,maxiter=100,printevery = 500)
 U.myed.universal  = myMash_data(myed.universal,data)$Ulist
 m.c.myed.universal = mash(data, c(U.c,U.myed.universal),verbose = F)
+print('estimated universal sigma2')
 myed.universal$sigma2
 
 U.myed.universal2 = myed.universal$Ulist
@@ -277,15 +278,17 @@ data.myed.universal2 = data
 data.myed.universal2$Shat = sqrt(data.myed.universal2$Shat^2 + myed.universal$sigma2)
 m.c.myed.universal2 = mash(data.myed.universal2, c(U.c,U.myed.universal2),verbose = F)
 
-myed.mixture = myED_wrapper(data,U.pca,rep(0.1,length(U.pca)),maxiter=100,printevery = 1)
+myed.mixture = myED_wrapper(data,U.pca,rep(0.1,length(U.pca)),maxiter=100,printevery = 500)
 U.myed.mixture  = myMash_data(myed.mixture,data)$Ulist
 m.c.myed.mixture = mash(data, c(U.c,U.myed.mixture),verbose = F)
+print('estimated mixture-specific sigma2')
 myed.mixture$sigma2
 
 
-myed.sample = myED_wrapper(data,U.pca,rep(0.1,nrow(data$Bhat)),maxiter=100,printevery = 1)
+myed.sample = myED_wrapper(data,U.pca,rep(0.1,nrow(data$Bhat)),maxiter=100,printevery = 500)
 U.myed.sample  = myMash_data(myed.sample,data)
 m.c.myed.sample = mash(U.myed.sample$data, c(U.c,U.myed.sample$U.myed.sample),verbose = F)
+print('estimated sample-specific sigma2')
 summary(myed.sample$sigma2)
 ```
 
