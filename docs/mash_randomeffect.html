@@ -527,16 +527,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomDongyueXiedeartreefdd8c28f3ba0e47e6311e48e1f3f332045412525targetblankfdd8c28a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/DongyueXie/dear/tree/fdd8c28f3ba0e47e6311e48e1f3f332045412525" target="_blank">fdd8c28</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomDongyueXiedeartreec24b3e2af9e35bc89a24f6f5a9529b051aa97729targetblankc24b3e2a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/DongyueXie/dear/tree/c24b3e2af9e35bc89a24f6f5a9529b051aa97729" target="_blank">c24b3e2</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomDongyueXiedeartreefdd8c28f3ba0e47e6311e48e1f3f332045412525targetblankfdd8c28a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomDongyueXiedeartreec24b3e2af9e35bc89a24f6f5a9529b051aa97729targetblankc24b3e2a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/DongyueXie/dear/tree/fdd8c28f3ba0e47e6311e48e1f3f332045412525" target="_blank">fdd8c28</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/DongyueXie/dear/tree/c24b3e2af9e35bc89a24f6f5a9529b051aa97729" target="_blank">c24b3e2</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -595,6 +595,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/DongyueXie/dear/blob/c24b3e2af9e35bc89a24f6f5a9529b051aa97729/analysis/mash_randomeffect.Rmd" target="_blank">c24b3e2</a>
+</td>
+<td>
+DongyueXie
+</td>
+<td>
+2020-10-26
+</td>
+<td>
+wflow_publish(“analysis/mash_randomeffect.Rmd”)
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/DongyueXie/dear/492fadd7b96dc6df60597cd642296fd3f118df88/docs/mash_randomeffect.html" target="_blank">492fadd</a>
+</td>
+<td>
+DongyueXie
+</td>
+<td>
+2020-10-26
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -867,326 +901,32 @@ U.c    = cov_canonical(data)
 U.pca  = cov_pca(data,5,strong)
 ed.out = bovy_wrapper(data,U.pca,strong)
 
-myed.universal = myED_wrapper(data,U.pca,0.1,maxiter=100,printevery = 1)</code></pre>
-<pre><code>[1] &quot;running iteration 1, loglik -2655.724411)&quot;
-[1] &quot;running iteration 2, loglik -865.856316)&quot;
-[1] &quot;running iteration 3, loglik 47.498536)&quot;
-[1] &quot;running iteration 4, loglik 472.711254)&quot;
-[1] &quot;running iteration 5, loglik 677.343688)&quot;
-[1] &quot;running iteration 6, loglik 789.724713)&quot;
-[1] &quot;running iteration 7, loglik 858.879392)&quot;
-[1] &quot;running iteration 8, loglik 905.094607)&quot;
-[1] &quot;running iteration 9, loglik 937.871828)&quot;
-[1] &quot;running iteration 10, loglik 962.181715)&quot;
-[1] &quot;running iteration 11, loglik 980.850604)&quot;
-[1] &quot;running iteration 12, loglik 995.592198)&quot;
-[1] &quot;running iteration 13, loglik 1007.500256)&quot;
-[1] &quot;running iteration 14, loglik 1017.302767)&quot;
-[1] &quot;running iteration 15, loglik 1025.501502)&quot;
-[1] &quot;running iteration 16, loglik 1032.452684)&quot;
-[1] &quot;running iteration 17, loglik 1038.415689)&quot;
-[1] &quot;running iteration 18, loglik 1043.583556)&quot;
-[1] &quot;running iteration 19, loglik 1048.102732)&quot;
-[1] &quot;running iteration 20, loglik 1052.086201)&quot;
-[1] &quot;running iteration 21, loglik 1055.622450)&quot;
-[1] &quot;running iteration 22, loglik 1058.781707)&quot;
-[1] &quot;running iteration 23, loglik 1061.620383)&quot;
-[1] &quot;running iteration 24, loglik 1064.184286)&quot;
-[1] &quot;running iteration 25, loglik 1066.510977)&quot;
-[1] &quot;running iteration 26, loglik 1068.631539)&quot;
-[1] &quot;running iteration 27, loglik 1070.571900)&quot;
-[1] &quot;running iteration 28, loglik 1072.353852)&quot;
-[1] &quot;running iteration 29, loglik 1073.995843)&quot;
-[1] &quot;running iteration 30, loglik 1075.513585)&quot;
-[1] &quot;running iteration 31, loglik 1076.920542)&quot;
-[1] &quot;running iteration 32, loglik 1078.228319)&quot;
-[1] &quot;running iteration 33, loglik 1079.446963)&quot;
-[1] &quot;running iteration 34, loglik 1080.585220)&quot;
-[1] &quot;running iteration 35, loglik 1081.650737)&quot;
-[1] &quot;running iteration 36, loglik 1082.650226)&quot;
-[1] &quot;running iteration 37, loglik 1083.589604)&quot;
-[1] &quot;running iteration 38, loglik 1084.474106)&quot;
-[1] &quot;running iteration 39, loglik 1085.308380)&quot;
-[1] &quot;running iteration 40, loglik 1086.096566)&quot;
-[1] &quot;running iteration 41, loglik 1086.842365)&quot;
-[1] &quot;running iteration 42, loglik 1087.549093)&quot;
-[1] &quot;running iteration 43, loglik 1088.219732)&quot;
-[1] &quot;running iteration 44, loglik 1088.856969)&quot;
-[1] &quot;running iteration 45, loglik 1089.463231)&quot;
-[1] &quot;running iteration 46, loglik 1090.040719)&quot;
-[1] &quot;running iteration 47, loglik 1090.591429)&quot;
-[1] &quot;running iteration 48, loglik 1091.117178)&quot;
-[1] &quot;running iteration 49, loglik 1091.619624)&quot;
-[1] &quot;running iteration 50, loglik 1092.100280)&quot;
-[1] &quot;running iteration 51, loglik 1092.560533)&quot;
-[1] &quot;running iteration 52, loglik 1093.001656)&quot;
-[1] &quot;running iteration 53, loglik 1093.424815)&quot;
-[1] &quot;running iteration 54, loglik 1093.831087)&quot;
-[1] &quot;running iteration 55, loglik 1094.221464)&quot;
-[1] &quot;running iteration 56, loglik 1094.596861)&quot;
-[1] &quot;running iteration 57, loglik 1094.958126)&quot;
-[1] &quot;running iteration 58, loglik 1095.306043)&quot;
-[1] &quot;running iteration 59, loglik 1095.641340)&quot;
-[1] &quot;running iteration 60, loglik 1095.964692)&quot;
-[1] &quot;running iteration 61, loglik 1096.276730)&quot;
-[1] &quot;running iteration 62, loglik 1096.578038)&quot;
-[1] &quot;running iteration 63, loglik 1096.869162)&quot;
-[1] &quot;running iteration 64, loglik 1097.150612)&quot;
-[1] &quot;running iteration 65, loglik 1097.422865)&quot;
-[1] &quot;running iteration 66, loglik 1097.686367)&quot;
-[1] &quot;running iteration 67, loglik 1097.941534)&quot;
-[1] &quot;running iteration 68, loglik 1098.188760)&quot;
-[1] &quot;running iteration 69, loglik 1098.428412)&quot;
-[1] &quot;running iteration 70, loglik 1098.660835)&quot;
-[1] &quot;running iteration 71, loglik 1098.886356)&quot;
-[1] &quot;running iteration 72, loglik 1099.105279)&quot;
-[1] &quot;running iteration 73, loglik 1099.317894)&quot;
-[1] &quot;running iteration 74, loglik 1099.524473)&quot;
-[1] &quot;running iteration 75, loglik 1099.725274)&quot;
-[1] &quot;running iteration 76, loglik 1099.920538)&quot;
-[1] &quot;running iteration 77, loglik 1100.110498)&quot;
-[1] &quot;running iteration 78, loglik 1100.295369)&quot;
-[1] &quot;running iteration 79, loglik 1100.475359)&quot;
-[1] &quot;running iteration 80, loglik 1100.650662)&quot;
-[1] &quot;running iteration 81, loglik 1100.821466)&quot;
-[1] &quot;running iteration 82, loglik 1100.987947)&quot;
-[1] &quot;running iteration 83, loglik 1101.150274)&quot;
-[1] &quot;running iteration 84, loglik 1101.308606)&quot;
-[1] &quot;running iteration 85, loglik 1101.463100)&quot;
-[1] &quot;running iteration 86, loglik 1101.613903)&quot;
-[1] &quot;running iteration 87, loglik 1101.761158)&quot;
-[1] &quot;running iteration 88, loglik 1101.905004)&quot;
-[1] &quot;running iteration 89, loglik 1102.045577)&quot;
-[1] &quot;running iteration 90, loglik 1102.183012)&quot;
-[1] &quot;running iteration 91, loglik 1102.317443)&quot;
-[1] &quot;running iteration 92, loglik 1102.449003)&quot;
-[1] &quot;running iteration 93, loglik 1102.577834)&quot;
-[1] &quot;running iteration 94, loglik 1102.704084)&quot;
-[1] &quot;running iteration 95, loglik 1102.827912)&quot;
-[1] &quot;running iteration 96, loglik 1102.949502)&quot;
-[1] &quot;running iteration 97, loglik 1103.069069)&quot;
-[1] &quot;running iteration 98, loglik 1103.186876)&quot;
-[1] &quot;running iteration 99, loglik 1103.303261)&quot;
-[1] &quot;running iteration 100, loglik 1103.418679)&quot;</code></pre>
-<pre class="r"><code>U.myed.universal  = myMash_data(myed.universal,data)$Ulist
+myed.universal = myED_wrapper(data,U.pca,0.1,maxiter=100,printevery = 500)
+U.myed.universal  = myMash_data(myed.universal,data)$Ulist
 m.c.myed.universal = mash(data, c(U.c,U.myed.universal),verbose = F)
-myed.universal$sigma2</code></pre>
+print(&#39;estimated universal sigma2&#39;)</code></pre>
+<pre><code>[1] &quot;estimated universal sigma2&quot;</code></pre>
+<pre class="r"><code>myed.universal$sigma2</code></pre>
 <pre><code>[1] 0.0008249469</code></pre>
 <pre class="r"><code>U.myed.universal2 = myed.universal$Ulist
 data.myed.universal2 = data
 data.myed.universal2$Shat = sqrt(data.myed.universal2$Shat^2 + myed.universal$sigma2)
 m.c.myed.universal2 = mash(data.myed.universal2, c(U.c,U.myed.universal2),verbose = F)
 
-myed.mixture = myED_wrapper(data,U.pca,rep(0.1,length(U.pca)),maxiter=100,printevery = 1)</code></pre>
-<pre><code>[1] &quot;running iteration 1, loglik -2655.724411)&quot;
-[1] &quot;running iteration 2, loglik -727.589953)&quot;
-[1] &quot;running iteration 3, loglik 186.606918)&quot;
-[1] &quot;running iteration 4, loglik 555.419369)&quot;
-[1] &quot;running iteration 5, loglik 725.818096)&quot;
-[1] &quot;running iteration 6, loglik 820.448435)&quot;
-[1] &quot;running iteration 7, loglik 879.798347)&quot;
-[1] &quot;running iteration 8, loglik 920.133027)&quot;
-[1] &quot;running iteration 9, loglik 949.145437)&quot;
-[1] &quot;running iteration 10, loglik 970.917746)&quot;
-[1] &quot;running iteration 11, loglik 987.803720)&quot;
-[1] &quot;running iteration 12, loglik 1001.249154)&quot;
-[1] &quot;running iteration 13, loglik 1012.187721)&quot;
-[1] &quot;running iteration 14, loglik 1021.247437)&quot;
-[1] &quot;running iteration 15, loglik 1028.865252)&quot;
-[1] &quot;running iteration 16, loglik 1035.353982)&quot;
-[1] &quot;running iteration 17, loglik 1040.943110)&quot;
-[1] &quot;running iteration 18, loglik 1045.804581)&quot;
-[1] &quot;running iteration 19, loglik 1050.069628)&quot;
-[1] &quot;running iteration 20, loglik 1053.840054)&quot;
-[1] &quot;running iteration 21, loglik 1057.195984)&quot;
-[1] &quot;running iteration 22, loglik 1060.201297)&quot;
-[1] &quot;running iteration 23, loglik 1062.907517)&quot;
-[1] &quot;running iteration 24, loglik 1065.356640)&quot;
-[1] &quot;running iteration 25, loglik 1067.583224)&quot;
-[1] &quot;running iteration 26, loglik 1069.615955)&quot;
-[1] &quot;running iteration 27, loglik 1071.478834)&quot;
-[1] &quot;running iteration 28, loglik 1073.192090)&quot;
-[1] &quot;running iteration 29, loglik 1074.772891)&quot;
-[1] &quot;running iteration 30, loglik 1076.235892)&quot;
-[1] &quot;running iteration 31, loglik 1077.593683)&quot;
-[1] &quot;running iteration 32, loglik 1078.857132)&quot;
-[1] &quot;running iteration 33, loglik 1080.035674)&quot;
-[1] &quot;running iteration 34, loglik 1081.137532)&quot;
-[1] &quot;running iteration 35, loglik 1082.169909)&quot;
-[1] &quot;running iteration 36, loglik 1083.139139)&quot;
-[1] &quot;running iteration 37, loglik 1084.050813)&quot;
-[1] &quot;running iteration 38, loglik 1084.909886)&quot;
-[1] &quot;running iteration 39, loglik 1085.720763)&quot;
-[1] &quot;running iteration 40, loglik 1086.487372)&quot;
-[1] &quot;running iteration 41, loglik 1087.213230)&quot;
-[1] &quot;running iteration 42, loglik 1087.901491)&quot;
-[1] &quot;running iteration 43, loglik 1088.554994)&quot;
-[1] &quot;running iteration 44, loglik 1089.176302)&quot;
-[1] &quot;running iteration 45, loglik 1089.767730)&quot;
-[1] &quot;running iteration 46, loglik 1090.331381)&quot;
-[1] &quot;running iteration 47, loglik 1090.869163)&quot;
-[1] &quot;running iteration 48, loglik 1091.382816)&quot;
-[1] &quot;running iteration 49, loglik 1091.873927)&quot;
-[1] &quot;running iteration 50, loglik 1092.343947)&quot;
-[1] &quot;running iteration 51, loglik 1092.794206)&quot;
-[1] &quot;running iteration 52, loglik 1093.225925)&quot;
-[1] &quot;running iteration 53, loglik 1093.640227)&quot;
-[1] &quot;running iteration 54, loglik 1094.038146)&quot;
-[1] &quot;running iteration 55, loglik 1094.420636)&quot;
-[1] &quot;running iteration 56, loglik 1094.788579)&quot;
-[1] &quot;running iteration 57, loglik 1095.142789)&quot;
-[1] &quot;running iteration 58, loglik 1095.484025)&quot;
-[1] &quot;running iteration 59, loglik 1095.812987)&quot;
-[1] &quot;running iteration 60, loglik 1096.130327)&quot;
-[1] &quot;running iteration 61, loglik 1096.436653)&quot;
-[1] &quot;running iteration 62, loglik 1096.732530)&quot;
-[1] &quot;running iteration 63, loglik 1097.018486)&quot;
-[1] &quot;running iteration 64, loglik 1097.295013)&quot;
-[1] &quot;running iteration 65, loglik 1097.562571)&quot;
-[1] &quot;running iteration 66, loglik 1097.821592)&quot;
-[1] &quot;running iteration 67, loglik 1098.072480)&quot;
-[1] &quot;running iteration 68, loglik 1098.315614)&quot;
-[1] &quot;running iteration 69, loglik 1098.551350)&quot;
-[1] &quot;running iteration 70, loglik 1098.780021)&quot;
-[1] &quot;running iteration 71, loglik 1099.001943)&quot;
-[1] &quot;running iteration 72, loglik 1099.217411)&quot;
-[1] &quot;running iteration 73, loglik 1099.426706)&quot;
-[1] &quot;running iteration 74, loglik 1099.630089)&quot;
-[1] &quot;running iteration 75, loglik 1099.827810)&quot;
-[1] &quot;running iteration 76, loglik 1100.020103)&quot;
-[1] &quot;running iteration 77, loglik 1100.207190)&quot;
-[1] &quot;running iteration 78, loglik 1100.389281)&quot;
-[1] &quot;running iteration 79, loglik 1100.566576)&quot;
-[1] &quot;running iteration 80, loglik 1100.739263)&quot;
-[1] &quot;running iteration 81, loglik 1100.907519)&quot;
-[1] &quot;running iteration 82, loglik 1101.071516)&quot;
-[1] &quot;running iteration 83, loglik 1101.231414)&quot;
-[1] &quot;running iteration 84, loglik 1101.387366)&quot;
-[1] &quot;running iteration 85, loglik 1101.539518)&quot;
-[1] &quot;running iteration 86, loglik 1101.688007)&quot;
-[1] &quot;running iteration 87, loglik 1101.832967)&quot;
-[1] &quot;running iteration 88, loglik 1101.974522)&quot;
-[1] &quot;running iteration 89, loglik 1102.112792)&quot;
-[1] &quot;running iteration 90, loglik 1102.247891)&quot;
-[1] &quot;running iteration 91, loglik 1102.379928)&quot;
-[1] &quot;running iteration 92, loglik 1102.509007)&quot;
-[1] &quot;running iteration 93, loglik 1102.635228)&quot;
-[1] &quot;running iteration 94, loglik 1102.758684)&quot;
-[1] &quot;running iteration 95, loglik 1102.879468)&quot;
-[1] &quot;running iteration 96, loglik 1102.997666)&quot;
-[1] &quot;running iteration 97, loglik 1103.113360)&quot;
-[1] &quot;running iteration 98, loglik 1103.226631)&quot;
-[1] &quot;running iteration 99, loglik 1103.337554)&quot;
-[1] &quot;running iteration 100, loglik 1103.446203)&quot;</code></pre>
-<pre class="r"><code>U.myed.mixture  = myMash_data(myed.mixture,data)$Ulist
+myed.mixture = myED_wrapper(data,U.pca,rep(0.1,length(U.pca)),maxiter=100,printevery = 500)
+U.myed.mixture  = myMash_data(myed.mixture,data)$Ulist
 m.c.myed.mixture = mash(data, c(U.c,U.myed.mixture),verbose = F)
-myed.mixture$sigma2</code></pre>
+print(&#39;estimated mixture-specific sigma2&#39;)</code></pre>
+<pre><code>[1] &quot;estimated mixture-specific sigma2&quot;</code></pre>
+<pre class="r"><code>myed.mixture$sigma2</code></pre>
 <pre><code>[1] 0.0008333841 0.0008118946 0.0008637158 0.0008887293 0.0008703730
 [6] 0.0008416655</code></pre>
-<pre class="r"><code>myed.sample = myED_wrapper(data,U.pca,rep(0.1,nrow(data$Bhat)),maxiter=100,printevery = 1)</code></pre>
-<pre><code>[1] &quot;running iteration 1, loglik -2655.724411)&quot;
-[1] &quot;running iteration 2, loglik -815.166423)&quot;
-[1] &quot;running iteration 3, loglik 99.891562)&quot;
-[1] &quot;running iteration 4, loglik 543.664709)&quot;
-[1] &quot;running iteration 5, loglik 765.215363)&quot;
-[1] &quot;running iteration 6, loglik 888.862367)&quot;
-[1] &quot;running iteration 7, loglik 965.446367)&quot;
-[1] &quot;running iteration 8, loglik 1016.805586)&quot;
-[1] &quot;running iteration 9, loglik 1053.338674)&quot;
-[1] &quot;running iteration 10, loglik 1080.518148)&quot;
-[1] &quot;running iteration 11, loglik 1101.461135)&quot;
-[1] &quot;running iteration 12, loglik 1118.058143)&quot;
-[1] &quot;running iteration 13, loglik 1131.515612)&quot;
-[1] &quot;running iteration 14, loglik 1142.636470)&quot;
-[1] &quot;running iteration 15, loglik 1151.974225)&quot;
-[1] &quot;running iteration 16, loglik 1159.922004)&quot;
-[1] &quot;running iteration 17, loglik 1166.766259)&quot;
-[1] &quot;running iteration 18, loglik 1172.720389)&quot;
-[1] &quot;running iteration 19, loglik 1177.946480)&quot;
-[1] &quot;running iteration 20, loglik 1182.569760)&quot;
-[1] &quot;running iteration 21, loglik 1186.688452)&quot;
-[1] &quot;running iteration 22, loglik 1190.380644)&quot;
-[1] &quot;running iteration 23, loglik 1193.709174)&quot;
-[1] &quot;running iteration 24, loglik 1196.725159)&quot;
-[1] &quot;running iteration 25, loglik 1199.470602)&quot;
-[1] &quot;running iteration 26, loglik 1201.980322)&quot;
-[1] &quot;running iteration 27, loglik 1204.283426)&quot;
-[1] &quot;running iteration 28, loglik 1206.404429)&quot;
-[1] &quot;running iteration 29, loglik 1208.364123)&quot;
-[1] &quot;running iteration 30, loglik 1210.180256)&quot;
-[1] &quot;running iteration 31, loglik 1211.868069)&quot;
-[1] &quot;running iteration 32, loglik 1213.440719)&quot;
-[1] &quot;running iteration 33, loglik 1214.909629)&quot;
-[1] &quot;running iteration 34, loglik 1216.284758)&quot;
-[1] &quot;running iteration 35, loglik 1217.574831)&quot;
-[1] &quot;running iteration 36, loglik 1218.787523)&quot;
-[1] &quot;running iteration 37, loglik 1219.929615)&quot;
-[1] &quot;running iteration 38, loglik 1221.007115)&quot;
-[1] &quot;running iteration 39, loglik 1222.025369)&quot;
-[1] &quot;running iteration 40, loglik 1222.989150)&quot;
-[1] &quot;running iteration 41, loglik 1223.902729)&quot;
-[1] &quot;running iteration 42, loglik 1224.769943)&quot;
-[1] &quot;running iteration 43, loglik 1225.594248)&quot;
-[1] &quot;running iteration 44, loglik 1226.378763)&quot;
-[1] &quot;running iteration 45, loglik 1227.126312)&quot;
-[1] &quot;running iteration 46, loglik 1227.839458)&quot;
-[1] &quot;running iteration 47, loglik 1228.520531)&quot;
-[1] &quot;running iteration 48, loglik 1229.171657)&quot;
-[1] &quot;running iteration 49, loglik 1229.794776)&quot;
-[1] &quot;running iteration 50, loglik 1230.391663)&quot;
-[1] &quot;running iteration 51, loglik 1230.963950)&quot;
-[1] &quot;running iteration 52, loglik 1231.513131)&quot;
-[1] &quot;running iteration 53, loglik 1232.040584)&quot;
-[1] &quot;running iteration 54, loglik 1232.547580)&quot;
-[1] &quot;running iteration 55, loglik 1233.035290)&quot;
-[1] &quot;running iteration 56, loglik 1233.504801)&quot;
-[1] &quot;running iteration 57, loglik 1233.957116)&quot;
-[1] &quot;running iteration 58, loglik 1234.393167)&quot;
-[1] &quot;running iteration 59, loglik 1234.813821)&quot;
-[1] &quot;running iteration 60, loglik 1235.219882)&quot;
-[1] &quot;running iteration 61, loglik 1235.612101)&quot;
-[1] &quot;running iteration 62, loglik 1235.991176)&quot;
-[1] &quot;running iteration 63, loglik 1236.357762)&quot;
-[1] &quot;running iteration 64, loglik 1236.712467)&quot;
-[1] &quot;running iteration 65, loglik 1237.055863)&quot;
-[1] &quot;running iteration 66, loglik 1237.388486)&quot;
-[1] &quot;running iteration 67, loglik 1237.710836)&quot;
-[1] &quot;running iteration 68, loglik 1238.023386)&quot;
-[1] &quot;running iteration 69, loglik 1238.326577)&quot;
-[1] &quot;running iteration 70, loglik 1238.620825)&quot;
-[1] &quot;running iteration 71, loglik 1238.906523)&quot;
-[1] &quot;running iteration 72, loglik 1239.184039)&quot;
-[1] &quot;running iteration 73, loglik 1239.453723)&quot;
-[1] &quot;running iteration 74, loglik 1239.715902)&quot;
-[1] &quot;running iteration 75, loglik 1239.970887)&quot;
-[1] &quot;running iteration 76, loglik 1240.218972)&quot;
-[1] &quot;running iteration 77, loglik 1240.460435)&quot;
-[1] &quot;running iteration 78, loglik 1240.695538)&quot;
-[1] &quot;running iteration 79, loglik 1240.924531)&quot;
-[1] &quot;running iteration 80, loglik 1241.147650)&quot;
-[1] &quot;running iteration 81, loglik 1241.365119)&quot;
-[1] &quot;running iteration 82, loglik 1241.577152)&quot;
-[1] &quot;running iteration 83, loglik 1241.783950)&quot;
-[1] &quot;running iteration 84, loglik 1241.985707)&quot;
-[1] &quot;running iteration 85, loglik 1242.182605)&quot;
-[1] &quot;running iteration 86, loglik 1242.374819)&quot;
-[1] &quot;running iteration 87, loglik 1242.562514)&quot;
-[1] &quot;running iteration 88, loglik 1242.745850)&quot;
-[1] &quot;running iteration 89, loglik 1242.924976)&quot;
-[1] &quot;running iteration 90, loglik 1243.100038)&quot;
-[1] &quot;running iteration 91, loglik 1243.271172)&quot;
-[1] &quot;running iteration 92, loglik 1243.438510)&quot;
-[1] &quot;running iteration 93, loglik 1243.602177)&quot;
-[1] &quot;running iteration 94, loglik 1243.762294)&quot;
-[1] &quot;running iteration 95, loglik 1243.918975)&quot;
-[1] &quot;running iteration 96, loglik 1244.072331)&quot;
-[1] &quot;running iteration 97, loglik 1244.222467)&quot;
-[1] &quot;running iteration 98, loglik 1244.369483)&quot;
-[1] &quot;running iteration 99, loglik 1244.513477)&quot;
-[1] &quot;running iteration 100, loglik 1244.654540)&quot;</code></pre>
-<pre class="r"><code>U.myed.sample  = myMash_data(myed.sample,data)
+<pre class="r"><code>myed.sample = myED_wrapper(data,U.pca,rep(0.1,nrow(data$Bhat)),maxiter=100,printevery = 500)
+U.myed.sample  = myMash_data(myed.sample,data)
 m.c.myed.sample = mash(U.myed.sample$data, c(U.c,U.myed.sample$U.myed.sample),verbose = F)
-summary(myed.sample$sigma2)</code></pre>
+print(&#39;estimated sample-specific sigma2&#39;)</code></pre>
+<pre><code>[1] &quot;estimated sample-specific sigma2&quot;</code></pre>
+<pre class="r"><code>summary(myed.sample$sigma2)</code></pre>
 <pre><code>     Min.   1st Qu.    Median      Mean   3rd Qu.      Max. 
 0.0001300 0.0002409 0.0005343 0.0026987 0.0032205 0.0350959 </code></pre>
 <pre class="r"><code>result = simu_study(simdata,1:nrow(simdata$B))
