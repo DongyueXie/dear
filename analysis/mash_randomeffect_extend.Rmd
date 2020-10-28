@@ -9,9 +9,15 @@ editor_options:
 
 ## Introduction
 
-We generate $X$ from a mixture of 2 multivariate normal distributions, $x_i\sim \sum_k\pi_k N(0,U_k+S_i)$, with the following covariance matrices: present (and identical) in first two conditions, present (and identical) in last three conditions, each with 500 samples(so $\pi_1=\pi_2=0.5$), and $S_i=diag(0.1,...,0.1)$.
+Extend universal sigma2 [examples](mash_randomeffect.html).
+
+We generate $X$ from a mixture of 2 multivariate normal distributions, $x_i\sim \sum_k\pi_k N(0,U_k+S_i)$, with the following covariance matrices: present (and identical) in first two conditions, present (and identical) in last three conditions, each with 500 samples(so $\pi_1=\pi_2=0.5$).
 
 Try varying $\sigma^2$ and see how it effects the results.
+
+## small error sd
+
+$S_i=diag(0.1^2,...,0.1^2)$.
 
 ```{r}
 source('code/myED.R')
@@ -49,7 +55,9 @@ out = summary_out(simdata$B,myed.mash.all)
 knitr::kable(out$find_cond,col.names = name,caption = 'On finding conditions',digits = 5)
 ```
 
-Try $S_i=diag(0.5,...,0.5)$
+## larger error sd
+
+Try $S_i=diag(0.5^2,...,0.5^2)$
 
 ```{r}
 set.seed(12345)
@@ -80,7 +88,9 @@ out = summary_out(simdata$B,myed.mash.all)
 knitr::kable(out$find_cond,col.names = name,caption = 'On finding conditions',digits = 5)
 ```
 
-Try change $S_i$ to non-diagonal matrices. 
+## Non-diag S
+
+Try change $S_i$ to non-diagonal matrices. Generate $S$ from a wishart distribution with $\Lambda = I/20, df=10$.
 
 ```{r}
 # generate S_i
