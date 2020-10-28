@@ -515,16 +515,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomDongyueXiedeartreedda5221df603dd80678c79aafe37ce018bc92013targetblankdda5221a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/DongyueXie/dear/tree/dda5221df603dd80678c79aafe37ce018bc92013" target="_blank">dda5221</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomDongyueXiedeartree97bd3f4680b5515d42beacf56bb7b0208a15814dtargetblank97bd3f4a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/DongyueXie/dear/tree/97bd3f4680b5515d42beacf56bb7b0208a15814d" target="_blank">97bd3f4</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomDongyueXiedeartreedda5221df603dd80678c79aafe37ce018bc92013targetblankdda5221a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomDongyueXiedeartree97bd3f4680b5515d42beacf56bb7b0208a15814dtargetblank97bd3f4a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/DongyueXie/dear/tree/dda5221df603dd80678c79aafe37ce018bc92013" target="_blank">dda5221</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/DongyueXie/dear/tree/97bd3f4680b5515d42beacf56bb7b0208a15814d" target="_blank">97bd3f4</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -587,6 +587,40 @@ Message
 Rmd
 </td>
 <td>
+<a href="https://github.com/DongyueXie/dear/blob/97bd3f4680b5515d42beacf56bb7b0208a15814d/analysis/mash_randomeffect_extend.Rmd" target="_blank">97bd3f4</a>
+</td>
+<td>
+Dongyue Xie
+</td>
+<td>
+2020-10-28
+</td>
+<td>
+wflow_publish(“analysis/mash_randomeffect_extend.Rmd”)
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/DongyueXie/dear/077a3b70f0cdbe5023f88a9276ab302dc6d272a4/docs/mash_randomeffect_extend.html" target="_blank">077a3b7</a>
+</td>
+<td>
+Dongyue Xie
+</td>
+<td>
+2020-10-28
+</td>
+<td>
+Build site.
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
 <a href="https://github.com/DongyueXie/dear/blob/dda5221df603dd80678c79aafe37ce018bc92013/analysis/mash_randomeffect_extend.Rmd" target="_blank">dda5221</a>
 </td>
 <td>
@@ -608,8 +642,13 @@ wflow_publish(“analysis/mash_randomeffect_extend.Rmd”)
 </div>
 <div id="introduction" class="section level2">
 <h2>Introduction</h2>
-<p>We generate <span class="math inline">\(X\)</span> from a mixture of 2 multivariate normal distributions, <span class="math inline">\(x_i\sim \sum_k\pi_k N(0,U_k+S_i)\)</span>, with the following covariance matrices: present (and identical) in first two conditions, present (and identical) in last three conditions, each with 500 samples(so <span class="math inline">\(\pi_1=\pi_2=0.5\)</span>), and <span class="math inline">\(S_i=diag(0.1,...,0.1)\)</span>.</p>
+<p>Extend universal sigma2 <a href="mash_randomeffect.html">examples</a>.</p>
+<p>We generate <span class="math inline">\(X\)</span> from a mixture of 2 multivariate normal distributions, <span class="math inline">\(x_i\sim \sum_k\pi_k N(0,U_k+S_i)\)</span>, with the following covariance matrices: present (and identical) in first two conditions, present (and identical) in last three conditions, each with 500 samples(so <span class="math inline">\(\pi_1=\pi_2=0.5\)</span>).</p>
 <p>Try varying <span class="math inline">\(\sigma^2\)</span> and see how it effects the results.</p>
+</div>
+<div id="small-error-sd" class="section level2">
+<h2>small error sd</h2>
+<p><span class="math inline">\(S_i=diag(0.1^2,...,0.1^2)\)</span>.</p>
 <pre class="r"><code>source(&#39;code/myED.R&#39;)
 source(&#39;code/mash_randomeffect.R&#39;)</code></pre>
 <pre><code>Loading required package: ashr</code></pre>
@@ -705,7 +744,10 @@ knitr::kable(out$find_cond,col.names = name,caption = &#39;On finding conditions
 </tr>
 </tbody>
 </table>
-<p>Try <span class="math inline">\(S_i=diag(0.5,...,0.5)\)</span></p>
+</div>
+<div id="larger-error-sd" class="section level2">
+<h2>larger error sd</h2>
+<p>Try <span class="math inline">\(S_i=diag(0.5^2,...,0.5^2)\)</span></p>
 <pre class="r"><code>set.seed(12345)
 simdata = simple_sims0(500,err_sd = 0.5)
 data = mash_set_data(simdata$Bhat,simdata$Shat)
@@ -796,7 +838,10 @@ knitr::kable(out$find_cond,col.names = name,caption = &#39;On finding conditions
 </tr>
 </tbody>
 </table>
-<p>Try change <span class="math inline">\(S_i\)</span> to non-diagonal matrices.</p>
+</div>
+<div id="non-diag-s" class="section level2">
+<h2>Non-diag S</h2>
+<p>Try change <span class="math inline">\(S_i\)</span> to non-diagonal matrices. Generate <span class="math inline">\(S\)</span> from a wishart distribution with <span class="math inline">\(\Lambda = I/20, df=10\)</span>.</p>
 <pre class="r"><code># generate S_i
 # set.seed(12345)
 # n = 1000
