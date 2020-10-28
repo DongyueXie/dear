@@ -37,7 +37,7 @@ myMash_data = function(ed.res,data){
 
 #'@title wrapper function for myED
 #'@param data mash data object
-myED_wrapper = function(data,V_init,sigma2_init,subsets=NULL,w_init=NULL,xMean0=TRUE,...){
+myED_wrapper = function(data,V_init,sigma2_init,subsets=NULL,w_init=NULL,fix_sigma2=FALSE,...){
   N = nrow(data$Bhat)
   R = ncol(data$Bhat)
   if(is.null(subsets)){subsets = 1:N}
@@ -50,26 +50,33 @@ myED_wrapper = function(data,V_init,sigma2_init,subsets=NULL,w_init=NULL,xMean0=
   }
   D = ncol(data$V)
 
-  if(all(data$V==diag(D))){
-    ed.res = myED(data$Bhat[subsets,],data$Shat[subsets,]^2,w_init,V_init,sigma2_init,xMean0,...)
-  }else{
-    if(!is.null(data$L)){
-      ycovar = lapply(subsets, function(i) data$L %*% (data$Shat_orig[i,] * t(data$V * data$Shat_orig[i,])) %*% t(data$L) )
+  if(prod(dim(data$V))==(D^2)){
+    if(all(data$V==diag(D))){
+      ed.res = myED(data$Bhat[subsets,],data$Shat[subsets,]^2,w_init,V_init,sigma2_init,fix_sigma2,...)
     }else{
-      ycovar = lapply(subsets, function(i) data$Shat[i,] * t(data$V * data$Shat[i,]) )
+      if(!is.null(data$L)){
+        ycovar = lapply(subsets, function(i) data$L %*% (data$Shat_orig[i,] * t(data$V * data$Shat_orig[i,])) %*% t(data$L) )
+      }else{
+        ycovar = lapply(subsets, function(i) data$Shat[i,] * t(data$V * data$Shat[i,]) )
+      }
+      ed.res = myED(data$Bhat[subsets,],ycovar,w_init,V_init,sigma2_init,fix_sigma2,...)
     }
-    ed.res = myED(data$Bhat[subsets,],ycovar,w_init,V_init,sigma2_init,xMean0,...)
+  }else{
+    ed.res = myED(data$Bhat[subsets,],data$V[,,subsets],w_init,V_init,sigma2_init,fix_sigma2,...)
   }
+
   ed.res
 }
 
 #'@param X data, a N by R matrix
 #'@param S a matrix, each row is the variance of x_i; or a list of covariance matrices.
 #'@param w_init,V_init,sigma2_init initial value of pi(a vector),V(a list),sigma^2(a vector or a scalar)
+#'@param fix_sigma2 If true, do not update sigma2.
 #'@param xMean0 if False, also estimate mean of X
 #'@param tol tolerance for convergence
 #'@param maxiter maximum number of iterations to perform
-myED = function(X,S,w_init,V_init,sigma2_init,xMean0=TRUE,tol=1e-5,maxiter=1e6,printevery = 5){
+myED = function(X,S,w_init,V_init,sigma2_init,fix_sigma2=FALSE,
+                xMean0=TRUE,tol=1e-5,maxiter=1e6,printevery = 5){
 
   N = nrow(X)
   K = length(V_init)
@@ -89,20 +96,22 @@ myED = function(X,S,w_init,V_init,sigma2_init,xMean0=TRUE,tol=1e-5,maxiter=1e6,p
     gamma_curr = update_gamma(L_curr,w_curr)
     w_curr = update_w(gamma_curr)
     V_curr = update_V(X,S,V_curr,sigma2_curr,gamma_curr)
-    if(length(sigma2_init)==1){
+    if(!fix_sigma2){
+      if(length(sigma2_init)==1){
 
-      sigma2_curr = update_sigma2_universal(X,S,V_curr,sigma2_curr,gamma_curr)
+        sigma2_curr = update_sigma2_universal(X,S,V_curr,sigma2_curr,gamma_curr)
 
-    }else if(length(sigma2_init)==K){
+      }else if(length(sigma2_init)==K){
 
-      sigma2_curr = update_sigma2_mixture(X,S,V_curr,sigma2_curr,gamma_curr)
+        sigma2_curr = update_sigma2_mixture(X,S,V_curr,sigma2_curr,gamma_curr)
 
-    }else if(length(sigma2_init)==N){
+      }else if(length(sigma2_init)==N){
 
-      sigma2_curr = update_sigma2_sample(X,S,V_curr,sigma2_curr,gamma_curr)
+        sigma2_curr = update_sigma2_sample(X,S,V_curr,sigma2_curr,gamma_curr)
 
-    }else{
-      stop('invalid initial value of sigma2')
+      }else{
+        stop('invalid initial value of sigma2')
+      }
     }
 
 
@@ -135,7 +144,7 @@ update_sigma2_sample = function(X,S,V,sigma2,gammas){
     if(isSmat){
       Si = diag(S[i,])
     }else{
-      Si = S[[i]]
+      Si = S[,,i]
     }
     xi = X[i,]
 
@@ -171,7 +180,7 @@ update_sigma2_mixture = function(X,S,V,sigma2,gammas){
       if(isSmat){
         Si = diag(S[i,])
       }else{
-        Si = S[[i]]
+        Si = S[,,i]
       }
       inv_temp = solve(Vk+Si+diag(sigma2[k],R))
       hik = sigma2[k]*inv_temp%*%X[i,]
@@ -199,7 +208,7 @@ update_sigma2_universal = function(X,S,V,sigma2,gammas){
     if(isSmat){
       Si = diag(S[i,])
     }else{
-      Si = S[[i]]
+      Si = S[,,i]
     }
     xi = X[i,]
 
@@ -263,7 +272,7 @@ update_V = function(X,S,V,sigma2,gammas){
       if(isSmat){
         Si = diag(S[i,])
       }else{
-        Si = S[[i]]
+        Si = S[,,i]
       }
       inv_temp = Vk%*%solve(Vk+Si+sigma2[i,k]*diag(R))
       bik = inv_temp%*%X[i,]
@@ -315,7 +324,7 @@ mixtureLik = function(X,S,V,sigma2,m){
     if(isSmat){
       Si = diag(S[i,])
     }else{
-      Si = S[[i]]
+      Si = S[,,i]
     }
     for(k in 1:K){
       cov_temp = Si + V[[k]] + sigma2[i,k]*diag(R)
