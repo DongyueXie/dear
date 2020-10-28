@@ -1,0 +1,114 @@
+---
+title: "mash randomeffect extended"
+author: "Dongyue Xie"
+date: "2020-10-27"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+---
+
+## Introduction
+
+We generate $X$ from a mixture of 2 multivariate normal distributions, $x_i\sim \sum_k\pi_k N(0,U_k+S_i)$, with the following covariance matrices: present (and identical) in first two conditions, present (and identical) in last three conditions, each with 500 samples(so $\pi_1=\pi_2=0.5$), and $S_i=diag(0.1,...,0.1)$.
+
+Try varying $\sigma^2$ and see how it effects the results.
+
+```{r}
+source('code/myED.R')
+source('code/mash_randomeffect.R')
+```
+
+```{r}
+sigma2_list = c(0,1e-5,1e-4,1e-3,1e-2,1e-1,1)
+name = paste('sigma2=',sigma2_list,sep='')
+set.seed(12345)
+simdata = simple_sims0(500,err_sd = 0.1)
+data = mash_set_data(simdata$Bhat,simdata$Shat)
+strong = 1:nrow(simdata$B)
+U.c    = cov_canonical(data)
+U.pca  = cov_pca(data,5,strong)
+```
+
+```{r}
+# myed.all = list()
+# myed.mash.all = list()
+# sigma2_list = c(0,1e-5,1e-4,1e-3,1e-2,1e-1,1)
+# name = c()
+# for(isig in 1:length(sigma2_list)){
+#   myed.universal = myED_wrapper(data,U.pca,sigma2_list[isig],fix_sigma2 = TRUE,maxiter=100,tol=0.01)
+#   myed.all[[isig]] = myed.universal
+#   U.myed.universal  = myMash_data(myed.universal,data)$Ulist
+#   m.c.myed.universal = mash(data, c(U.c,U.myed.universal),verbose = F)
+#   myed.mash.all[[isig]] = m.c.myed.universal
+#   name[isig] = paste('sigma2=',sigma2_list[isig],sep='')
+# }
+# save(myed.all,file='output/myed_all_01.RData')
+# save(myed.mash.all,file = "output/myed_mash_all_01.RData")
+load('output/myed_mash_all_01.RData')
+out = summary_out(simdata$B,myed.mash.all)
+knitr::kable(out$find_cond,col.names = name,caption = 'On finding conditions',digits = 5)
+```
+
+Try $S_i=diag(0.5,...,0.5)$
+
+```{r}
+set.seed(12345)
+simdata = simple_sims0(500,err_sd = 0.5)
+data = mash_set_data(simdata$Bhat,simdata$Shat)
+strong = 1:nrow(simdata$B)
+U.c    = cov_canonical(data)
+U.pca  = cov_pca(data,5,strong)
+```
+
+```{r}
+# myed.all = list()
+# myed.mash.all = list()
+# sigma2_list = c(0,1e-5,1e-4,1e-3,1e-2,1e-1,1)
+# name = c()
+# for(isig in 1:length(sigma2_list)){
+#   myed.universal = myED_wrapper(data,U.pca,sigma2_list[isig],fix_sigma2 = TRUE,maxiter=100,tol=0.01)
+#   myed.all[[isig]] = myed.universal
+#   U.myed.universal  = myMash_data(myed.universal,data)$Ulist
+#   m.c.myed.universal = mash(data, c(U.c,U.myed.universal),verbose = F)
+#   myed.mash.all[[isig]] = m.c.myed.universal
+#   name[isig] = paste('sigma2=',sigma2_list[isig],sep='')
+# }
+# save(myed.all,file='output/myed_all_05.RData')
+# save(myed.mash.all,file = "output/myed_mash_all_05.RData")
+load('output/myed_mash_all_05.RData')
+out = summary_out(simdata$B,myed.mash.all)
+knitr::kable(out$find_cond,col.names = name,caption = 'On finding conditions',digits = 5)
+```
+
+Try change $S_i$ to non-diagonal matrices. 
+
+```{r}
+# generate S_i
+# set.seed(12345)
+# n = 1000
+# S = rWishart(n,10,diag(5)/20)
+# simdata = simple_sims01(500,S)
+# data = mash_set_data(simdata$Bhat,simdata$Shat,V=S)
+# strong = 1:nrow(simdata$B)
+# U.c    = cov_canonical(data)
+# U.pca  = cov_pca(data,5,strong)
+# 
+# myed.all = list()
+# myed.mash.all = list()
+# sigma2_list = c(0,1e-5,1e-4,1e-3,1e-2,1e-1,1)
+# name = c()
+# for(isig in 1:length(sigma2_list)){
+#   myed.universal = myED_wrapper(data,U.pca,sigma2_list[isig],fix_sigma2 = TRUE,maxiter=100,tol=0.1)
+#   myed.all[[isig]] = myed.universal
+#   U.myed.universal  = myMash_data(myed.universal,data)$Ulist
+#   m.c.myed.universal = mash(data, c(U.c,U.myed.universal),verbose = F,algorithm.version = 'R')
+#   myed.mash.all[[isig]] = m.c.myed.universal
+#   name[isig] = paste('sigma2=',sigma2_list[isig],sep='')
+# }
+# save(myed.all,file='output/myed_all_05_nondiagS.RData')
+# save(myed.mash.all,file = "output/myed_mash_all_05_nondiagS.RData")
+
+load("output/myed_mash_all_05_nondiagS.RData")
+out = summary_out(simdata$B,myed.mash.all)
+knitr::kable(out$find_cond,col.names = name,caption = 'On finding conditions',digits = 5)
+```
