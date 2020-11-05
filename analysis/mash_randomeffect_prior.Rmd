@@ -228,9 +228,10 @@ knitr::kable(out$find_cond,caption = 'On finding conditions',digits = 5)
 ```{r}
 
 set.seed(12345)
-simdata = simple_sims0(500,err_sd = 0.1)
-
-data = mash_set_data(simdata$Bhat,simdata$Shat)
+n = 1000
+S = rWishart(n,10,diag(5)/20)
+simdata = simple_sims01(500,S)
+data = mash_set_data(simdata$Bhat,simdata$Shat,V=S)
 strong = 1:nrow(simdata$B)
 U.c    = cov_canonical(data)
 U.pca  = cov_pca(data,5,strong)
@@ -238,40 +239,40 @@ U.pca  = cov_pca(data,5,strong)
 
 load('output/myed_universalS.RData')
 U.myed.universal  = myMash_data(myed.universal,data)$Ulist
-m.c.myed.universal = mash(data, c(U.c,U.myed.universal),verbose = F)
+m.c.myed.universal = mash(data, c(U.c,U.myed.universal),verbose = F,algorithm.version = 'R')
 print('estimated universal sigma2')
 myed.universal$sigma2
 
 load('output/myed_universal_priorS.RData')
 U.myed.universal.prior  = myMash_data(myed.universal.prior,data)$Ulist
-m.c.myed.universal.prior = mash(data, c(U.c,U.myed.universal.prior),verbose = F)
+m.c.myed.universal.prior = mash(data, c(U.c,U.myed.universal.prior),verbose = F,algorithm.version = 'R')
 print('estimated universal sigma2')
 myed.universal.prior$sigma2
 
 
 load('output/myed_universalDS.RData')
 U.myed.universalD  = myMash_data(myed.universalD,data)$Ulist
-m.c.myed.universalD = mash(data, c(U.c,U.myed.universalD),verbose = F)
+m.c.myed.universalD = mash(data, c(U.c,U.myed.universalD),verbose = F,algorithm.version = 'R')
 print('estimated universal sigma2')
 myed.universalD$sigma2
 
 load('output/myed_universalD_priorS.RData')
 U.myed.universalD.prior  = myMash_data(myed.universalD.prior,data)$Ulist
-m.c.myed.universalD.prior = mash(data, c(U.c,U.myed.universalD.prior),verbose = F)
+m.c.myed.universalD.prior = mash(data, c(U.c,U.myed.universalD.prior),verbose = F,algorithm.version = 'R')
 print('estimated universal sigma2')
 myed.universalD.prior$sigma2
 
 
 load('output/myed_mixtureS.RData')
 U.myed.mixture  = myMash_data(myed.mixture,data)$Ulist
-m.c.myed.mixture = mash(data, c(U.c,U.myed.mixture),verbose = F)
+m.c.myed.mixture = mash(data, c(U.c,U.myed.mixture),verbose = F,algorithm.version = 'R')
 print('estimated mixture-specific sigma2')
 myed.mixture$sigma2
 
 
 load('output/myed_mixture_priorS.RData')
 U.myed.mixture.prior  = myMash_data(myed.mixture.prior,data)$Ulist
-m.c.myed.mixture.prior = mash(data, c(U.c,U.myed.mixture.prior),verbose = F)
+m.c.myed.mixture.prior = mash(data, c(U.c,U.myed.mixture.prior),verbose = F,algorithm.version = 'R')
 print('estimated mixture-specific sigma2')
 myed.mixture.prior$sigma2
 ```
