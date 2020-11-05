@@ -1,0 +1,1368 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Dongyue Xie" />
+
+<meta name="date" content="2020-11-01" />
+
+<title>mash randomeffect prior</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
+<script src="site_libs/anchor-sections-1.0/anchor-sections.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/master/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">dear</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="license.html">License</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/DongyueXie/dear">
+    <span class="fa fa-github"></span>
+     
+    Source code
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">mash randomeffect prior</h1>
+<h4 class="author">Dongyue Xie</h4>
+<h4 class="date">2020-11-01</h4>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> </a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2020-11-05
+</p>
+<p>
+<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
+</p>
+<p>
+<strong>Knit directory:</strong> <code>dear/</code> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed."> </span>
+</p>
+<p>
+This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis was created with <a
+  href="https://github.com/jdblischak/workflowr">workflowr</a> (version 1.6.2). The <em>Checks</em> tab describes the reproducibility checks that were applied when the results were created. The <em>Past versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date </a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguptodate" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great! Since the R Markdown file has been committed to the Git repository, you know the exact version of the code that produced these results.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the global environment can affect the analysis in your R Markdown file in unknown ways. For reproduciblity it’s best to always run the code in an empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20200403code"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Seed:</strong> <code>set.seed(20200403)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20200403code" class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20200403)</code> was run prior to running the code in the R Markdown file. Setting a seed ensures that any results that rely on randomness, e.g. subsampling or permutations, are reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Session information:</strong> recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be confident that you successfully produced the results during this run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomDongyueXiedeartree9166f4618e78c96e7b0e8479e2dec37f247f1da2targetblank9166f46a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/DongyueXie/dear/tree/9166f4618e78c96e7b0e8479e2dec37f247f1da2" target="_blank">9166f46</a> </a>
+</p>
+</div>
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomDongyueXiedeartree9166f4618e78c96e7b0e8479e2dec37f247f1da2targetblank9166f46a" class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version <a href="https://github.com/DongyueXie/dear/tree/9166f4618e78c96e7b0e8479e2dec37f247f1da2" target="_blank">9166f46</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    .Rhistory
+    Ignored:    .Rproj.user/
+
+Untracked files:
+    Untracked:  code/mash_randomeffect_prior.R
+    Untracked:  code/matrix.cpp
+    Untracked:  code/myED_daarem.R
+    Untracked:  code/myED_prior.R
+    Untracked:  output/myed_all_01.RData
+    Untracked:  output/myed_all_05.RData
+    Untracked:  output/myed_all_05_nondiagS.RData
+    Untracked:  output/myed_mash_all_01.RData
+    Untracked:  output/myed_mash_all_05.RData
+    Untracked:  output/myed_mash_all_05_nondiagS.RData
+    Untracked:  output/myed_mixture01.RData
+    Untracked:  output/myed_mixture05.RData
+    Untracked:  output/myed_mixture05n1000.RData
+    Untracked:  output/myed_mixtureS.RData
+    Untracked:  output/myed_mixture_prior01.RData
+    Untracked:  output/myed_mixture_prior05.RData
+    Untracked:  output/myed_mixture_prior05n1000.RData
+    Untracked:  output/myed_mixture_priorS.RData
+    Untracked:  output/myed_universal01.RData
+    Untracked:  output/myed_universal05.RData
+    Untracked:  output/myed_universal05n1000.RData
+    Untracked:  output/myed_universalD01.RData
+    Untracked:  output/myed_universalD05.RData
+    Untracked:  output/myed_universalD05n1000.RData
+    Untracked:  output/myed_universalDS.RData
+    Untracked:  output/myed_universalD_prior01.RData
+    Untracked:  output/myed_universalD_prior05.RData
+    Untracked:  output/myed_universalD_prior05n1000.RData
+    Untracked:  output/myed_universalD_priorS.RData
+    Untracked:  output/myed_universalS.RData
+    Untracked:  output/myed_universal_prior01.RData
+    Untracked:  output/myed_universal_prior05.RData
+    Untracked:  output/myed_universal_prior05n1000.RData
+    Untracked:  output/myed_universal_priorS.RData
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not included in this status report because it is ok for generated content to have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+
+<p>
+These are the previous versions of the repository in which changes were made to the R Markdown (<code>analysis/mash_randomeffect_prior.Rmd</code>) and HTML (<code>docs/mash_randomeffect_prior.html</code>) files. If you’ve configured a remote Git repository (see <code>?wflow_git_remote</code>), click on the hyperlinks in the table below to view the files as they were in that past version.
+</p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/DongyueXie/dear/blob/9166f4618e78c96e7b0e8479e2dec37f247f1da2/analysis/mash_randomeffect_prior.Rmd" target="_blank">9166f46</a>
+</td>
+<td>
+Dongyue Xie
+</td>
+<td>
+2020-11-05
+</td>
+<td>
+wflow_publish(“analysis/mash_randomeffect_prior.Rmd”)
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<div id="introduction" class="section level2">
+<h2>Introduction</h2>
+<pre class="r"><code>source(&#39;code/myED_prior.R&#39;)</code></pre>
+<pre><code>
+Attaching package: &#39;mvnfast&#39;</code></pre>
+<pre><code>The following objects are masked from &#39;package:mvtnorm&#39;:
+
+    dmvt, rmvt</code></pre>
+<pre class="r"><code>source(&#39;code/mash_randomeffect.R&#39;)</code></pre>
+<pre><code>Loading required package: ashr</code></pre>
+</div>
+<div id="diagonal-s-0.12-total-1000-samples" class="section level2">
+<h2>diagonal S, 0.1^2, total 1000 samples</h2>
+<pre class="r"><code>set.seed(12345)
+simdata = simple_sims0(500,err_sd = 0.1)
+
+data = mash_set_data(simdata$Bhat,simdata$Shat)
+strong = 1:nrow(simdata$B)
+U.c    = cov_canonical(data)
+U.pca  = cov_pca(data,5,strong)
+
+
+load(&#39;output/myed_universal01.RData&#39;)
+U.myed.universal  = myMash_data(myed.universal,data)$Ulist
+m.c.myed.universal = mash(data, c(U.c,U.myed.universal),verbose = F)
+print(&#39;estimated universal sigma2&#39;)</code></pre>
+<pre><code>[1] &quot;estimated universal sigma2&quot;</code></pre>
+<pre class="r"><code>myed.universal$sigma2</code></pre>
+<pre><code>[1] 9.508114e-05</code></pre>
+<pre class="r"><code>load(&#39;output/myed_universal_prior01.RData&#39;)
+U.myed.universal.prior  = myMash_data(myed.universal.prior,data)$Ulist
+m.c.myed.universal.prior = mash(data, c(U.c,U.myed.universal.prior),verbose = F)
+print(&#39;estimated universal sigma2&#39;)</code></pre>
+<pre><code>[1] &quot;estimated universal sigma2&quot;</code></pre>
+<pre class="r"><code>myed.universal.prior$sigma2</code></pre>
+<pre><code>[1] 0.0004918088</code></pre>
+<pre class="r"><code>load(&#39;output/myed_universalD01.RData&#39;)
+U.myed.universalD  = myMash_data(myed.universalD,data)$Ulist
+m.c.myed.universalD = mash(data, c(U.c,U.myed.universalD),verbose = F)
+print(&#39;estimated universal sigma2&#39;)</code></pre>
+<pre><code>[1] &quot;estimated universal sigma2&quot;</code></pre>
+<pre class="r"><code>myed.universalD$sigma2</code></pre>
+<pre><code>[1] 9.444791e-05 6.210156e-05 4.871563e-05 2.297229e-04 2.463336e-04</code></pre>
+<pre class="r"><code>load(&#39;output/myed_universalD_prior01.RData&#39;)
+U.myed.universalD.prior  = myMash_data(myed.universalD.prior,data)$Ulist
+m.c.myed.universalD.prior = mash(data, c(U.c,U.myed.universalD.prior),verbose = F)
+print(&#39;estimated universal sigma2&#39;)</code></pre>
+<pre><code>[1] &quot;estimated universal sigma2&quot;</code></pre>
+<pre class="r"><code>myed.universalD.prior$sigma2</code></pre>
+<pre><code>[1] 0.0004933766 0.0004931310 0.0004929821 0.0004935232 0.0004935217</code></pre>
+<pre class="r"><code>load(&#39;output/myed_mixture01.RData&#39;)
+U.myed.mixture  = myMash_data(myed.mixture,data)$Ulist
+m.c.myed.mixture = mash(data, c(U.c,U.myed.mixture),verbose = F)
+print(&#39;estimated mixture-specific sigma2&#39;)</code></pre>
+<pre><code>[1] &quot;estimated mixture-specific sigma2&quot;</code></pre>
+<pre class="r"><code>myed.mixture$sigma2</code></pre>
+<pre><code>[1] 9.201347e-05 1.009911e-04 6.941250e-05 7.113023e-05 6.975540e-05
+[6] 4.208835e-05</code></pre>
+<pre class="r"><code>load(&#39;output/myed_mixture_prior01.RData&#39;)
+U.myed.mixture.prior  = myMash_data(myed.mixture.prior,data)$Ulist
+m.c.myed.mixture.prior = mash(data, c(U.c,U.myed.mixture.prior),verbose = F)
+print(&#39;estimated mixture-specific sigma2&#39;)</code></pre>
+<pre><code>[1] &quot;estimated mixture-specific sigma2&quot;</code></pre>
+<pre class="r"><code>myed.mixture.prior$sigma2</code></pre>
+<pre><code>[1] 0.0004918597 0.0004917916 0.0004912883 0.0004932324 0.0004912976
+[6] 0.0004839030</code></pre>
+<pre class="r"><code>result = simu_study(simdata,1:nrow(simdata$B))
+result$m.c.myed.universal = m.c.myed.universal
+result$m.c.myed.universal.prior = m.c.myed.universal.prior
+result$m.c.myed.universalD = m.c.myed.universalD
+result$m.c.myed.universalD.prior = m.c.myed.universalD.prior
+result$m.c.myed.mixture = m.c.myed.mixture
+result$m.c.myed.mixture.prior = m.c.myed.mixture.prior
+out = summary_out(simdata$B,result)
+knitr::kable(out$find_cond,caption = &#39;On finding conditions&#39;,digits = 5)</code></pre>
+<table>
+<caption>On finding conditions</caption>
+<colgroup>
+<col width="4%" />
+<col width="6%" />
+<col width="6%" />
+<col width="6%" />
+<col width="6%" />
+<col width="10%" />
+<col width="13%" />
+<col width="10%" />
+<col width="14%" />
+<col width="9%" />
+<col width="12%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="right">m.true</th>
+<th align="right">m.c</th>
+<th align="right">m.ed</th>
+<th align="right">m.c.ed</th>
+<th align="right">m.c.myed.universal</th>
+<th align="right">m.c.myed.universal.prior</th>
+<th align="right">m.c.myed.universalD</th>
+<th align="right">m.c.myed.universalD.prior</th>
+<th align="right">m.c.myed.mixture</th>
+<th align="right">m.c.myed.mixture.prior</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">fdp</td>
+<td align="right">0.00186</td>
+<td align="right">0.08686</td>
+<td align="right">0.49838</td>
+<td align="right">0.49838</td>
+<td align="right">0.02794</td>
+<td align="right">0.00231</td>
+<td align="right">0.00415</td>
+<td align="right">0.00231</td>
+<td align="right">0.02568</td>
+<td align="right">0.00231</td>
+</tr>
+<tr class="even">
+<td align="left">power</td>
+<td align="right">0.85880</td>
+<td align="right">0.82000</td>
+<td align="right">0.86960</td>
+<td align="right">0.86960</td>
+<td align="right">0.86280</td>
+<td align="right">0.86480</td>
+<td align="right">0.86400</td>
+<td align="right">0.86480</td>
+<td align="right">0.86520</td>
+<td align="right">0.86480</td>
+</tr>
+<tr class="odd">
+<td align="left">mse</td>
+<td align="right">0.00218</td>
+<td align="right">0.00867</td>
+<td align="right">0.00223</td>
+<td align="right">0.00223</td>
+<td align="right">0.00224</td>
+<td align="right">0.00224</td>
+<td align="right">0.00224</td>
+<td align="right">0.00224</td>
+<td align="right">0.00223</td>
+<td align="right">0.00224</td>
+</tr>
+<tr class="even">
+<td align="left">log_lik</td>
+<td align="right">1103.28838</td>
+<td align="right">-3795.92910</td>
+<td align="right">1108.14843</td>
+<td align="right">1108.14843</td>
+<td align="right">1109.51494</td>
+<td align="right">1102.39720</td>
+<td align="right">1109.82959</td>
+<td align="right">1102.37573</td>
+<td align="right">1108.67552</td>
+<td align="right">1102.39857</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="diagonal-s-0.52-total-1000-samples" class="section level2">
+<h2>diagonal S, 0.5^2, total 1000 samples</h2>
+<pre class="r"><code>set.seed(12345)
+simdata = simple_sims0(500,err_sd = 0.5)
+
+data = mash_set_data(simdata$Bhat,simdata$Shat)
+strong = 1:nrow(simdata$B)
+U.c    = cov_canonical(data)
+U.pca  = cov_pca(data,5,strong)
+
+
+load(&#39;output/myed_universal05.RData&#39;)
+U.myed.universal  = myMash_data(myed.universal,data)$Ulist
+m.c.myed.universal = mash(data, c(U.c,U.myed.universal),verbose = F)
+print(&#39;estimated universal sigma2&#39;)</code></pre>
+<pre><code>[1] &quot;estimated universal sigma2&quot;</code></pre>
+<pre class="r"><code>myed.universal$sigma2</code></pre>
+<pre><code>[1] 0.002604153</code></pre>
+<pre class="r"><code>load(&#39;output/myed_universal_prior05.RData&#39;)
+U.myed.universal.prior  = myMash_data(myed.universal.prior,data)$Ulist
+m.c.myed.universal.prior = mash(data, c(U.c,U.myed.universal.prior),verbose = F)
+print(&#39;estimated universal sigma2&#39;)</code></pre>
+<pre><code>[1] &quot;estimated universal sigma2&quot;</code></pre>
+<pre class="r"><code>myed.universal.prior$sigma2</code></pre>
+<pre><code>[1] 0.009736318</code></pre>
+<pre class="r"><code>load(&#39;output/myed_universalD05.RData&#39;)
+U.myed.universalD  = myMash_data(myed.universalD,data)$Ulist
+m.c.myed.universalD = mash(data, c(U.c,U.myed.universalD),verbose = F)
+print(&#39;estimated universal sigma2&#39;)</code></pre>
+<pre><code>[1] &quot;estimated universal sigma2&quot;</code></pre>
+<pre class="r"><code>myed.universalD$sigma2</code></pre>
+<pre><code>[1] 0.002233043 0.002205469 0.001142227 0.010212261 0.004994447</code></pre>
+<pre class="r"><code>load(&#39;output/myed_universalD_prior05.RData&#39;)
+U.myed.universalD.prior  = myMash_data(myed.universalD.prior,data)$Ulist
+m.c.myed.universalD.prior = mash(data, c(U.c,U.myed.universalD.prior),verbose = F)
+print(&#39;estimated universal sigma2&#39;)</code></pre>
+<pre><code>[1] &quot;estimated universal sigma2&quot;</code></pre>
+<pre class="r"><code>myed.universalD.prior$sigma2</code></pre>
+<pre><code>[1] 0.009755936 0.009755683 0.009750496 0.009761342 0.009759303</code></pre>
+<pre class="r"><code>load(&#39;output/myed_mixture05.RData&#39;)
+U.myed.mixture  = myMash_data(myed.mixture,data)$Ulist
+m.c.myed.mixture = mash(data, c(U.c,U.myed.mixture),verbose = F)
+print(&#39;estimated mixture-specific sigma2&#39;)</code></pre>
+<pre><code>[1] &quot;estimated mixture-specific sigma2&quot;</code></pre>
+<pre class="r"><code>myed.mixture$sigma2</code></pre>
+<pre><code>[1] 0.0025770652 0.0027186091 0.0047865555 0.0050088400 0.0049872301
+[6] 0.0008533382</code></pre>
+<pre class="r"><code>load(&#39;output/myed_mixture_prior05.RData&#39;)
+U.myed.mixture.prior  = myMash_data(myed.mixture.prior,data)$Ulist
+m.c.myed.mixture.prior = mash(data, c(U.c,U.myed.mixture.prior),verbose = F)
+print(&#39;estimated mixture-specific sigma2&#39;)</code></pre>
+<pre><code>[1] &quot;estimated mixture-specific sigma2&quot;</code></pre>
+<pre class="r"><code>myed.mixture.prior$sigma2</code></pre>
+<pre><code>[1] 0.009736192 0.009737336 0.009747423 0.009747661 0.009747648 0.009688206</code></pre>
+<pre class="r"><code>result = simu_study(simdata,1:nrow(simdata$B))
+result$m.c.myed.universal = m.c.myed.universal
+result$m.c.myed.universal.prior = m.c.myed.universal.prior
+result$m.c.myed.universalD = m.c.myed.universalD
+result$m.c.myed.universalD.prior = m.c.myed.universalD.prior
+result$m.c.myed.mixture = m.c.myed.mixture
+result$m.c.myed.mixture.prior = m.c.myed.mixture.prior
+out = summary_out(simdata$B,result)
+knitr::kable(out$find_cond,caption = &#39;On finding conditions&#39;,digits = 5)</code></pre>
+<table>
+<caption>On finding conditions</caption>
+<colgroup>
+<col width="4%" />
+<col width="6%" />
+<col width="6%" />
+<col width="6%" />
+<col width="6%" />
+<col width="10%" />
+<col width="13%" />
+<col width="10%" />
+<col width="13%" />
+<col width="9%" />
+<col width="12%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="right">m.true</th>
+<th align="right">m.c</th>
+<th align="right">m.ed</th>
+<th align="right">m.c.ed</th>
+<th align="right">m.c.myed.universal</th>
+<th align="right">m.c.myed.universal.prior</th>
+<th align="right">m.c.myed.universalD</th>
+<th align="right">m.c.myed.universalD.prior</th>
+<th align="right">m.c.myed.mixture</th>
+<th align="right">m.c.myed.mixture.prior</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">fdp</td>
+<td align="right">0.00417</td>
+<td align="right">0.07973</td>
+<td align="right">0.47444</td>
+<td align="right">0.47245</td>
+<td align="right">0.08219</td>
+<td align="right">0.01839</td>
+<td align="right">0.04463</td>
+<td align="right">0.01839</td>
+<td align="right">0.08051</td>
+<td align="right">0.01839</td>
+</tr>
+<tr class="even">
+<td align="left">power</td>
+<td align="right">0.38240</td>
+<td align="right">0.27240</td>
+<td align="right">0.41120</td>
+<td align="right">0.40600</td>
+<td align="right">0.40200</td>
+<td align="right">0.40560</td>
+<td align="right">0.40240</td>
+<td align="right">0.40560</td>
+<td align="right">0.40200</td>
+<td align="right">0.40560</td>
+</tr>
+<tr class="odd">
+<td align="left">mse</td>
+<td align="right">0.05820</td>
+<td align="right">0.12633</td>
+<td align="right">0.05991</td>
+<td align="right">0.06023</td>
+<td align="right">0.06025</td>
+<td align="right">0.06026</td>
+<td align="right">0.06025</td>
+<td align="right">0.06026</td>
+<td align="right">0.06025</td>
+<td align="right">0.06026</td>
+</tr>
+<tr class="even">
+<td align="left">log_lik</td>
+<td align="right">-5114.01103</td>
+<td align="right">-5947.39884</td>
+<td align="right">-5109.19102</td>
+<td align="right">-5108.75229</td>
+<td align="right">-5109.51061</td>
+<td align="right">-5112.74262</td>
+<td align="right">-5109.17906</td>
+<td align="right">-5112.75161</td>
+<td align="right">-5109.46738</td>
+<td align="right">-5112.74152</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="diagonal-s-0.52-total-2000-samples" class="section level2">
+<h2>diagonal S, 0.5^2, total 2000 samples</h2>
+<pre class="r"><code>set.seed(12345)
+simdata = simple_sims0(1000,err_sd = 0.5)
+
+data = mash_set_data(simdata$Bhat,simdata$Shat)
+strong = 1:nrow(simdata$B)
+U.c    = cov_canonical(data)
+U.pca  = cov_pca(data,5,strong)
+
+
+
+load(&#39;output/myed_universal05n1000.RData&#39;)
+U.myed.universal  = myMash_data(myed.universal,data)$Ulist
+m.c.myed.universal = mash(data, c(U.c,U.myed.universal),verbose = F)
+print(&#39;estimated universal sigma2&#39;)</code></pre>
+<pre><code>[1] &quot;estimated universal sigma2&quot;</code></pre>
+<pre class="r"><code>myed.universal$sigma2</code></pre>
+<pre><code>[1] 0.003436371</code></pre>
+<pre class="r"><code>load(&#39;output/myed_universal_prior05n1000.RData&#39;)
+U.myed.universal.prior  = myMash_data(myed.universal.prior,data)$Ulist
+m.c.myed.universal.prior = mash(data, c(U.c,U.myed.universal.prior),verbose = F)
+print(&#39;estimated universal sigma2&#39;)</code></pre>
+<pre><code>[1] &quot;estimated universal sigma2&quot;</code></pre>
+<pre class="r"><code>myed.universal.prior$sigma2</code></pre>
+<pre><code>[1] 0.006924021</code></pre>
+<pre class="r"><code>load(&#39;output/myed_universalD05n1000.RData&#39;)
+U.myed.universalD  = myMash_data(myed.universalD,data)$Ulist
+m.c.myed.universalD = mash(data, c(U.c,U.myed.universalD),verbose = F)
+print(&#39;estimated universal sigma2&#39;)</code></pre>
+<pre><code>[1] &quot;estimated universal sigma2&quot;</code></pre>
+<pre class="r"><code>myed.universalD$sigma2</code></pre>
+<pre><code>[1] 0.002503640 0.003335483 0.007272336 0.005874463 0.001958243</code></pre>
+<pre class="r"><code>load(&#39;output/myed_universalD_prior05n1000.RData&#39;)
+U.myed.universalD.prior  = myMash_data(myed.universalD.prior,data)$Ulist
+m.c.myed.universalD.prior = mash(data, c(U.c,U.myed.universalD.prior),verbose = F)
+print(&#39;estimated universal sigma2&#39;)</code></pre>
+<pre><code>[1] &quot;estimated universal sigma2&quot;</code></pre>
+<pre class="r"><code>myed.universalD.prior$sigma2</code></pre>
+<pre><code>[1] 0.006929676 0.006930338 0.006931618 0.006931334 0.006928899</code></pre>
+<pre class="r"><code>load(&#39;output/myed_mixture05n1000.RData&#39;)
+U.myed.mixture  = myMash_data(myed.mixture,data)$Ulist
+m.c.myed.mixture = mash(data, c(U.c,U.myed.mixture),verbose = F)
+print(&#39;estimated mixture-specific sigma2&#39;)</code></pre>
+<pre><code>[1] &quot;estimated mixture-specific sigma2&quot;</code></pre>
+<pre class="r"><code>myed.mixture$sigma2</code></pre>
+<pre><code>[1] 0.002376332 0.006281548 0.004929794 0.004886368 0.004863188 0.001954005</code></pre>
+<pre class="r"><code>load(&#39;output/myed_mixture_prior05n1000.RData&#39;)
+U.myed.mixture.prior  = myMash_data(myed.mixture.prior,data)$Ulist
+m.c.myed.mixture.prior = mash(data, c(U.c,U.myed.mixture.prior),verbose = F)
+print(&#39;estimated mixture-specific sigma2&#39;)</code></pre>
+<pre><code>[1] &quot;estimated mixture-specific sigma2&quot;</code></pre>
+<pre class="r"><code>myed.mixture.prior$sigma2</code></pre>
+<pre><code>[1] 0.006920112 0.006929183 0.006927015 0.006926965 0.006926956 0.006918178</code></pre>
+<pre class="r"><code>result = simu_study(simdata,1:nrow(simdata$B))
+result$m.c.myed.universal = m.c.myed.universal
+result$m.c.myed.universal.prior = m.c.myed.universal.prior
+result$m.c.myed.universalD = m.c.myed.universalD
+result$m.c.myed.universalD.prior = m.c.myed.universalD.prior
+result$m.c.myed.mixture = m.c.myed.mixture
+result$m.c.myed.mixture.prior = m.c.myed.mixture.prior
+out = summary_out(simdata$B,result)
+knitr::kable(out$find_cond,caption = &#39;On finding conditions&#39;,digits = 5)</code></pre>
+<table style="width:100%;">
+<caption>On finding conditions</caption>
+<colgroup>
+<col width="4%" />
+<col width="6%" />
+<col width="6%" />
+<col width="6%" />
+<col width="6%" />
+<col width="10%" />
+<col width="13%" />
+<col width="10%" />
+<col width="13%" />
+<col width="8%" />
+<col width="12%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="right">m.true</th>
+<th align="right">m.c</th>
+<th align="right">m.ed</th>
+<th align="right">m.c.ed</th>
+<th align="right">m.c.myed.universal</th>
+<th align="right">m.c.myed.universal.prior</th>
+<th align="right">m.c.myed.universalD</th>
+<th align="right">m.c.myed.universalD.prior</th>
+<th align="right">m.c.myed.mixture</th>
+<th align="right">m.c.myed.mixture.prior</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">fdp</td>
+<td align="right">0.00355</td>
+<td align="right">0.11557</td>
+<td align="right">0.33149</td>
+<td align="right">0.33149</td>
+<td align="right">0.07910</td>
+<td align="right">0.03677</td>
+<td align="right">0.04762</td>
+<td align="right">0.03633</td>
+<td align="right">0.04105</td>
+<td align="right">0.03633</td>
+</tr>
+<tr class="even">
+<td align="left">power</td>
+<td align="right">0.39320</td>
+<td align="right">0.28620</td>
+<td align="right">0.43520</td>
+<td align="right">0.43520</td>
+<td align="right">0.42380</td>
+<td align="right">0.42440</td>
+<td align="right">0.42400</td>
+<td align="right">0.42440</td>
+<td align="right">0.42520</td>
+<td align="right">0.42440</td>
+</tr>
+<tr class="odd">
+<td align="left">mse</td>
+<td align="right">0.05921</td>
+<td align="right">0.13181</td>
+<td align="right">0.06050</td>
+<td align="right">0.06050</td>
+<td align="right">0.06038</td>
+<td align="right">0.06044</td>
+<td align="right">0.06041</td>
+<td align="right">0.06044</td>
+<td align="right">0.06037</td>
+<td align="right">0.06044</td>
+</tr>
+<tr class="even">
+<td align="left">log_lik</td>
+<td align="right">-10260.41203</td>
+<td align="right">-11870.72222</td>
+<td align="right">-10273.91354</td>
+<td align="right">-10273.91351</td>
+<td align="right">-10274.17136</td>
+<td align="right">-10275.99063</td>
+<td align="right">-10273.85456</td>
+<td align="right">-10275.99463</td>
+<td align="right">-10273.52619</td>
+<td align="right">-10275.98818</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="nondiagonal-s-total-1000-samples" class="section level2">
+<h2>nondiagonal S, total 1000 samples</h2>
+<pre class="r"><code>set.seed(12345)
+simdata = simple_sims0(500,err_sd = 0.1)
+
+data = mash_set_data(simdata$Bhat,simdata$Shat)
+strong = 1:nrow(simdata$B)
+U.c    = cov_canonical(data)
+U.pca  = cov_pca(data,5,strong)
+
+
+load(&#39;output/myed_universalS.RData&#39;)
+U.myed.universal  = myMash_data(myed.universal,data)$Ulist
+m.c.myed.universal = mash(data, c(U.c,U.myed.universal),verbose = F)
+print(&#39;estimated universal sigma2&#39;)</code></pre>
+<pre><code>[1] &quot;estimated universal sigma2&quot;</code></pre>
+<pre class="r"><code>myed.universal$sigma2</code></pre>
+<pre><code>[1] 0.004000983</code></pre>
+<pre class="r"><code>load(&#39;output/myed_universal_priorS.RData&#39;)
+U.myed.universal.prior  = myMash_data(myed.universal.prior,data)$Ulist
+m.c.myed.universal.prior = mash(data, c(U.c,U.myed.universal.prior),verbose = F)
+print(&#39;estimated universal sigma2&#39;)</code></pre>
+<pre><code>[1] &quot;estimated universal sigma2&quot;</code></pre>
+<pre class="r"><code>myed.universal.prior$sigma2</code></pre>
+<pre><code>[1] 0.0126194</code></pre>
+<pre class="r"><code>load(&#39;output/myed_universalDS.RData&#39;)
+U.myed.universalD  = myMash_data(myed.universalD,data)$Ulist
+m.c.myed.universalD = mash(data, c(U.c,U.myed.universalD),verbose = F)
+print(&#39;estimated universal sigma2&#39;)</code></pre>
+<pre><code>[1] &quot;estimated universal sigma2&quot;</code></pre>
+<pre class="r"><code>myed.universalD$sigma2</code></pre>
+<pre><code>[1] 0.003654567 0.003462412 0.013491001 0.002058621 0.003967160</code></pre>
+<pre class="r"><code>load(&#39;output/myed_universalD_priorS.RData&#39;)
+U.myed.universalD.prior  = myMash_data(myed.universalD.prior,data)$Ulist
+m.c.myed.universalD.prior = mash(data, c(U.c,U.myed.universalD.prior),verbose = F)
+print(&#39;estimated universal sigma2&#39;)</code></pre>
+<pre><code>[1] &quot;estimated universal sigma2&quot;</code></pre>
+<pre class="r"><code>myed.universalD.prior$sigma2</code></pre>
+<pre><code>[1] 0.01264568 0.01264591 0.01265278 0.01264238 0.01264814</code></pre>
+<pre class="r"><code>load(&#39;output/myed_mixtureS.RData&#39;)
+U.myed.mixture  = myMash_data(myed.mixture,data)$Ulist
+m.c.myed.mixture = mash(data, c(U.c,U.myed.mixture),verbose = F)
+print(&#39;estimated mixture-specific sigma2&#39;)</code></pre>
+<pre><code>[1] &quot;estimated mixture-specific sigma2&quot;</code></pre>
+<pre class="r"><code>myed.mixture$sigma2</code></pre>
+<pre><code>[1] 0.004097792 0.005694083 0.004749593 0.004590118 0.004732171 0.002743461</code></pre>
+<pre class="r"><code>load(&#39;output/myed_mixture_priorS.RData&#39;)
+U.myed.mixture.prior  = myMash_data(myed.mixture.prior,data)$Ulist
+m.c.myed.mixture.prior = mash(data, c(U.c,U.myed.mixture.prior),verbose = F)
+print(&#39;estimated mixture-specific sigma2&#39;)</code></pre>
+<pre><code>[1] &quot;estimated mixture-specific sigma2&quot;</code></pre>
+<pre class="r"><code>myed.mixture.prior$sigma2</code></pre>
+<pre><code>[1] 0.01261458 0.01263385 0.01262512 0.01262490 0.01262515 0.01261624</code></pre>
+<pre class="r"><code>result = simu_study(simdata,1:nrow(simdata$B))
+result$m.c.myed.universal = m.c.myed.universal
+result$m.c.myed.universal.prior = m.c.myed.universal.prior
+result$m.c.myed.universalD = m.c.myed.universalD
+result$m.c.myed.universalD.prior = m.c.myed.universalD.prior
+result$m.c.myed.mixture = m.c.myed.mixture
+result$m.c.myed.mixture.prior = m.c.myed.mixture.prior
+out = summary_out(simdata$B,result)
+knitr::kable(out$find_cond,caption = &#39;On finding conditions&#39;,digits = 5)</code></pre>
+<table>
+<caption>On finding conditions</caption>
+<colgroup>
+<col width="4%" />
+<col width="6%" />
+<col width="6%" />
+<col width="6%" />
+<col width="6%" />
+<col width="10%" />
+<col width="13%" />
+<col width="10%" />
+<col width="14%" />
+<col width="9%" />
+<col width="12%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="right">m.true</th>
+<th align="right">m.c</th>
+<th align="right">m.ed</th>
+<th align="right">m.c.ed</th>
+<th align="right">m.c.myed.universal</th>
+<th align="right">m.c.myed.universal.prior</th>
+<th align="right">m.c.myed.universalD</th>
+<th align="right">m.c.myed.universalD.prior</th>
+<th align="right">m.c.myed.mixture</th>
+<th align="right">m.c.myed.mixture.prior</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">fdp</td>
+<td align="right">0.00186</td>
+<td align="right">0.08686</td>
+<td align="right">0.49838</td>
+<td align="right">0.49838</td>
+<td align="right">0.06505</td>
+<td align="right">0.03966</td>
+<td align="right">0.07550</td>
+<td align="right">0.03966</td>
+<td align="right">0.05108</td>
+<td align="right">0.03966</td>
+</tr>
+<tr class="even">
+<td align="left">power</td>
+<td align="right">0.85880</td>
+<td align="right">0.82000</td>
+<td align="right">0.86960</td>
+<td align="right">0.86960</td>
+<td align="right">0.86240</td>
+<td align="right">0.86200</td>
+<td align="right">0.86200</td>
+<td align="right">0.86200</td>
+<td align="right">0.86200</td>
+<td align="right">0.86200</td>
+</tr>
+<tr class="odd">
+<td align="left">mse</td>
+<td align="right">0.00218</td>
+<td align="right">0.00867</td>
+<td align="right">0.00223</td>
+<td align="right">0.00223</td>
+<td align="right">0.00348</td>
+<td align="right">0.00390</td>
+<td align="right">0.00358</td>
+<td align="right">0.00390</td>
+<td align="right">0.00349</td>
+<td align="right">0.00390</td>
+</tr>
+<tr class="even">
+<td align="left">log_lik</td>
+<td align="right">1103.28838</td>
+<td align="right">-3795.92910</td>
+<td align="right">1108.14843</td>
+<td align="right">1108.14843</td>
+<td align="right">797.66265</td>
+<td align="right">636.67662</td>
+<td align="right">751.57626</td>
+<td align="right">636.30257</td>
+<td align="right">788.06811</td>
+<td align="right">636.63881</td>
+</tr>
+</tbody>
+</table>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 4.0.3 (2020-10-10)
+Platform: x86_64-apple-darwin17.0 (64-bit)
+Running under: macOS High Sierra 10.13.6
+
+Matrix products: default
+BLAS:   /Library/Frameworks/R.framework/Versions/4.0/Resources/lib/libRblas.dylib
+LAPACK: /Library/Frameworks/R.framework/Versions/4.0/Resources/lib/libRlapack.dylib
+
+locale:
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+[1] mashr_0.2.38    ashr_2.2-47     mvnfast_0.2.5.1 mvtnorm_1.1-1  
+[5] workflowr_1.6.2
+
+loaded via a namespace (and not attached):
+ [1] Rcpp_1.0.5       highr_0.8        plyr_1.8.6       pillar_1.4.6    
+ [5] compiler_4.0.3   later_1.1.0.1    git2r_0.27.1     tools_4.0.3     
+ [9] digest_0.6.27    evaluate_0.14    lifecycle_0.2.0  tibble_3.0.4    
+[13] lattice_0.20-41  pkgconfig_2.0.3  rlang_0.4.8      Matrix_1.2-18   
+[17] rstudioapi_0.11  yaml_2.2.1       xfun_0.18        invgamma_1.1    
+[21] stringr_1.4.0    knitr_1.30       fs_1.5.0         vctrs_0.3.4     
+[25] rprojroot_1.3-2  grid_4.0.3       glue_1.4.2       R6_2.4.1        
+[29] rmarkdown_2.5    mixsqp_0.3-43    rmeta_3.0        irlba_2.3.3     
+[33] magrittr_1.5     whisker_0.4      backports_1.1.10 promises_1.1.1  
+[37] ellipsis_0.3.1   htmltools_0.5.0  assertthat_0.2.1 abind_1.4-5     
+[41] httpuv_1.5.4     stringi_1.5.3    truncnorm_1.0-8  SQUAREM_2020.5  
+[45] crayon_1.3.4    </code></pre>
+</div>
+</div>
+
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+http://docs.mathjax.org/en/latest/configuration.html.  This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
