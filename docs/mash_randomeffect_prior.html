@@ -515,16 +515,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomDongyueXiedeartree9166f4618e78c96e7b0e8479e2dec37f247f1da2targetblank9166f46a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/DongyueXie/dear/tree/9166f4618e78c96e7b0e8479e2dec37f247f1da2" target="_blank">9166f46</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomDongyueXiedeartree229cdb078e4b9ed37fba527046dec8eddca491d5targetblank229cdb0a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/DongyueXie/dear/tree/229cdb078e4b9ed37fba527046dec8eddca491d5" target="_blank">229cdb0</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomDongyueXiedeartree9166f4618e78c96e7b0e8479e2dec37f247f1da2targetblank9166f46a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomDongyueXiedeartree229cdb078e4b9ed37fba527046dec8eddca491d5targetblank229cdb0a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/DongyueXie/dear/tree/9166f4618e78c96e7b0e8479e2dec37f247f1da2" target="_blank">9166f46</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/DongyueXie/dear/tree/229cdb078e4b9ed37fba527046dec8eddca491d5" target="_blank">229cdb0</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -607,6 +607,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/DongyueXie/dear/blob/229cdb078e4b9ed37fba527046dec8eddca491d5/analysis/mash_randomeffect_prior.Rmd" target="_blank">229cdb0</a>
+</td>
+<td>
+Dongyue Xie
+</td>
+<td>
+2020-11-05
+</td>
+<td>
+wflow_publish(“analysis/mash_randomeffect_prior.Rmd”)
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/DongyueXie/dear/f8c16963a63992f1da5ea988b484ffd33386a727/docs/mash_randomeffect_prior.html" target="_blank">f8c1696</a>
+</td>
+<td>
+Dongyue Xie
+</td>
+<td>
+2020-11-05
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -1093,9 +1127,10 @@ knitr::kable(out$find_cond,caption = &#39;On finding conditions&#39;,digits = 5)
 <div id="nondiagonal-s-total-1000-samples" class="section level2">
 <h2>nondiagonal S, total 1000 samples</h2>
 <pre class="r"><code>set.seed(12345)
-simdata = simple_sims0(500,err_sd = 0.1)
-
-data = mash_set_data(simdata$Bhat,simdata$Shat)
+n = 1000
+S = rWishart(n,10,diag(5)/20)
+simdata = simple_sims01(500,S)
+data = mash_set_data(simdata$Bhat,simdata$Shat,V=S)
 strong = 1:nrow(simdata$B)
 U.c    = cov_canonical(data)
 U.pca  = cov_pca(data,5,strong)
@@ -1103,42 +1138,42 @@ U.pca  = cov_pca(data,5,strong)
 
 load(&#39;output/myed_universalS.RData&#39;)
 U.myed.universal  = myMash_data(myed.universal,data)$Ulist
-m.c.myed.universal = mash(data, c(U.c,U.myed.universal),verbose = F)
+m.c.myed.universal = mash(data, c(U.c,U.myed.universal),verbose = F,algorithm.version = &#39;R&#39;)
 print(&#39;estimated universal sigma2&#39;)</code></pre>
 <pre><code>[1] &quot;estimated universal sigma2&quot;</code></pre>
 <pre class="r"><code>myed.universal$sigma2</code></pre>
 <pre><code>[1] 0.004000983</code></pre>
 <pre class="r"><code>load(&#39;output/myed_universal_priorS.RData&#39;)
 U.myed.universal.prior  = myMash_data(myed.universal.prior,data)$Ulist
-m.c.myed.universal.prior = mash(data, c(U.c,U.myed.universal.prior),verbose = F)
+m.c.myed.universal.prior = mash(data, c(U.c,U.myed.universal.prior),verbose = F,algorithm.version = &#39;R&#39;)
 print(&#39;estimated universal sigma2&#39;)</code></pre>
 <pre><code>[1] &quot;estimated universal sigma2&quot;</code></pre>
 <pre class="r"><code>myed.universal.prior$sigma2</code></pre>
 <pre><code>[1] 0.0126194</code></pre>
 <pre class="r"><code>load(&#39;output/myed_universalDS.RData&#39;)
 U.myed.universalD  = myMash_data(myed.universalD,data)$Ulist
-m.c.myed.universalD = mash(data, c(U.c,U.myed.universalD),verbose = F)
+m.c.myed.universalD = mash(data, c(U.c,U.myed.universalD),verbose = F,algorithm.version = &#39;R&#39;)
 print(&#39;estimated universal sigma2&#39;)</code></pre>
 <pre><code>[1] &quot;estimated universal sigma2&quot;</code></pre>
 <pre class="r"><code>myed.universalD$sigma2</code></pre>
 <pre><code>[1] 0.003654567 0.003462412 0.013491001 0.002058621 0.003967160</code></pre>
 <pre class="r"><code>load(&#39;output/myed_universalD_priorS.RData&#39;)
 U.myed.universalD.prior  = myMash_data(myed.universalD.prior,data)$Ulist
-m.c.myed.universalD.prior = mash(data, c(U.c,U.myed.universalD.prior),verbose = F)
+m.c.myed.universalD.prior = mash(data, c(U.c,U.myed.universalD.prior),verbose = F,algorithm.version = &#39;R&#39;)
 print(&#39;estimated universal sigma2&#39;)</code></pre>
 <pre><code>[1] &quot;estimated universal sigma2&quot;</code></pre>
 <pre class="r"><code>myed.universalD.prior$sigma2</code></pre>
 <pre><code>[1] 0.01264568 0.01264591 0.01265278 0.01264238 0.01264814</code></pre>
 <pre class="r"><code>load(&#39;output/myed_mixtureS.RData&#39;)
 U.myed.mixture  = myMash_data(myed.mixture,data)$Ulist
-m.c.myed.mixture = mash(data, c(U.c,U.myed.mixture),verbose = F)
+m.c.myed.mixture = mash(data, c(U.c,U.myed.mixture),verbose = F,algorithm.version = &#39;R&#39;)
 print(&#39;estimated mixture-specific sigma2&#39;)</code></pre>
 <pre><code>[1] &quot;estimated mixture-specific sigma2&quot;</code></pre>
 <pre class="r"><code>myed.mixture$sigma2</code></pre>
 <pre><code>[1] 0.004097792 0.005694083 0.004749593 0.004590118 0.004732171 0.002743461</code></pre>
 <pre class="r"><code>load(&#39;output/myed_mixture_priorS.RData&#39;)
 U.myed.mixture.prior  = myMash_data(myed.mixture.prior,data)$Ulist
-m.c.myed.mixture.prior = mash(data, c(U.c,U.myed.mixture.prior),verbose = F)
+m.c.myed.mixture.prior = mash(data, c(U.c,U.myed.mixture.prior),verbose = F,algorithm.version = &#39;R&#39;)
 print(&#39;estimated mixture-specific sigma2&#39;)</code></pre>
 <pre><code>[1] &quot;estimated mixture-specific sigma2&quot;</code></pre>
 <pre class="r"><code>myed.mixture.prior$sigma2</code></pre>
@@ -1163,7 +1198,7 @@ knitr::kable(out$find_cond,caption = &#39;On finding conditions&#39;,digits = 5)
 <col width="10%" />
 <col width="13%" />
 <col width="10%" />
-<col width="14%" />
+<col width="13%" />
 <col width="9%" />
 <col width="12%" />
 </colgroup>
@@ -1185,55 +1220,55 @@ knitr::kable(out$find_cond,caption = &#39;On finding conditions&#39;,digits = 5)
 <tbody>
 <tr class="odd">
 <td align="left">fdp</td>
-<td align="right">0.00186</td>
-<td align="right">0.08686</td>
-<td align="right">0.49838</td>
-<td align="right">0.49838</td>
-<td align="right">0.06505</td>
-<td align="right">0.03966</td>
-<td align="right">0.07550</td>
-<td align="right">0.03966</td>
-<td align="right">0.05108</td>
-<td align="right">0.03966</td>
+<td align="right">0.00000</td>
+<td align="right">0.10526</td>
+<td align="right">0.44840</td>
+<td align="right">0.44840</td>
+<td align="right">0.01765</td>
+<td align="right">0.01064</td>
+<td align="right">0.01869</td>
+<td align="right">0.01065</td>
+<td align="right">0.01561</td>
+<td align="right">0.01064</td>
 </tr>
 <tr class="even">
 <td align="left">power</td>
-<td align="right">0.85880</td>
-<td align="right">0.82000</td>
-<td align="right">0.86960</td>
-<td align="right">0.86960</td>
-<td align="right">0.86240</td>
-<td align="right">0.86200</td>
-<td align="right">0.86200</td>
-<td align="right">0.86200</td>
-<td align="right">0.86200</td>
-<td align="right">0.86200</td>
+<td align="right">0.05880</td>
+<td align="right">0.02720</td>
+<td align="right">0.06200</td>
+<td align="right">0.06200</td>
+<td align="right">0.37840</td>
+<td align="right">0.37200</td>
+<td align="right">0.37800</td>
+<td align="right">0.37160</td>
+<td align="right">0.37840</td>
+<td align="right">0.37200</td>
 </tr>
 <tr class="odd">
 <td align="left">mse</td>
-<td align="right">0.00218</td>
-<td align="right">0.00867</td>
-<td align="right">0.00223</td>
-<td align="right">0.00223</td>
-<td align="right">0.00348</td>
-<td align="right">0.00390</td>
-<td align="right">0.00358</td>
-<td align="right">0.00390</td>
-<td align="right">0.00349</td>
-<td align="right">0.00390</td>
+<td align="right">0.16712</td>
+<td align="right">0.31241</td>
+<td align="right">0.16872</td>
+<td align="right">0.16872</td>
+<td align="right">0.07320</td>
+<td align="right">0.07336</td>
+<td align="right">0.07308</td>
+<td align="right">0.07335</td>
+<td align="right">0.07318</td>
+<td align="right">0.07336</td>
 </tr>
 <tr class="even">
 <td align="left">log_lik</td>
-<td align="right">1103.28838</td>
-<td align="right">-3795.92910</td>
-<td align="right">1108.14843</td>
-<td align="right">1108.14843</td>
-<td align="right">797.66265</td>
-<td align="right">636.67662</td>
-<td align="right">751.57626</td>
-<td align="right">636.30257</td>
-<td align="right">788.06811</td>
-<td align="right">636.63881</td>
+<td align="right">-6832.05652</td>
+<td align="right">-7021.44689</td>
+<td align="right">-6831.87390</td>
+<td align="right">-6831.87391</td>
+<td align="right">-5982.23617</td>
+<td align="right">-5984.47518</td>
+<td align="right">-5981.84232</td>
+<td align="right">-5984.47658</td>
+<td align="right">-5982.12630</td>
+<td align="right">-5984.47414</td>
 </tr>
 </tbody>
 </table>
@@ -1272,10 +1307,10 @@ loaded via a namespace (and not attached):
 [21] stringr_1.4.0    knitr_1.30       fs_1.5.0         vctrs_0.3.4     
 [25] rprojroot_1.3-2  grid_4.0.3       glue_1.4.2       R6_2.4.1        
 [29] rmarkdown_2.5    mixsqp_0.3-43    rmeta_3.0        irlba_2.3.3     
-[33] magrittr_1.5     whisker_0.4      backports_1.1.10 promises_1.1.1  
-[37] ellipsis_0.3.1   htmltools_0.5.0  assertthat_0.2.1 abind_1.4-5     
-[41] httpuv_1.5.4     stringi_1.5.3    truncnorm_1.0-8  SQUAREM_2020.5  
-[45] crayon_1.3.4    </code></pre>
+[33] magrittr_1.5     whisker_0.4      MASS_7.3-53      backports_1.1.10
+[37] promises_1.1.1   ellipsis_0.3.1   htmltools_0.5.0  assertthat_0.2.1
+[41] abind_1.4-5      httpuv_1.5.4     stringi_1.5.3    truncnorm_1.0-8 
+[45] SQUAREM_2020.5   crayon_1.3.4    </code></pre>
 </div>
 </div>
 
