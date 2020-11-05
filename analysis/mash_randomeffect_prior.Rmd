@@ -1,0 +1,292 @@
+---
+title: "mash randomeffect prior"
+author: "Dongyue Xie"
+date: "2020-11-01"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+---
+
+## Introduction
+
+```{r}
+source('code/myED_prior.R')
+source('code/mash_randomeffect.R')
+
+```
+
+## diagonal S, 0.1^2, total 1000 samples
+
+
+```{r}
+
+set.seed(12345)
+simdata = simple_sims0(500,err_sd = 0.1)
+
+data = mash_set_data(simdata$Bhat,simdata$Shat)
+strong = 1:nrow(simdata$B)
+U.c    = cov_canonical(data)
+U.pca  = cov_pca(data,5,strong)
+
+
+load('output/myed_universal01.RData')
+U.myed.universal  = myMash_data(myed.universal,data)$Ulist
+m.c.myed.universal = mash(data, c(U.c,U.myed.universal),verbose = F)
+print('estimated universal sigma2')
+myed.universal$sigma2
+
+load('output/myed_universal_prior01.RData')
+U.myed.universal.prior  = myMash_data(myed.universal.prior,data)$Ulist
+m.c.myed.universal.prior = mash(data, c(U.c,U.myed.universal.prior),verbose = F)
+print('estimated universal sigma2')
+myed.universal.prior$sigma2
+
+
+load('output/myed_universalD01.RData')
+U.myed.universalD  = myMash_data(myed.universalD,data)$Ulist
+m.c.myed.universalD = mash(data, c(U.c,U.myed.universalD),verbose = F)
+print('estimated universal sigma2')
+myed.universalD$sigma2
+
+load('output/myed_universalD_prior01.RData')
+U.myed.universalD.prior  = myMash_data(myed.universalD.prior,data)$Ulist
+m.c.myed.universalD.prior = mash(data, c(U.c,U.myed.universalD.prior),verbose = F)
+print('estimated universal sigma2')
+myed.universalD.prior$sigma2
+
+
+load('output/myed_mixture01.RData')
+U.myed.mixture  = myMash_data(myed.mixture,data)$Ulist
+m.c.myed.mixture = mash(data, c(U.c,U.myed.mixture),verbose = F)
+print('estimated mixture-specific sigma2')
+myed.mixture$sigma2
+
+
+load('output/myed_mixture_prior01.RData')
+U.myed.mixture.prior  = myMash_data(myed.mixture.prior,data)$Ulist
+m.c.myed.mixture.prior = mash(data, c(U.c,U.myed.mixture.prior),verbose = F)
+print('estimated mixture-specific sigma2')
+myed.mixture.prior$sigma2
+```
+
+
+```{r,results='asis'}
+result = simu_study(simdata,1:nrow(simdata$B))
+result$m.c.myed.universal = m.c.myed.universal
+result$m.c.myed.universal.prior = m.c.myed.universal.prior
+result$m.c.myed.universalD = m.c.myed.universalD
+result$m.c.myed.universalD.prior = m.c.myed.universalD.prior
+result$m.c.myed.mixture = m.c.myed.mixture
+result$m.c.myed.mixture.prior = m.c.myed.mixture.prior
+out = summary_out(simdata$B,result)
+knitr::kable(out$find_cond,caption = 'On finding conditions',digits = 5)
+```
+
+
+## diagonal S, 0.5^2, total 1000 samples
+
+
+```{r}
+
+set.seed(12345)
+simdata = simple_sims0(500,err_sd = 0.5)
+
+data = mash_set_data(simdata$Bhat,simdata$Shat)
+strong = 1:nrow(simdata$B)
+U.c    = cov_canonical(data)
+U.pca  = cov_pca(data,5,strong)
+
+
+load('output/myed_universal05.RData')
+U.myed.universal  = myMash_data(myed.universal,data)$Ulist
+m.c.myed.universal = mash(data, c(U.c,U.myed.universal),verbose = F)
+print('estimated universal sigma2')
+myed.universal$sigma2
+
+load('output/myed_universal_prior05.RData')
+U.myed.universal.prior  = myMash_data(myed.universal.prior,data)$Ulist
+m.c.myed.universal.prior = mash(data, c(U.c,U.myed.universal.prior),verbose = F)
+print('estimated universal sigma2')
+myed.universal.prior$sigma2
+
+
+load('output/myed_universalD05.RData')
+U.myed.universalD  = myMash_data(myed.universalD,data)$Ulist
+m.c.myed.universalD = mash(data, c(U.c,U.myed.universalD),verbose = F)
+print('estimated universal sigma2')
+myed.universalD$sigma2
+
+load('output/myed_universalD_prior05.RData')
+U.myed.universalD.prior  = myMash_data(myed.universalD.prior,data)$Ulist
+m.c.myed.universalD.prior = mash(data, c(U.c,U.myed.universalD.prior),verbose = F)
+print('estimated universal sigma2')
+myed.universalD.prior$sigma2
+
+
+load('output/myed_mixture05.RData')
+U.myed.mixture  = myMash_data(myed.mixture,data)$Ulist
+m.c.myed.mixture = mash(data, c(U.c,U.myed.mixture),verbose = F)
+print('estimated mixture-specific sigma2')
+myed.mixture$sigma2
+
+
+load('output/myed_mixture_prior05.RData')
+U.myed.mixture.prior  = myMash_data(myed.mixture.prior,data)$Ulist
+m.c.myed.mixture.prior = mash(data, c(U.c,U.myed.mixture.prior),verbose = F)
+print('estimated mixture-specific sigma2')
+myed.mixture.prior$sigma2
+```
+
+
+```{r,results='asis'}
+result = simu_study(simdata,1:nrow(simdata$B))
+result$m.c.myed.universal = m.c.myed.universal
+result$m.c.myed.universal.prior = m.c.myed.universal.prior
+result$m.c.myed.universalD = m.c.myed.universalD
+result$m.c.myed.universalD.prior = m.c.myed.universalD.prior
+result$m.c.myed.mixture = m.c.myed.mixture
+result$m.c.myed.mixture.prior = m.c.myed.mixture.prior
+out = summary_out(simdata$B,result)
+knitr::kable(out$find_cond,caption = 'On finding conditions',digits = 5)
+```
+
+
+
+## diagonal S, 0.5^2, total 2000 samples
+
+
+```{r}
+
+set.seed(12345)
+simdata = simple_sims0(1000,err_sd = 0.5)
+
+data = mash_set_data(simdata$Bhat,simdata$Shat)
+strong = 1:nrow(simdata$B)
+U.c    = cov_canonical(data)
+U.pca  = cov_pca(data,5,strong)
+
+
+
+load('output/myed_universal05n1000.RData')
+U.myed.universal  = myMash_data(myed.universal,data)$Ulist
+m.c.myed.universal = mash(data, c(U.c,U.myed.universal),verbose = F)
+print('estimated universal sigma2')
+myed.universal$sigma2
+
+load('output/myed_universal_prior05n1000.RData')
+U.myed.universal.prior  = myMash_data(myed.universal.prior,data)$Ulist
+m.c.myed.universal.prior = mash(data, c(U.c,U.myed.universal.prior),verbose = F)
+print('estimated universal sigma2')
+myed.universal.prior$sigma2
+
+
+load('output/myed_universalD05n1000.RData')
+U.myed.universalD  = myMash_data(myed.universalD,data)$Ulist
+m.c.myed.universalD = mash(data, c(U.c,U.myed.universalD),verbose = F)
+print('estimated universal sigma2')
+myed.universalD$sigma2
+
+load('output/myed_universalD_prior05n1000.RData')
+U.myed.universalD.prior  = myMash_data(myed.universalD.prior,data)$Ulist
+m.c.myed.universalD.prior = mash(data, c(U.c,U.myed.universalD.prior),verbose = F)
+print('estimated universal sigma2')
+myed.universalD.prior$sigma2
+
+
+load('output/myed_mixture05n1000.RData')
+U.myed.mixture  = myMash_data(myed.mixture,data)$Ulist
+m.c.myed.mixture = mash(data, c(U.c,U.myed.mixture),verbose = F)
+print('estimated mixture-specific sigma2')
+myed.mixture$sigma2
+
+
+load('output/myed_mixture_prior05n1000.RData')
+U.myed.mixture.prior  = myMash_data(myed.mixture.prior,data)$Ulist
+m.c.myed.mixture.prior = mash(data, c(U.c,U.myed.mixture.prior),verbose = F)
+print('estimated mixture-specific sigma2')
+myed.mixture.prior$sigma2
+```
+
+
+```{r,results='asis'}
+result = simu_study(simdata,1:nrow(simdata$B))
+result$m.c.myed.universal = m.c.myed.universal
+result$m.c.myed.universal.prior = m.c.myed.universal.prior
+result$m.c.myed.universalD = m.c.myed.universalD
+result$m.c.myed.universalD.prior = m.c.myed.universalD.prior
+result$m.c.myed.mixture = m.c.myed.mixture
+result$m.c.myed.mixture.prior = m.c.myed.mixture.prior
+out = summary_out(simdata$B,result)
+knitr::kable(out$find_cond,caption = 'On finding conditions',digits = 5)
+```
+
+
+
+## nondiagonal S,  total 1000 samples
+
+
+```{r}
+
+set.seed(12345)
+simdata = simple_sims0(500,err_sd = 0.1)
+
+data = mash_set_data(simdata$Bhat,simdata$Shat)
+strong = 1:nrow(simdata$B)
+U.c    = cov_canonical(data)
+U.pca  = cov_pca(data,5,strong)
+
+
+load('output/myed_universalS.RData')
+U.myed.universal  = myMash_data(myed.universal,data)$Ulist
+m.c.myed.universal = mash(data, c(U.c,U.myed.universal),verbose = F)
+print('estimated universal sigma2')
+myed.universal$sigma2
+
+load('output/myed_universal_priorS.RData')
+U.myed.universal.prior  = myMash_data(myed.universal.prior,data)$Ulist
+m.c.myed.universal.prior = mash(data, c(U.c,U.myed.universal.prior),verbose = F)
+print('estimated universal sigma2')
+myed.universal.prior$sigma2
+
+
+load('output/myed_universalDS.RData')
+U.myed.universalD  = myMash_data(myed.universalD,data)$Ulist
+m.c.myed.universalD = mash(data, c(U.c,U.myed.universalD),verbose = F)
+print('estimated universal sigma2')
+myed.universalD$sigma2
+
+load('output/myed_universalD_priorS.RData')
+U.myed.universalD.prior  = myMash_data(myed.universalD.prior,data)$Ulist
+m.c.myed.universalD.prior = mash(data, c(U.c,U.myed.universalD.prior),verbose = F)
+print('estimated universal sigma2')
+myed.universalD.prior$sigma2
+
+
+load('output/myed_mixtureS.RData')
+U.myed.mixture  = myMash_data(myed.mixture,data)$Ulist
+m.c.myed.mixture = mash(data, c(U.c,U.myed.mixture),verbose = F)
+print('estimated mixture-specific sigma2')
+myed.mixture$sigma2
+
+
+load('output/myed_mixture_priorS.RData')
+U.myed.mixture.prior  = myMash_data(myed.mixture.prior,data)$Ulist
+m.c.myed.mixture.prior = mash(data, c(U.c,U.myed.mixture.prior),verbose = F)
+print('estimated mixture-specific sigma2')
+myed.mixture.prior$sigma2
+```
+
+
+```{r,results='asis'}
+result = simu_study(simdata,1:nrow(simdata$B))
+result$m.c.myed.universal = m.c.myed.universal
+result$m.c.myed.universal.prior = m.c.myed.universal.prior
+result$m.c.myed.universalD = m.c.myed.universalD
+result$m.c.myed.universalD.prior = m.c.myed.universalD.prior
+result$m.c.myed.mixture = m.c.myed.mixture
+result$m.c.myed.mixture.prior = m.c.myed.mixture.prior
+out = summary_out(simdata$B,result)
+knitr::kable(out$find_cond,caption = 'On finding conditions',digits = 5)
+```
+
+
