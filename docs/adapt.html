@@ -515,16 +515,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomDongyueXiedeartreee9fdfe91101d7f31d98c3b53ac0a688fccb7fa11targetblanke9fdfe9a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/DongyueXie/dear/tree/e9fdfe91101d7f31d98c3b53ac0a688fccb7fa11" target="_blank">e9fdfe9</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomDongyueXiedeartree59b3d5e944bebfbd94968bc9c07ebe21eaf6986ftargetblank59b3d5ea"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/DongyueXie/dear/tree/59b3d5e944bebfbd94968bc9c07ebe21eaf6986f" target="_blank">59b3d5e</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomDongyueXiedeartreee9fdfe91101d7f31d98c3b53ac0a688fccb7fa11targetblanke9fdfe9a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomDongyueXiedeartree59b3d5e944bebfbd94968bc9c07ebe21eaf6986ftargetblank59b3d5ea" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/DongyueXie/dear/tree/e9fdfe91101d7f31d98c3b53ac0a688fccb7fa11" target="_blank">e9fdfe9</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/DongyueXie/dear/tree/59b3d5e944bebfbd94968bc9c07ebe21eaf6986f" target="_blank">59b3d5e</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -605,6 +605,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/DongyueXie/dear/blob/59b3d5e944bebfbd94968bc9c07ebe21eaf6986f/analysis/adapt.Rmd" target="_blank">59b3d5e</a>
+</td>
+<td>
+Dongyue Xie
+</td>
+<td>
+2020-11-09
+</td>
+<td>
+wflow_publish(“analysis/adapt.Rmd”)
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/DongyueXie/dear/c77158315f5ed5ba1c84861c433b4c2b8124b7e8/docs/adapt.html" target="_blank">c771583</a>
+</td>
+<td>
+Dongyue Xie
+</td>
+<td>
+2020-11-09
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -723,29 +757,108 @@ lines(alphas,summary_bh$FDP,col=3)
 abline(a=0,b=1,lty=2)
 legend(&#39;bottomright&#39;,c(&#39;adapt_glm&#39;,&#39;adapt_gam&#39;,&#39;BH&#39;),lty=c(1,1,1),col=c(1,2,3))</code></pre>
 <p><img src="figure/adapt.Rmd/unnamed-chunk-2-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-2-1">
+Past versions of unnamed-chunk-2-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-2-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/DongyueXie/dear/blob/c77158315f5ed5ba1c84861c433b4c2b8124b7e8/docs/figure/adapt.Rmd/unnamed-chunk-2-1.png" target="_blank">c771583</a>
+</td>
+<td>
+Dongyue Xie
+</td>
+<td>
+2020-11-09
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>plot(alphas,summary_res_glm$power,type=&#39;l&#39;,ylim=c(0,1),ylab=&#39;power&#39;,xlab=&#39;target FDR level&#39;)
 lines(alphas,summary_res_gam$power,col=2)
 lines(alphas,summary_bh$power,col=3)
 legend(&#39;right&#39;,c(&#39;adapt_glm&#39;,&#39;adapt_gam&#39;,&#39;BH&#39;),lty=c(1,1,1),col=c(1,2,3))</code></pre>
 <p><img src="figure/adapt.Rmd/unnamed-chunk-2-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-2-2">
+Past versions of unnamed-chunk-2-2.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-2-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/DongyueXie/dear/blob/c77158315f5ed5ba1c84861c433b4c2b8124b7e8/docs/figure/adapt.Rmd/unnamed-chunk-2-2.png" target="_blank">c771583</a>
+</td>
+<td>
+Dongyue Xie
+</td>
+<td>
+2020-11-09
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <p>random generate <span class="math inline">\(H\)</span>.</p>
 <pre class="r"><code>set.seed(12345)
 x1 &lt;- seq(-100, 100, length.out = 50)
 x2 &lt;- seq(-100, 100, length.out = 50)
 x &lt;- expand.grid(x1, x2)
+xx = data.frame(x1 = rep(1,2500),x2 = rep(1,2500))
 colnames(x) &lt;- c(&quot;x1&quot;, &quot;x2&quot;)
 #pi_formula &lt;- mu_formula &lt;- &quot;s(x1, x2)&quot;
 #alphas &lt;- seq(0.01, 0.23, 0.04)
 alphas = c(0.01,0.05,0.1,0.2,0.3)
 ## Case 1: a circle in the center
 #H0 &lt;- apply(x, 1, function(coord){sum(coord^2) &lt; 900})
+n &lt;- nrow(x)
 H0 = rbinom(n,1,0.1)
 mu &lt;- ifelse(H0, 2, 0)
 z &lt;- rnorm(n) + mu
 pvals &lt;- 1 - pnorm(z)
 res &lt;- try(adapt_glm(x, pvals,pi_formulas = &quot;x1 + x2&quot;,
                       mu_formulas = &quot;x1 + x2&quot;,alphas = alphas,verbose=list(print=F,fit=F,ms=F)))
+res_same &lt;- try(adapt_glm(xx, pvals,pi_formulas = &quot;x1 + x2&quot;,
+                      mu_formulas = &quot;x1 + x2&quot;,alphas = alphas,verbose=list(print=F,fit=F,ms=F)))
 summary_res_glm = summary_adapt(res,H0,pvals)
+summary_res_same_glm = summary_adapt(res_same,H0,pvals)
 summary_bh = summary_BH(pvals,H0,alphas)
 print(cbind(alphas,summary_res_glm))</code></pre>
 <pre><code>  alphas nrej        FDP     power
@@ -754,6 +867,13 @@ print(cbind(alphas,summary_res_glm))</code></pre>
 3   0.10    0 0.00000000 0.0000000
 4   0.20   46 0.08695652 0.1735537
 5   0.30   71 0.14084507 0.2520661</code></pre>
+<pre class="r"><code>print(cbind(alphas,summary_res_same_glm))</code></pre>
+<pre><code>  alphas nrej       FDP     power
+1   0.01    0 0.0000000 0.0000000
+2   0.05    0 0.0000000 0.0000000
+3   0.10   32 0.0312500 0.1280992
+4   0.20   86 0.1162791 0.3140496
+5   0.30  130 0.2384615 0.4090909</code></pre>
 <pre class="r"><code>#print(cbind(alphas,summary_res_gam))
 print(cbind(alphas,summary_bh))</code></pre>
 <pre><code>  alphas nrej        FDP      power
@@ -763,16 +883,90 @@ print(cbind(alphas,summary_bh))</code></pre>
 4   0.20   85 0.11764706 0.30991736
 5   0.30  128 0.24218750 0.40082645</code></pre>
 <pre class="r"><code>plot(alphas,summary_res_glm$FDP,type=&#39;l&#39;,ylim=c(0,0.3),ylab=&#39;FDP&#39;,xlab=&#39;target FDR level&#39;)
-#lines(alphas,summary_res_gam$FDP,col=2)
+lines(alphas,summary_res_same_glm$FDP,col=2)
 lines(alphas,summary_bh$FDP,col=3)
 abline(a=0,b=1,lty=2)
-legend(&#39;bottomright&#39;,c(&#39;adapt_glm&#39;,&#39;BH&#39;),lty=c(1,1),col=c(1,3))</code></pre>
+legend(&#39;topleft&#39;,c(&#39;adapt_glm&#39;,&#39;adapt_glm_no_x&#39;,&#39;BH&#39;),lty=c(1,1,1),col=c(1,2,3))</code></pre>
 <p><img src="figure/adapt.Rmd/unnamed-chunk-3-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-3-1">
+Past versions of unnamed-chunk-3-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-3-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/DongyueXie/dear/blob/c77158315f5ed5ba1c84861c433b4c2b8124b7e8/docs/figure/adapt.Rmd/unnamed-chunk-3-1.png" target="_blank">c771583</a>
+</td>
+<td>
+Dongyue Xie
+</td>
+<td>
+2020-11-09
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>plot(alphas,summary_res_glm$power,type=&#39;l&#39;,ylim=c(0,1),ylab=&#39;power&#39;,xlab=&#39;target FDR level&#39;)
-#lines(alphas,summary_res_gam$power,col=2)
+lines(alphas,summary_res_same_glm$power,col=2)
 lines(alphas,summary_bh$power,col=3)
-legend(&#39;topright&#39;,c(&#39;adapt_glm&#39;,&#39;BH&#39;),lty=c(1,1),col=c(1,3))</code></pre>
+legend(&#39;topleft&#39;,c(&#39;adapt_glm&#39;,&#39;adapt_glm_no_x&#39;,&#39;BH&#39;),lty=c(1,1,1),col=c(1,2,3))</code></pre>
 <p><img src="figure/adapt.Rmd/unnamed-chunk-3-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-3-2">
+Past versions of unnamed-chunk-3-2.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-3-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/DongyueXie/dear/blob/c77158315f5ed5ba1c84861c433b4c2b8124b7e8/docs/figure/adapt.Rmd/unnamed-chunk-3-2.png" target="_blank">c771583</a>
+</td>
+<td>
+Dongyue Xie
+</td>
+<td>
+2020-11-09
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
