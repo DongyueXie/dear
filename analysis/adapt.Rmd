@@ -101,32 +101,38 @@ set.seed(12345)
 x1 <- seq(-100, 100, length.out = 50)
 x2 <- seq(-100, 100, length.out = 50)
 x <- expand.grid(x1, x2)
+xx = data.frame(x1 = rep(1,2500),x2 = rep(1,2500))
 colnames(x) <- c("x1", "x2")
 #pi_formula <- mu_formula <- "s(x1, x2)"
 #alphas <- seq(0.01, 0.23, 0.04)
 alphas = c(0.01,0.05,0.1,0.2,0.3)
 ## Case 1: a circle in the center
 #H0 <- apply(x, 1, function(coord){sum(coord^2) < 900})
+n <- nrow(x)
 H0 = rbinom(n,1,0.1)
 mu <- ifelse(H0, 2, 0)
 z <- rnorm(n) + mu
 pvals <- 1 - pnorm(z)
 res <- try(adapt_glm(x, pvals,pi_formulas = "x1 + x2",
                       mu_formulas = "x1 + x2",alphas = alphas,verbose=list(print=F,fit=F,ms=F)))
+res_same <- try(adapt_glm(xx, pvals,pi_formulas = "x1 + x2",
+                      mu_formulas = "x1 + x2",alphas = alphas,verbose=list(print=F,fit=F,ms=F)))
 summary_res_glm = summary_adapt(res,H0,pvals)
+summary_res_same_glm = summary_adapt(res_same,H0,pvals)
 summary_bh = summary_BH(pvals,H0,alphas)
 print(cbind(alphas,summary_res_glm))
+print(cbind(alphas,summary_res_same_glm))
 #print(cbind(alphas,summary_res_gam))
 print(cbind(alphas,summary_bh))
 plot(alphas,summary_res_glm$FDP,type='l',ylim=c(0,0.3),ylab='FDP',xlab='target FDR level')
-#lines(alphas,summary_res_gam$FDP,col=2)
+lines(alphas,summary_res_same_glm$FDP,col=2)
 lines(alphas,summary_bh$FDP,col=3)
 abline(a=0,b=1,lty=2)
-legend('bottomright',c('adapt_glm','BH'),lty=c(1,1),col=c(1,3))
+legend('topleft',c('adapt_glm','adapt_glm_no_x','BH'),lty=c(1,1,1),col=c(1,2,3))
 
 plot(alphas,summary_res_glm$power,type='l',ylim=c(0,1),ylab='power',xlab='target FDR level')
-#lines(alphas,summary_res_gam$power,col=2)
+lines(alphas,summary_res_same_glm$power,col=2)
 lines(alphas,summary_bh$power,col=3)
-legend('topright',c('adapt_glm','BH'),lty=c(1,1),col=c(1,3))
+legend('topleft',c('adapt_glm','adapt_glm_no_x','BH'),lty=c(1,1,1),col=c(1,2,3))
 ```
 
