@@ -11,3 +11,15 @@ editor_options:
 **d**ifferential **e**xpression **a**nalysis **r**elated.
 
 
+## mash random effect
+
+[Problem](check_mash.html) found when running mash on a bulk dataset. 
+
+Try to add a diagonal matrix to prior covariance matrixes: 
+
+1. initial [investigation](diagonal_mvebnm.html); 
+2. add random effect to [ED](mash_randomeffect.html), and more [examples](mash_randomeffect_extend.html); 
+3. add [prior](mash_randomeffect_prior.html) to the random effect.
+4. Why random effect [works](randomeffect_work.Rmd)
+
+
