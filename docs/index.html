@@ -344,7 +344,7 @@ $(document).ready(function () {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2020-10-27
+<strong>Last updated:</strong> 2021-02-06
 </p>
 <p>
 <strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 2 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
@@ -375,32 +375,61 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomDongyueXiedeartreefa17463625fc6d3660f7a5c7c7eea31299ff1c72targetblankfa17463a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/DongyueXie/dear/tree/fa17463625fc6d3660f7a5c7c7eea31299ff1c72" target="_blank">fa17463</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomDongyueXiedeartree67e698cd7cf8727c79dee4c00a743c291e81e1e6targetblank67e698ca"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/DongyueXie/dear/tree/67e698cd7cf8727c79dee4c00a743c291e81e1e6" target="_blank">67e698c</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomDongyueXiedeartreefa17463625fc6d3660f7a5c7c7eea31299ff1c72targetblankfa17463a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomDongyueXiedeartree67e698cd7cf8727c79dee4c00a743c291e81e1e6targetblank67e698ca" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/DongyueXie/dear/tree/fa17463625fc6d3660f7a5c7c7eea31299ff1c72" target="_blank">fa17463</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/DongyueXie/dear/tree/67e698cd7cf8727c79dee4c00a743c291e81e1e6" target="_blank">67e698c</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
 </p>
 <pre><code>
 Ignored files:
+    Ignored:    .DS_Store
     Ignored:    .Rhistory
     Ignored:    .Rproj.user/
 
 Untracked files:
-    Untracked:  data/bulk_cytokin_SI.RData
-    Untracked:  output/PLNfit_bulk_cytokin_SI.RData
-    Untracked:  output/PLNfit_bulk_cytokin_SI_1_30.RData
-    Untracked:  output/pln_simu_denseSigma_plnFit.RData
-    Untracked:  output/pln_simu_diagSigma01.RData
-    Untracked:  output/pln_simu_diagSigma_plnFit.RData
+    Untracked:  analysis/randomeffect_work.Rmd
+    Untracked:  output/myed_all_01.RData
+    Untracked:  output/myed_all_05.RData
+    Untracked:  output/myed_all_05_nondiagS.RData
+    Untracked:  output/myed_mash_all_01.RData
+    Untracked:  output/myed_mash_all_05.RData
+    Untracked:  output/myed_mash_all_05_nondiagS.RData
+    Untracked:  output/myed_mixture01.RData
+    Untracked:  output/myed_mixture05.RData
+    Untracked:  output/myed_mixture05n1000.RData
+    Untracked:  output/myed_mixtureS.RData
+    Untracked:  output/myed_mixture_prior01.RData
+    Untracked:  output/myed_mixture_prior05.RData
+    Untracked:  output/myed_mixture_prior05n1000.RData
+    Untracked:  output/myed_mixture_priorS.RData
+    Untracked:  output/myed_universal01.RData
+    Untracked:  output/myed_universal05.RData
+    Untracked:  output/myed_universal05n1000.RData
+    Untracked:  output/myed_universalD01.RData
+    Untracked:  output/myed_universalD05.RData
+    Untracked:  output/myed_universalD05n1000.RData
+    Untracked:  output/myed_universalDS.RData
+    Untracked:  output/myed_universalD_prior01.RData
+    Untracked:  output/myed_universalD_prior05.RData
+    Untracked:  output/myed_universalD_prior05n1000.RData
+    Untracked:  output/myed_universalD_priorS.RData
+    Untracked:  output/myed_universalS.RData
+    Untracked:  output/myed_universal_prior01.RData
+    Untracked:  output/myed_universal_prior05.RData
+    Untracked:  output/myed_universal_prior05n1000.RData
+    Untracked:  output/myed_universal_priorS.RData
+
+Unstaged changes:
+    Modified:   analysis/AdaPT.md
 
 </code></pre>
 <p>
@@ -439,6 +468,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/DongyueXie/dear/blob/67e698cd7cf8727c79dee4c00a743c291e81e1e6/analysis/index.Rmd" target="_blank">67e698c</a>
+</td>
+<td>
+Dongyue Xie
+</td>
+<td>
+2021-02-06
+</td>
+<td>
+wflow_publish(“analysis/index.Rmd”)
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/DongyueXie/dear/b008295c7081e823b119f223731a90a7ea3f6378/docs/index.html" target="_blank">b008295</a>
+</td>
+<td>
+DongyueXie
+</td>
+<td>
+2020-10-27
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -583,6 +646,17 @@ Start workflowr project.
 </div>
 </div>
 <p><strong>d</strong>ifferential <strong>e</strong>xpression <strong>a</strong>nalysis <strong>r</strong>elated.</p>
+<div id="mash-random-effect" class="section level2">
+<h2>mash random effect</h2>
+<p><a href="check_mash.html">Problem</a> found when running mash on a bulk dataset.</p>
+<p>Try to add a diagonal matrix to prior covariance matrixes:</p>
+<ol style="list-style-type: decimal">
+<li>initial <a href="diagonal_mvebnm.html">investigation</a>;</li>
+<li>add random effect to <a href="mash_randomeffect.html">ED</a>, and more <a href="mash_randomeffect_extend.html">examples</a>;</li>
+<li>add <a href="mash_randomeffect_prior.html">prior</a> to the random effect.</li>
+<li>Why random effect <a href="randomeffect_work.Rmd">works</a></li>
+</ol>
+</div>
 
 
 <!-- Adjust MathJax settings so that all math formulae are shown using
