@@ -1,0 +1,336 @@
+---
+title: "why does random effect work"
+author: "Dongyue Xie"
+date: "2020-11-15"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+---
+
+## Introduction
+
+The problem is of using rank 1 matrix.
+
+Check it.
+
+```{r}
+library(mashr)
+library(mvtnorm)
+n_conditions = function(data){ncol(data$Bhat)}
+n_effects = function(data){nrow(data$Bhat)}
+
+n_conditions = function(data){ncol(data$Bhat)}
+
+n_effects = function(data){nrow(data$Bhat)}
+
+bovy_wrapper = function(data, Ulist_init, subset=NULL, ...){
+  if(is.null(subset)){subset = 1:n_effects(data)}
+  K = length(Ulist_init)
+  R = n_conditions(data)
+  pi_init = rep(1/K, K) # initial mix proportions
+  D = ncol(data$V)
+  if(all(data$V==diag(D))){
+    ed.res = extreme_deconvolution(data$Bhat[subset,],
+                                   data$Shat[subset,]^2,
+                                   xamp = pi_init,
+                                   xmean = matrix(0,nrow=K,ncol=R),
+                                   xcovar = Ulist_init,
+                                   fixmean = TRUE,
+                                   ...)
+  }else{
+    if(!is.null(data$L)){
+      ycovar = lapply(subset, function(i) data$L %*% (data$Shat_orig[i,] * t(data$V * data$Shat_orig[i,])) %*% t(data$L) )
+    }else{
+      ycovar = lapply(subset, function(i) data$Shat[i,] * t(data$V * data$Shat[i,]) )
+    }
+    ed.res = extreme_deconvolution(data$Bhat[subset,],
+                                   ycovar,
+                                   xamp = pi_init,
+                                   xmean = matrix(0,nrow=K,ncol=R),
+                                   xcovar = Ulist_init,
+                                   fixmean = TRUE,
+                                   ...)
+  }
+  return(list(pi = ed.res$xamp, Ulist = ed.res$xcovar, av_loglik = ed.res$avgloglikedata))
+}
+
+calc_loglikx = function(data,subset,pihat,Ulist,sigma){
+  
+  n = length(subset)
+  loglik = 0
+  for(i in subset){
+    loglik = loglik + mixture_loglikx(data$Bhat[i,],data$Shat[i,],pihat,Ulist,sigma)
+  }
+  loglik
+}
+
+mixture_loglikx = function(x,shat,pihat,Ulist,sigma){
+  
+  K = length(pihat)
+  p = length(x)
+  lik = 0
+  for(k in 1:K){
+    #browser()
+    lik = lik + pihat[k]*dmvnorm(x,sigma = Ulist[[k]]+diag(shat^2)+sigma^2*diag(p))
+  }
+  log(lik)
+}
+
+
+
+fdp = function(dis.idx, true.idx){
+  if(length(dis.idx)==0){
+    0
+  }else{
+    1-mean(dis.idx%in%true.idx)
+  }
+}
+
+
+auc = function(pred,true.label){
+  auc=pROC::roc(response = true.label, predictor = pred,direction = '<',levels = c(0,1))
+  auc$auc
+}
+
+powr = function(dis.idx, true.idx){
+  if(length(dis.idx)==0){
+    0
+  }else{
+    sum(dis.idx%in%true.idx)/length(true.idx)
+  }
+}
+
+mse = function(x,y){
+  mean((x-y)^2)
+}
+```
+
+
+
+```{r}
+cov1 = c(1,1,0,0,0)%*%t(c(1,1,0,0,0))
+cov2 = c(0,0,1,1,1)%*%t(c(0,0,1,1,1))
+
+```
+
+```{r}
+simple_sims0 = function(nsamp = 100, err_sd = 0.01){
+    ncond = 5
+    b1 = rnorm(nsamp)
+    B.1 = matrix(cbind(b1, b1, 0, 0, 0), nrow = nsamp, ncol = ncond)
+    b2 = rnorm(nsamp)
+    B.2 = matrix(cbind(0, 0, b2, b2, b2), nrow = nsamp, ncol = ncond)
+    
+    #B.id = matrix(rnorm(nsamp * ncond), nrow = nsamp, ncol = ncond)
+    #B.zero = matrix(0, nrow = nsamp, ncol = ncond)
+    
+    B = rbind(B.1, B.2)
+    Shat = matrix(err_sd, nrow = nrow(B), ncol = ncol(B))
+    E = matrix(rnorm(length(Shat), mean = 0, sd = Shat), nrow = nrow(B), ncol = ncol(B))
+    Bhat = B + E
+    row_ids = paste0("effect_", 1:nrow(B))
+    col_ids = paste0("condition_", 1:ncol(B))
+    rownames(B) = row_ids
+    colnames(B) = col_ids
+    rownames(Bhat) = row_ids
+    colnames(Bhat) = col_ids
+    rownames(Shat) = row_ids
+    colnames(Shat) = col_ids
+    U = matrix(0,nrow=ncond,ncol=ncond)
+    U2 = U
+    U2[1:2,1:2] = 1
+    U3 = U
+    U3[3:5,3:5] = 1
+    U.true = list(#U1 = matrix(0,nrow=ncond,ncol=ncond),
+                  U2=U2,
+                  U3=U3)
+                  #U4 = diag(ncond))
+    return(list(B = B, Bhat = Bhat, Shat = Shat,U.true=U.true))
+}
+
+set.seed(12345)
+simdata = simple_sims0(500,err_sd = 0.1)
+data = mash_set_data(simdata$Bhat,simdata$Shat)
+strong = 1:nrow(simdata$B)
+U.c    = cov_canonical(data)
+U.pca  = cov_pca(data,2,strong)
+U.pca = U.pca[1:2]
+U.ed   = cov_ed(data,U.pca,strong)
+out_mash = mash(data, c(U.c,U.ed),verbose = F,outputlevel = 3)
+
+non_null_idx_c = which(simdata$B!=0)
+fdp(which(out_mash$result$lfsr<0.05),non_null_idx_c)
+round(out_mash$result$lfsr[1:5,],3)
+```
+
+
+
+
+
+First look at estimated prior weights $\pi$.
+
+```{r}
+length(out_mash$fitted_g$grid)
+length(out_mash$fitted_g$pi)
+## grid by K matrix
+pi = matrix(out_mash$fitted_g$pi[-1],nrow=20,byrow = TRUE)
+colSums(pi)
+```
+
+None of the weights are put on canonical covairance matrices. Approximately equal weights on 2 data driven matrices and about 0.03 on null matrix.
+
+Look at posterior weights
+```{r}
+round(cbind(out_mash$posterior_weights[,1],out_mash$posterior_weights[,3]+out_mash$posterior_weights[,5],out_mash$posterior_weights[,2]+out_mash$posterior_weights[,4]),3)[1:10,]
+```
+
+Pretty good. The posterior weights concentrates on the correct covairances. 
+
+Now the problem is on the posterior of normals
+
+Let's focus on the first sample.
+
+First look at the posterior covariance
+
+````{r}
+U1_tilde_hat = 0.8654087*U.ed[[2]]%*%(solve(0.8654087*U.ed[[2]] + 0.1^2*diag(5))*0.1^2)
+U1_tilde_hat
+```
+
+
+The true one is 
+
+```{r}
+U1_tilde = cov1%*%solve(cov1 + 0.1^2*diag(5))*0.1^2
+U1_tilde
+```
+
+Pretty close, and posterior vaiarnce is very small. 
+
+The posterior mean is 
+
+```{r}
+mu1_tilde_hat = U1_tilde_hat%*%simdata$Bhat[1,]*(1/0.1^2)
+```
+
+Calculate negative probability and lfsr
+
+```{r}
+pnorm(-mu1_tilde_hat/sqrt(diag(U1_tilde_hat)))
+compute_lfsr(pnorm(-mu1_tilde_hat/sqrt(diag(U1_tilde_hat))),0)
+```
+
+The true posterior mean is 
+```{r}
+mu1_tilde = U1_tilde%*%simdata$Bhat[1,]*(1/0.1^2)
+```
+
+ The true negative probability and lfsr
+ 
+```{r}
+temp = -mu1_tilde/sqrt(diag(U1_tilde))
+temp[is.nan(temp)] = -Inf
+pnorm(temp)
+compute_lfsr(pnorm(temp),c(0,0,1,1,1))
+```
+
+Note $uu^T(I+uu^T)^{-1} = \frac{1}{1+u^Tu}uu^T$. So in this example, the posterior covariance matrix is just a scaled version of prior matrix. They are basically the same! 
+
+Does this only happen when $U$ is rank one? 
+
+Let's try some non-rank 1 matrices. 
+
+```{r}
+u1 = c(1,1,0,0,0)
+u2 = c(0,0,1,1,1)
+cov1 = tcrossprod(u1)
+cov1[1,1] = 2
+cov2 = tcrossprod(u2)
+cov2[5,5] = 2
+cov2[4,4] = 3
+
+cov1
+cov2
+
+sim2 = function(n,cov1,cov2,err_sd){
+  R = nrow(cov1)
+  #X1 = matrix(nrow=n,ncol=R)
+  B1 = rmvnorm(n,sigma = cov1)
+  x1 = t(apply(B1,1,function(x){rmvnorm(1,x,err_sd^2*diag(R))}))
+  B2 = rmvnorm(n,sigma = cov2)
+  x2 = t(apply(B2,1,function(x){rmvnorm(1,x,err_sd^2*diag(R))}))
+  
+  return(list(B = rbind(B1,B2), Bhat= rbind(x1,x2),Shat = matrix(err_sd,nrow=2*n,ncol=R)))
+}
+
+
+set.seed(12345)
+simdata = sim2(500,cov1,cov2,0.1)
+data = mash_set_data(simdata$Bhat,simdata$Shat)
+strong = 1:nrow(simdata$B)
+U.c    = cov_canonical(data)
+U.pca  = cov_pca(data,5,strong)
+#U.pca = U.pca[1:2]
+U.ed   = cov_ed(data,U.pca,strong)
+out_mash = mash(data, c(U.c,U.ed),verbose = F,outputlevel = 3)
+
+non_null_idx_c = which(simdata$B!=0)
+fdp(which(out_mash$result$lfsr<0.05),non_null_idx_c)
+round(out_mash$result$lfsr[1:5,],3)
+```
+
+Still inflated
+
+
+compare to the results using true covs:
+
+```{r}
+U.true = list(U1 = cov1,U2=cov2)
+out_mash_true = mash(data, c(U.c,U.true),verbose = F,outputlevel = 3)
+fdp(which(out_mash_true$result$lfsr<0.05),non_null_idx_c)
+round(out_mash_true$result$lfsr[1:5,],3)
+```
+
+how about feed contaminated true ones to ed so estimated ones are not rank-1 anymore?
+
+```{r}
+U.ed.init = list(U1 = cov1 + matrix(rnorm(25,0,0.2),nrow=5),U2 = cov2 + matrix(rnorm(25,0,0.2),nrow=5))
+#U.ed.init = list(U1 = cov1 + 0.1,U2 = cov2 + 0.1)
+#U.ed.init = list(U1 = cov1 + 0.1,U2 = cov2 + 0.1)
+U.ed   = cov_ed(data,U.ed.init,strong)
+out_mash = mash(data, c(U.c,U.ed),verbose = F,outputlevel = 3)
+fdp(which(out_mash$result$lfsr<0.05),non_null_idx_c)
+round(out_mash$result$lfsr[1:5,],3)
+```
+
+how about initialize from some random matrix.
+
+```{r}
+U.ed.init = list(U1 = matrix(rnorm(25,0,0.2),nrow=5),U2 = matrix(rnorm(25,0,0.2),nrow=5),U3 = matrix(rnorm(25,0,0.2),nrow=5))
+#U.ed.init = list(U1 = cov1 + 0.1,U2 = cov2 + 0.1)
+#U.ed.init = list(U1 = cov1 + 0.1,U2 = cov2 + 0.1)
+U.ed   = cov_ed(data,U.ed.init,strong)
+out_mash = mash(data, c(U.c,U.ed),verbose = F,outputlevel = 3)
+fdp(which(out_mash$result$lfsr<0.05),non_null_idx_c)
+round(out_mash$result$lfsr[1:5,],3)
+```
+
+
+
+The rank-1 case revisited:
+```{r}
+set.seed(12345)
+simdata = simple_sims0(500,err_sd = 0.1)
+data = mash_set_data(simdata$Bhat,simdata$Shat)
+U.ed.init = list(U1 = matrix(rnorm(25,0,0.2),nrow=5),
+                 U2 = matrix(rnorm(25,0,0.2),nrow=5),
+                 U3 = matrix(rnorm(25,0,0.2),nrow=5),
+                 U4 = matrix(rnorm(25,0,0.2),nrow=5),
+                 U5 = matrix(rnorm(25,0,0.2),nrow=5))
+U.ed   = cov_ed(data,U.ed.init,strong)
+out_mash = mash(data, c(U.c,U.ed),verbose = F,outputlevel = 3)
+fdp(which(out_mash$result$lfsr<0.05),non_null_idx_c)
+round(out_mash$result$lfsr[1:5,],3)
+```
+
+Rank1 matrices are evil!
